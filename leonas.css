@@ -816,3 +816,78 @@ footer {
     padding: 0;
   }
 }
+
+/* --- CALL BUTTON VISIBILITY LOGIC --- */
+
+/* Default (Desktop): Hide the mobile button, Show desktop button */
+.mobile-btn {
+  display: none;
+}
+
+.desktop-btn {
+  display: inline-block;
+}
+
+/* PHONE MODE (Max-Width 768px) */
+@media (max-width: 768px) {
+
+  /* Hide the button inside the dropdown menu */
+  .desktop-btn {
+    display: none;
+  }
+
+  /* Show the button next to the logo on the header */
+  .mobile-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    /* Smaller padding for phone */
+    font-size: 0.8rem;
+    /* Smaller text for phone */
+    margin-right: 15px;
+    /* Space between button and hamburger */
+    margin-left: auto;
+    /* Pushes button to the right */
+  }
+
+  .logo span {
+    display: none;
+    /* Optional: Hide text "Leona's Pizzeria" on tiny phones to make room for the button */
+  }
+}
+
+/* --- MOBILE FIXES (Add to bottom of CSS) --- */
+
+@media (max-width: 768px) {
+
+  /* 1. Force Header to stay in one line */
+  header {
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+    padding: 10px 15px !important;
+  }
+
+  /* 2. Shrink the Logo Text on Phone */
+  .logo {
+    font-size: 1rem !important;
+    /* Makes text smaller */
+    gap: 5px !important;
+  }
+
+  .logo img {
+    height: 35px !important;
+    /* Makes image smaller */
+  }
+
+  /* 3. Make sure Hamburger is visible and Black */
+  .hamburger {
+    display: block !important;
+    z-index: 2000;
+    margin-left: auto;
+    /* Pushes it to the right */
+  }
+
+  .bar {
+    background-color: #000 !important;
+    /* Force black color */
+  }
+}

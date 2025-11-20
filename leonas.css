@@ -1,4 +1,4 @@
-/* --- LEONA'S PIZZERIA: RESPONSIVE THEME --- */
+/* --- LEONA'S PIZZERIA: MASTER THEME (FIXED) --- */
 
 :root {
   --brand-yellow: #FFC107;
@@ -26,6 +26,7 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   overflow-x: hidden;
+  /* Prevents page from wiggling left/right */
 }
 
 a {
@@ -44,7 +45,7 @@ img {
   display: block;
 }
 
-/* --- HEADER --- */
+/* --- HEADER & NAVIGATION --- */
 header {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -70,6 +71,8 @@ header {
   letter-spacing: 1px;
   text-shadow: 1px 1px 0px #333;
   cursor: pointer;
+  /* Ensure logo text is visible by default */
+  display: flex;
 }
 
 .logo img {
@@ -93,6 +96,7 @@ header {
   color: var(--brand-yellow);
 }
 
+/* Desktop Button Style */
 .nav-btn {
   background-color: var(--brand-yellow);
   color: #000 !important;
@@ -102,7 +106,12 @@ header {
   box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
 }
 
-/* HAMBURGER (Mobile Only) */
+/* By default, hide the standalone mobile button on PC */
+.mobile-btn {
+  display: none;
+}
+
+/* HAMBURGER (Hidden on PC) */
 .hamburger {
   display: none;
   cursor: pointer;
@@ -308,6 +317,7 @@ header {
 /* MENU GRID */
 .menu-grid {
   display: grid;
+  /* Use 280px to fit small phones better */
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 30px;
   row-gap: 80px;
@@ -404,36 +414,61 @@ header {
   border-radius: 5px;
 }
 
-/* --- GALLERY SECTION --- */
-.gallery-section {
+/* --- REVIEWS SECTION (Fixed to prevent Cutoff) --- */
+.reviews-section {
   padding: 80px 5%;
-  background: white;
+  background-color: #f9f9f9;
   border-top: 1px solid #eee;
 }
 
-.gallery-grid {
+.reviews-grid {
   display: grid;
+  /* Use 250px min-width so it doesn't overflow on small phones */
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.gallery-item {
-  position: relative;
+.review-card {
+  background: white;
+  padding: 30px;
   border-radius: 15px;
-  overflow: hidden;
-  cursor: pointer;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  transition: 0.3s;
+  border: 1px solid #eee;
 }
 
-.gallery-item img {
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  transition: 0.5s;
+.stars {
+  color: var(--brand-dark-gold);
+  margin-bottom: 15px;
+  font-size: 1.2rem;
 }
 
-.gallery-item:hover img {
-  transform: scale(1.1);
+.review-card p {
+  color: #555;
+  font-style: italic;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.reviewer {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.reviewer img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--brand-yellow);
+}
+
+.reviewer span {
+  font-weight: bold;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
 }
 
 /* --- CONTACT SECTION --- */
@@ -504,7 +539,7 @@ footer {
 
 /* --- MODERN PRO CART UI --- */
 
-/* 1. The Floating Button (With Pulse Animation) */
+/* The Floating Button */
 .cart-icon {
   position: fixed;
   bottom: 25px;
@@ -560,16 +595,13 @@ footer {
   border: 2px solid white;
 }
 
-/* 2. The Sidebar (Glass Effect Header) */
+/* The Sidebar */
 .cart-sidebar {
   position: fixed;
   top: 0;
   right: -100%;
-  /* Hidden by default */
   width: 100%;
-  /* Full width on mobile */
   max-width: 400px;
-  /* Limit width on PC */
   height: 100%;
   background: #f4f7f6;
   z-index: 2001;
@@ -615,7 +647,7 @@ footer {
   transform: rotate(90deg);
 }
 
-/* 3. The Cart Items (Card Style) */
+/* Cart Items */
 .cart-items {
   flex-grow: 1;
   overflow-y: auto;
@@ -655,7 +687,7 @@ footer {
   font-size: 0.75rem;
 }
 
-/* 4. Plus/Minus Buttons */
+/* Qty Buttons */
 .qty-controls {
   display: flex;
   align-items: center;
@@ -689,7 +721,7 @@ footer {
   background: var(--brand-yellow);
 }
 
-/* 5. Inputs & Checkout Footer */
+/* Inputs & Footer */
 .cart-inputs {
   padding: 20px;
   background: white;
@@ -742,12 +774,7 @@ footer {
   letter-spacing: 1px;
 }
 
-.checkout-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(37, 211, 102, 0.4);
-}
-
-/* --- CUSTOM ALERT MODAL --- */
+/* Custom Alert Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -790,27 +817,79 @@ footer {
   cursor: pointer;
 }
 
+/* --- GALLERY SECTION --- */
+.gallery-section {
+  padding: 80px 5%;
+  background: white;
+  border-top: 1px solid #eee;
+}
 
-/* ============================================
-   RESPONSIVE MEDIA QUERIES
-   ============================================ */
+/* Default Gallery Grid (PC) */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
 
-/* TABLETS & SMALL LAPTOPS (Max-Width 768px) */
+.gallery-item {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  transition: 0.5s;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.1);
+}
+
+/* ==============================================================
+   MASTER MOBILE QUERY (MAX-WIDTH 768PX)
+   All mobile changes happen HERE. No conflicts.
+   ============================================================== */
+
 @media (max-width: 768px) {
+
+  /* 1. HEADER & NAV FIXES */
+  header {
+    padding: 10px 15px !important;
+  }
+
+  .logo {
+    font-size: 1rem !important;
+    gap: 5px !important;
+  }
+
+  .logo span {
+    display: block !important;
+    /* FORCE LOGO TEXT TO SHOW */
+  }
+
+  .logo img {
+    height: 35px !important;
+  }
+
+  /* FORCE HIDE THE YELLOW BUTTON ON HEADER */
+  .mobile-btn {
+    display: none !important;
+  }
+
+  .desktop-btn {
+    display: none !important;
+  }
+
+  /* Show Hamburger */
   .hamburger {
-    display: block;
-  }
-
-  .hamburger.active .bar:nth-child(2) {
-    opacity: 0;
-  }
-
-  .hamburger.active .bar:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-  }
-
-  .hamburger.active .bar:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+    display: block !important;
+    z-index: 2000;
+    margin-left: auto;
   }
 
   .nav-menu {
@@ -830,200 +909,44 @@ footer {
     left: 0;
   }
 
-  .hero h1 {
-    font-size: 3rem;
-  }
-
-  .section-title {
-    font-size: 2.5rem;
-  }
-
-  .contact-info {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-
-  .info-box {
-    border-right: none;
-    border-bottom: 1px solid #333;
-    padding-bottom: 30px;
-  }
-
-  .info-box:last-child {
-    border-bottom: none;
-  }
-}
-
-/* MOBILE PHONES (Max-Width 480px) */
-@media (max-width: 480px) {
-  .logo span {
-    font-size: 1.1rem;
-  }
-
-  .logo img {
-    height: 35px;
-  }
-
-  .hero h1 {
-    font-size: 2.2rem;
-  }
-
-  .hero p {
-    font-size: 1rem;
-  }
-
-  .menu-section,
-  .gallery-section,
-  .contact-section {
-    padding: 50px 5%;
-  }
-
-  .section-title {
-    font-size: 2rem;
-  }
-
-  .cart-sidebar {
-    width: 100%;
-    right: -100%;
-  }
-
-  .cart-sidebar.active {
-    right: 0;
-  }
-
-  .menu-filters {
-    gap: 8px;
-  }
-
-  .filter-btn {
-    padding: 8px 15px;
-    font-size: 0.8rem;
-  }
-
-  .nav-btn {
-    background: transparent;
-    color: #333 !important;
-    box-shadow: none;
-    padding: 0;
-  }
-}
-
-/* --- CALL BUTTON VISIBILITY LOGIC --- */
-
-/* Default (Desktop): Hide the mobile button, Show desktop button */
-.mobile-btn {
-  display: none;
-}
-
-.desktop-btn {
-  display: inline-block;
-}
-
-/* PHONE MODE (Max-Width 768px) */
-@media (max-width: 768px) {
-
-  /* Hide the desktop button in the menu */
-  .desktop-btn {
-    display: none;
-  }
-
-  /* 1. HIDE the mobile button (Yellow button next to logo) */
-  .mobile-btn {
-    display: none !important;
-  }
-
-  /* 2. SHOW the Logo Text again (Since button is gone, we have space) */
-  .logo span {
-    display: block !important;
-  }
-}
-
-/* --- MOBILE FIXES & OVERRIDES --- */
-@media (max-width: 768px) {
-
-  /* Force Header to stay in one line */
-  header {
-    flex-wrap: nowrap !important;
-    justify-content: space-between !important;
-    padding: 10px 15px !important;
-  }
-
-  /* Shrink the Logo Text on Phone */
-  .logo {
-    font-size: 1rem !important;
-    gap: 5px !important;
-  }
-
-  .logo img {
-    height: 35px !important;
-  }
-
-  /* Make sure Hamburger is visible and Black */
-  .hamburger {
-    display: block !important;
-    z-index: 2000;
-    margin-left: auto;
-    /* Pushes it to the right */
-  }
-
-  .bar {
-    background-color: #000 !important;
-  }
-}
-
-/* --- HORIZONTAL SWIPE GALLERY (The "App" Look) --- */
-
-@media (max-width: 768px) {
+  /* 2. HORIZONTAL SWIPE GALLERY (FIXED) */
   .gallery-grid {
-    /* Change from Grid to Flex so they line up in a row */
     display: flex !important;
-
-    /* Allow horizontal scrolling */
-    overflow-x: auto;
-
-    /* Make it snap nicely when you swipe */
+    /* Force Flex, override Grid */
+    flex-wrap: nowrap !important;
+    /* Prevent stacking */
+    overflow-x: auto !important;
+    /* Allow scroll */
     scroll-snap-type: x mandatory;
-
-    /* Add gap and padding */
     gap: 15px !important;
     padding-bottom: 20px;
-    /* Room for scrollbar */
     padding-left: 5%;
-    /* Aligns with other content */
     padding-right: 5%;
-
-    /* Hide the scrollbar (for cleaner look) */
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    /* Firefox */
+    /* Hide Scrollbar Firefox */
   }
 
-  /* Hide scrollbar for Chrome/Safari */
+  /* Hide Scrollbar Chrome/Safari */
   .gallery-grid::-webkit-scrollbar {
     display: none;
   }
 
   .gallery-item {
-    /* Force items to be a specific width (so they don't squash) */
     min-width: 80%;
-    /* Shows 1 full image + a peek of the next one */
+    /* Shows 1 image + peek of next */
     scroll-snap-align: center;
-    /* Snaps to center when you stop swiping */
+    margin-right: 0;
   }
 
   .gallery-item img {
     aspect-ratio: 4 / 5;
-    /* Slightly tall (Instagram Portrait size) looks best here */
-    object-fit: cover;
+    /* Portrait Mode */
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
 
-  /* Optional: Add a "Swipe ->" hint */
-  .gallery-section {
-    position: relative;
-  }
-
+  /* "Swipe" Hint Animation */
   .gallery-section::after {
     content: 'Swipe →';
     display: block;
@@ -1045,67 +968,52 @@ footer {
       transform: translateX(5px);
     }
   }
-}
 
-/* --- REVIEWS SECTION --- */
-.reviews-section {
-  padding: 80px 5%;
-  background-color: #f9f9f9;
-  /* Slightly different grey to separate it */
-  border-top: 1px solid #eee;
-}
+  /* 3. REVIEWS FIX (Prevent Cutoff) */
+  .reviews-section {
+    padding: 50px 15px;
+    /* Less padding on sides */
+  }
 
-.reviews-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+  .review-card {
+    padding: 20px;
+    /* Less internal padding */
+    margin-bottom: 15px;
+  }
 
-.review-card {
-  background: white;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-  transition: 0.3s;
-  border: 1px solid #eee;
-}
+  /* 4. GENERAL TEXT FIXES */
+  .hero h1 {
+    font-size: 3rem;
+  }
 
-.review-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  border-color: var(--brand-yellow);
-}
+  .contact-info {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
 
-.stars {
-  color: var(--brand-dark-gold);
-  margin-bottom: 15px;
-  font-size: 1.2rem;
-}
+  .info-box {
+    border-right: none;
+    border-bottom: 1px solid #333;
+    padding-bottom: 30px;
+  }
 
-.review-card p {
-  color: #555;
-  font-style: italic;
-  margin-bottom: 20px;
-  line-height: 1.6;
-}
+  .info-box:last-child {
+    border-bottom: none;
+  }
 
-.reviewer {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
+  .menu-section,
+  .gallery-section,
+  .contact-section {
+    padding: 50px 5%;
+  }
 
-.reviewer img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 2px solid var(--brand-yellow);
-}
+  .cart-sidebar {
+    width: 100%;
+    max-width: 100%;
+    right: -100%;
+  }
 
-.reviewer span {
-  font-weight: bold;
-  font-family: 'Oswald', sans-serif;
-  font-size: 1.1rem;
+  .cart-sidebar.active {
+    right: 0;
+  }
 }

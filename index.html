@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leona's Pizzeria | Best Pizza & Wraps</title>
+  <link rel="stylesheet" href="leonas.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Poppins:wght@300;400;600&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- CUSTOM ALERT MODAL -->
+  <div id="custom-alert" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-icon">⚠️</div>
+      <h3 id="modal-title">Notice</h3>
+      <p id="modal-message">Something went wrong.</p>
+      <button onclick="closeAlert()">OK, Got it</button>
+    </div>
+  </div>
+
+  <!-- CART BACKDROP (Clicking this closes the cart) -->
+  <div id="cart-backdrop" class="cart-backdrop" onclick="toggleCart()"></div>
+
+  <!-- FLOATING CART BUTTON -->
+  <div class="cart-icon" onclick="toggleCart()">
+    🛒 <span id="cart-count">0</span>
+  </div>
+
+  <!-- CART SIDEBAR -->
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <h3>Your Order</h3>
+      <span class="close-cart" onclick="toggleCart()">×</span>
+    </div>
+
+    <div class="cart-items" id="cart-items">
+      <p class="empty-msg">Your cart is empty.</p>
+    </div>
+
+    <!-- Customer Inputs -->
+    <div class="cart-inputs">
+      <label>Delivery Details:</label>
+      <!-- oninput="this.value..." blocks numbers from being typed in name -->
+      <input type="text" id="customer-name" placeholder="Your Name (Letters only)" class="cart-input"
+        oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')">
+      <!-- type="tel" + maxlength="10" for Ghana numbers -->
+      <input type="tel" id="customer-phone" placeholder="Ghana Phone (e.g. 055...)" class="cart-input" maxlength="10"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+    </div>
+
+    <div class="cart-footer">
+      <div class="total-row">
+        <span>Total:</span>
+        <span id="cart-total">₵0</span>
+      </div>
+      <button class="checkout-btn" onclick="checkout()">Checkout on WhatsApp ➝</button>
+    </div>
+  </div>
+
+  <header>
+    <!-- Updated Logo Section: Image + Text -->
+    <div class="logo">
+      <img src="logo.svg" alt="Logo">
+      <span>Leona's Pizzeria</span>
+    </div>
+
+    <div class="hamburger">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </div>
+
+    <nav>
+      <ul class="nav-menu">
+        <li><a href="#home" class="nav-link">Home</a></li>
+        <li><a href="#menu" class="nav-link">Menu</a></li>
+        <li><a href="#contact" class="nav-btn">Call to Order</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-slider">
+      <div class="slide active"
+        style="background-image: url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1200');">
+      </div>
+      <div class="slide"
+        style="background-image: url('https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=1200');">
+      </div>
+      <div class="slide"
+        style="background-image: url('https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=1200');">
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <h1>Taste the <span class="highlight">Joy</span></h1>
+      <p>Authentic Ghanaian-Style Pizza, Wraps, and Smoothies.</p>
+      <div class="hero-btns">
+        <a href="#menu" class="cta-button">View Menu</a>
+      </div>
+    </div>
+  </section>
+  <!-- NEW: HOW IT WORKS SECTION -->
+  <section class="how-it-works">
+    <h2 class="section-title" style="margin-bottom: 40px;">How to Order</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-icon">🍕</div>
+        <h3>1. Choose</h3>
+        <p>Select your favorite Pizza, Wraps, or Smoothies from the menu.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">🛒</div>
+        <h3>2. Cart</h3>
+        <p>Click "Add to Cart" and enter your delivery details.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-icon">💬</div>
+        <h3>3. WhatsApp</h3>
+        <p>Click Checkout. We will confirm your order and delivery price on WhatsApp!</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="menu-section" id="menu">
+    <div class="section-header">
+      <h2 class="section-title">Our Menu</h2>
+      <p class="section-subtitle">Authentic Ghanaian-Style Pizza</p>
+    </div>
+
+    <!-- NEW: CATEGORY FILTERS -->
+    <div class="menu-filters">
+      <button class="filter-btn active" onclick="filterMenu('all')">All</button>
+      <button class="filter-btn" onclick="filterMenu('pizza')">Pizzas</button>
+      <button class="filter-btn" onclick="filterMenu('wrap')">Wraps/Sides</button>
+      <button class="filter-btn" onclick="filterMenu('drink')">Drinks</button>
+    </div>
+
+    <div class="menu-grid">
+
+      <!-- PIZZAS (Added data-category="pizza") -->
+      <div class="pizza-card" data-category="pizza">
+        <div class="card-image"><img src="margherita.jpeg" alt="Margheritta"></div>
+        <div class="card-content">
+          <h4>Margheritta</h4>
+          <p class="ingredients">Mozzarella, Oregano, Pizza Sauce</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Margheritta', 'Small', 55)"><span>Small</span> <span>₵55</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Margheritta', 'Medium', 70)"><span>Medium</span> <span>₵70</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Margheritta', 'Large', 85)"><span>Large</span> <span>₵85</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Margheritta', 'XL', 120)"><span>XL</span> <span>₵120</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="pizza">
+        <div class="card-image"><img src="vegetarian.jpeg" alt="Vegetarian"></div>
+        <div class="card-content">
+          <h4>Leona's Vegetarian</h4>
+          <p class="ingredients">Mozzarella, Oregano, Vegetables</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Vegetarian', 'Small', 50)"><span>Small</span> <span>₵50</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Vegetarian', 'Medium', 75)"><span>Medium</span> <span>₵75</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Vegetarian', 'Large', 120)"><span>Large</span> <span>₵120</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Vegetarian', 'XL', 145)"><span>XL</span> <span>₵145</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="pizza">
+        <div class="card-image"><img src="chicken.jpeg" alt="Chicken"></div>
+        <div class="card-content">
+          <h4>Leona's Chicken</h4>
+          <p class="ingredients">Mozzarella, Mix meat, Chicken</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Chicken', 'Small', 70)"><span>Small</span> <span>₵70</span></div>
+            <div class="size-row" onclick="addToCart('Chicken', 'Medium', 85)"><span>Medium</span> <span>₵85</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Chicken', 'Large', 125)"><span>Large</span> <span>₵125</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Chicken', 'XL', 145)"><span>XL</span> <span>₵145</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="pizza">
+        <div class="card-image"><img src="beef.jpeg" alt="Beef"></div>
+        <div class="card-content">
+          <h4>Leona's Beef</h4>
+          <p class="ingredients">Mozzarella, Oregano, Beef</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Beef', 'Small', 70)"><span>Small</span> <span>₵70</span></div>
+            <div class="size-row" onclick="addToCart('Beef', 'Medium', 90)"><span>Medium</span> <span>₵90</span></div>
+            <div class="size-row" onclick="addToCart('Beef', 'Large', 125)"><span>Large</span> <span>₵125</span></div>
+            <div class="size-row" onclick="addToCart('Beef', 'XL', 145)"><span>XL</span> <span>₵145</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="pizza">
+        <div class="card-image"><img src="meatfeast.jpeg" alt="Meat Feast"></div>
+        <div class="card-content">
+          <h4>Meat Feast</h4>
+          <p class="ingredients">Beef, Chicken, Pepperoni, Mix Meat</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Meat Feast', 'Small', 75)"><span>Small</span> <span>₵75</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Meat Feast', 'Medium', 97)"><span>Medium</span> <span>₵97</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Meat Feast', 'Large', 135)"><span>Large</span> <span>₵135</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Meat Feast', 'XL', 155)"><span>XL</span> <span>₵155</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="pizza">
+        <div class="card-image"><img src="pepperoni.jpeg" alt="Pepperoni"></div>
+        <div class="card-content">
+          <h4>Leona's Pepperoni</h4>
+          <p class="ingredients">Mozzarella, Oregano, Pepperoni</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Pepperoni', 'Small', 70)"><span>Small</span> <span>₵70</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Pepperoni', 'Medium', 95)"><span>Medium</span> <span>₵95</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Pepperoni', 'Large', 120)"><span>Large</span> <span>₵120</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Pepperoni', 'XL', 145)"><span>XL</span> <span>₵145</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="pizza">
+        <div class="card-image"><img src="deluxe.jpeg" alt="Deluxe"></div>
+        <div class="card-content">
+          <h4>Deluxe Special</h4>
+          <p class="ingredients">Corn beef, Mushroom, Beef, Olives</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Deluxe', 'Small', 75)"><span>Small</span> <span>₵75</span></div>
+            <div class="size-row" onclick="addToCart('Deluxe', 'Medium', 100)"><span>Medium</span> <span>₵100</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Deluxe', 'Large', 145)"><span>Large</span> <span>₵145</span></div>
+            <div class="size-row" onclick="addToCart('Deluxe', 'XL', 165)"><span>XL</span> <span>₵165</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="pizza">
+        <div class="card-image"><img
+            src="https://images.unsplash.com/photo-1552539618-7eec9b4d1796?auto=format&fit=crop&w=800" alt="Odoyewu">
+        </div>
+        <div class="card-content">
+          <h4>Odoyewu</h4>
+          <p class="ingredients">Tuna, Mushroom, Chicken, Corn</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Odoyewu', 'Small', 85)"><span>Small</span> <span>₵85</span></div>
+            <div class="size-row" onclick="addToCart('Odoyewu', 'Medium', 105)"><span>Medium</span> <span>₵105</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Odoyewu', 'Large', 145)"><span>Large</span> <span>₵145</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Odoyewu', 'XL', 150)"><span>XL</span> <span>₵150</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="pizza">
+        <div class="card-image"><img
+            src="https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=800"
+            alt="Leona's Special"></div>
+        <div class="card-content">
+          <h4>Leona's Special</h4>
+          <p class="ingredients">Pepperoni, Tuna, Mushroom, Corn</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Leonas Special', 'Small', 85)"><span>Small</span> <span>₵85</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Leonas Special', 'Medium', 105)"><span>Medium</span>
+              <span>₵105</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Leonas Special', 'Large', 155)"><span>Large</span>
+              <span>₵155</span>
+            </div>
+            <div class="size-row" onclick="addToCart('Leonas Special', 'XL', 188)"><span>XL</span> <span>₵188</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WRAPS (Added data-category="wrap") -->
+      <div class="pizza-card" data-category="wrap">
+        <div class="card-image"><img
+            src="https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800" alt="Wrap">
+        </div>
+        <div class="card-content">
+          <h4>Chicken Wrap</h4>
+          <p class="ingredients">Grilled chicken, fresh veggies</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Chicken Wrap', 'Regular', 35)"><span>Regular</span>
+              <span>₵35</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="wrap">
+        <div class="card-image"><img src="beef wrap.jpeg" alt="Wrap"></div>
+        <div class="card-content">
+          <h4>Beef Wrap</h4>
+          <p class="ingredients">Spicy beef, onions, peppers</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Beef Wrap', 'Regular', 40)"><span>Regular</span> <span>₵40</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="wrap">
+        <div class="card-image"><img src="fries.jpeg" alt="Fries"></div>
+        <div class="card-content">
+          <h4>French Fries</h4>
+          <p class="ingredients">Crispy golden fried potatoes</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('French Fries', 'Portion', 20)"><span>Portion</span>
+              <span>₵20</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="wrap">
+        <div class="card-image"><img src="loaded fries.jpeg" alt="Loaded Fries"></div>
+        <div class="card-content">
+          <h4>Loaded Fries</h4>
+          <p class="ingredients">Fries topped with cheese & beef</p>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Loaded Fries', 'Portion', 35)"><span>Portion</span>
+              <span>₵35</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DRINKS (Added data-category="drink") -->
+      <div class="pizza-card" data-category="drink">
+        <div class="card-image"><img
+            src="https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=800"
+            alt="Smoothie"></div>
+        <div class="card-content">
+          <h4>Fruit Smoothie</h4>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Fruit Smoothie', 'Cup', 25)"><span>Cup</span> <span>₵25</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="drink">
+        <div class="card-image"><img src="coca cola.jpeg" alt="Coke">
+        </div>
+        <div class="card-content">
+          <h4>Coca Cola</h4>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Coca Cola', 'Bottle', 10)"><span>Bottle</span> <span>₵10</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pizza-card" data-category="drink">
+        <div class="card-image"><img
+            src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=800" alt="Water">
+        </div>
+        <div class="card-content">
+          <h4>Mineral Water</h4>
+          <div class="size-options">
+            <div class="size-row" onclick="addToCart('Water', 'Bottle', 5)"><span>Bottle</span> <span>₵5</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-section">
+    <div class="section-header">
+      <h2 class="section-title">Moments of Joy</h2>
+      <p class="section-subtitle">Good Friends. Great Pizza.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="2024-10-06.webp" alt="Customer"></div>
+      <div class="gallery-item"><img src="2024-10-06 (1).webp" alt="Customer"></div>
+      <div class="gallery-item"><img src="2024-10-06 (2).webp" alt="Customer"></div>
+      <div class="gallery-item"><img src="2024-10-06 (3).webp" alt="Customer"></div>
+    </div>
+  </section>
+
+  <section class="contact-section" id="contact">
+    <h2 class="section-title" style="color:white;">Visit Us</h2>
+    <p>We are open for Dine-inn, Takeout and Delivery!</p>
+    <div class="contact-info">
+      <div class="info-box">
+        <h4>📞 Call Us</h4>
+        <p><a href="tel:+233538497001" class="contact-link">0538 497 001</a></p>
+        <p><a href="tel:+233505737007" class="contact-link">0505 737 007</a></p>
+      </div>
+      <div class="info-box">
+        <h4>📍 Location</h4>
+        <p><a href="https://www.google.com/maps/search/?api=1&query=Leona's+Pizzeria+JMMF%2B4R3+Accra" target="_blank"
+            class="contact-link">Leona's Pizzeria<br>JMMF+4R3, Accra</a></p>
+      </div>
+      <div class="info-box">
+        <h4>⏰ Hours</h4>
+        <p>Mon - Sun: 10:00 AM - 10:00 PM</p>
+      </div>
+    </div>
+  </section>
+
+
+  <footer>
+    <div class="social-links">
+      <a href="#" target="_blank">Instagram 📸</a>
+      <a href="#" target="_blank">TikTok 🎵</a>
+      <a href="#" target="_blank">Facebook 🔵</a>
+    </div>
+    <p>&copy; 2025 Leona's Pizzeria. All rights reserved.</p>
+    <div class="info-box">
+      <P>DEVELOPED BY MR.WETTA</P>
+    </div>
+    <div class="info-box" style="border:none; margin-top:10px;">
+      <p style="font-size: 0.8rem; opacity: 0.7;">DEVELOPED BY MR.WETTA</p>
+    </div>
+  </footer>
+
+  <script src="leonas.js"></script>
+</body>
+
+</html>

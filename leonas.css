@@ -891,3 +891,32 @@ footer {
     /* Force black color */
   }
 }
+
+/* --- MAKE GALLERY LOOK PROFESSIONAL ON MOBILE --- */
+
+@media (max-width: 768px) {
+  .gallery-grid {
+    /* Force 2 images side-by-side */
+    grid-template-columns: 1fr 1fr !important;
+
+    /* Make the gap between them smaller and cleaner */
+    gap: 10px !important;
+
+    /* Add a little padding to the sides of the screen */
+    padding: 0 10px;
+  }
+
+  .gallery-item img {
+    /* Force images to be perfect squares so they line up perfectly */
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+    /* Slightly softer corners */
+  }
+
+  /* Optional: Make the "Moments of Joy" text a bit smaller */
+  .section-header {
+    margin-bottom: 30px !important;
+    /* Less empty space above images */
+  }
+}

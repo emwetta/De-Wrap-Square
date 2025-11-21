@@ -1,14 +1,40 @@
-// --- HAMBURGER MENU ---
+// --- SMART HAMBURGER MENU ---
 const hamburger = document.querySelector(".hamburger");
 const navMenu = document.querySelector(".nav-menu");
+const closeBtn = document.querySelector(".mobile-close-btn");
+
+// 1. Open/Close on Hamburger Click
 hamburger.addEventListener("click", () => {
   hamburger.classList.toggle("active");
   navMenu.classList.toggle("active");
 });
+
+// 2. Close when clicking the "Close Menu X" button
+if (closeBtn) {
+  closeBtn.addEventListener("click", () => {
+    hamburger.classList.remove("active");
+    navMenu.classList.remove("active");
+  });
+}
+
+// 3. Close when clicking any link
 document.querySelectorAll(".nav-link").forEach(n => n.addEventListener("click", () => {
   hamburger.classList.remove("active");
   navMenu.classList.remove("active");
 }));
+
+// 4. CLOSE WHEN CLICKING OUTSIDE (The "Magic" Fix)
+document.addEventListener('click', (e) => {
+  // If the menu is open...
+  if (navMenu.classList.contains('active')) {
+    // And the click was NOT on the menu, and NOT on the hamburger...
+    if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+      // Close it!
+      hamburger.classList.remove("active");
+      navMenu.classList.remove("active");
+    }
+  }
+});
 
 // --- HERO SLIDER ---
 const slides = document.querySelectorAll('.slide');

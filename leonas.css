@@ -892,6 +892,43 @@ footer {
    ============================================================== */
 
 @media (max-width: 768px) {
+  /* --- NEW CLOSE BUTTON STYLES --- */
+
+  /* 1. By default (PC), hide this button */
+  .mobile-close-container {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+
+    /* 2. On Mobile, show it */
+    .mobile-close-container {
+      display: block;
+      width: 100%;
+      text-align: right;
+      /* Put it on the right side */
+      padding-right: 30px;
+      margin-bottom: 10px;
+    }
+
+    .mobile-close-btn {
+      background-color: #f0f0f0;
+      color: #333;
+      padding: 8px 15px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      cursor: pointer;
+      border: 1px solid #ccc;
+    }
+
+    .mobile-close-btn:active {
+      background-color: #d32f2f;
+      /* Turn red when tapped */
+      color: white;
+      border-color: #d32f2f;
+    }
+  }
 
   /* 1. HEADER & NAV FIXES */
   header {

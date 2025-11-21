@@ -26,7 +26,6 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   overflow-x: hidden;
-  /* Prevents page from wiggling left/right */
 }
 
 a {
@@ -71,7 +70,6 @@ header {
   letter-spacing: 1px;
   text-shadow: 1px 1px 0px #333;
   cursor: pointer;
-  /* Ensure logo text is visible by default */
   display: flex;
 }
 
@@ -109,6 +107,12 @@ header {
 /* By default, hide the standalone mobile button on PC */
 .mobile-btn {
   display: none;
+}
+
+/* Close Button Style (Hidden on Desktop) */
+.mobile-close-btn {
+  display: none;
+  /* Crucial: Hides it on PC */
 }
 
 /* HAMBURGER (Hidden on PC) */
@@ -317,18 +321,16 @@ header {
 /* MENU GRID */
 .menu-grid {
   display: grid;
-  /* Use 280px to fit small phones better */
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 30px;
   row-gap: 80px;
 }
 
-/* --- CLEAN CARD DESIGN (FIXED "RAW" LOOK) --- */
+/* --- CLEAN CARD DESIGN --- */
 .pizza-card {
   background-color: var(--bg-card);
   border-radius: 15px;
   overflow: hidden;
-  /* Keeps image inside rounded corners */
   border: 1px solid var(--border-light);
   display: flex;
   flex-direction: column;
@@ -345,10 +347,8 @@ header {
 .card-image {
   width: 100%;
   height: 200px;
-  /* Forces all images to be same height */
   margin: 0;
   background: #f8f8f8;
-  /* Light grey background for transparency */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -358,7 +358,6 @@ header {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Makes image fill the box nicely */
   transition: 0.5s;
 }
 
@@ -416,7 +415,7 @@ header {
 }
 
 
-/* --- REVIEWS SECTION (Fixed to prevent Cutoff) --- */
+/* --- REVIEWS SECTION --- */
 .reviews-section {
   padding: 80px 5%;
   background-color: #f9f9f9;
@@ -425,7 +424,6 @@ header {
 
 .reviews-grid {
   display: grid;
-  /* Use 250px min-width so it doesn't overflow on small phones */
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 30px;
   max-width: 1200px;
@@ -447,11 +445,27 @@ header {
   font-size: 1.2rem;
 }
 
+/* Scrollable Review Text Fix */
 .review-card p {
   color: #555;
   font-style: italic;
   margin-bottom: 20px;
   line-height: 1.6;
+  max-height: 120px;
+  /* Keeps card size fixed */
+  overflow-y: auto;
+  /* Adds scroll if text is too long */
+  padding-right: 5px;
+}
+
+/* Custom Scrollbar for Review Text */
+.review-card p::-webkit-scrollbar {
+  width: 4px;
+}
+
+.review-card p::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
 }
 
 .reviewer {
@@ -674,7 +688,6 @@ footer {
   margin-bottom: 15px;
   display: flex;
   align-items: center;
-  /* Aligns items vertically */
   justify-content: space-between;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
   border: 1px solid white;
@@ -688,7 +701,6 @@ footer {
   font-size: 1.2rem;
   cursor: pointer;
   margin-right: 15px;
-  /* Space between X and item name */
   padding: 5px;
 }
 
@@ -704,7 +716,6 @@ footer {
 
 .item-info {
   flex-grow: 1;
-  /* Takes up remaining space */
 }
 
 .item-info h5 {
@@ -892,43 +903,6 @@ footer {
    ============================================================== */
 
 @media (max-width: 768px) {
-  /* --- NEW CLOSE BUTTON STYLES --- */
-
-  /* 1. By default (PC), hide this button */
-  .mobile-close-container {
-    display: none;
-  }
-
-  @media (max-width: 768px) {
-
-    /* 2. On Mobile, show it */
-    .mobile-close-container {
-      display: block;
-      width: 100%;
-      text-align: right;
-      /* Put it on the right side */
-      padding-right: 30px;
-      margin-bottom: 10px;
-    }
-
-    .mobile-close-btn {
-      background-color: #f0f0f0;
-      color: #333;
-      padding: 8px 15px;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      cursor: pointer;
-      border: 1px solid #ccc;
-    }
-
-    .mobile-close-btn:active {
-      background-color: #d32f2f;
-      /* Turn red when tapped */
-      color: white;
-      border-color: #d32f2f;
-    }
-  }
 
   /* 1. HEADER & NAV FIXES */
   header {
@@ -960,6 +934,22 @@ footer {
     display: inline-block !important;
     /* SHOW BUTTON IN MENU */
     margin-top: 15px;
+  }
+
+  /* Close Button Mobile Only */
+  .mobile-close-btn {
+    display: block !important;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2.5rem;
+    /* Big X */
+    line-height: 0.5;
+    color: #333;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 10px;
   }
 
   /* Show Hamburger */
@@ -1091,9 +1081,11 @@ footer {
     padding: 50px 5%;
   }
 
+  /* 6. CART WIDTH FIX (Show "Strip" behind) */
   .cart-sidebar {
-    width: 100%;
-    max-width: 100%;
+    width: 85%;
+    /* LEAVES 15% GAP SO USER SEES BACKDROP */
+    max-width: 350px;
     right: -100%;
   }
 

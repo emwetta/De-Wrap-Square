@@ -1236,3 +1236,105 @@ footer {
     right: 0;
   }
 }
+
+/* --- PROFESSIONAL GALLERY HOVER EFFECTS (Bottom Right) --- */
+
+.gallery-item {
+  position: relative;
+  /* Needed to trap the overlay inside */
+  border-radius: 15px;
+  overflow: hidden;
+  /* Crops the image if it zooms */
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* The Image itself */
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  /* Forces perfect squares */
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+/* 1. The Subtle Bottom Gradient Overlay */
+.gallery-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Gradient from transparent top to dark bottom */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 50%);
+  opacity: 0;
+  /* Hidden by default */
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+/* 2. The Heart Icon in Bottom Right */
+.gallery-item::after {
+  content: '❤️';
+  position: absolute;
+  bottom: 15px;
+  /* Position at bottom */
+  right: 15px;
+  /* Position at right */
+  font-size: 1.8rem;
+  /* Nice corner size */
+  color: white;
+  z-index: 2;
+  opacity: 0;
+  /* Hidden by default */
+  /* Start slightly pushed down */
+  transform: translateY(20px);
+  /* Smooth bouncy transition */
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* --- HOVER ACTIONS --- */
+
+/* Zoom the image slightly */
+.gallery-item:hover img {
+  transform: scale(1.08);
+}
+
+/* Show the bottom gradient */
+.gallery-item:hover::before {
+  opacity: 1;
+}
+
+/* Slide the heart up and fade it in */
+.gallery-item:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- FOLLOW BUTTON CONTAINER --- */
+.gallery-footer {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.instagram-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+  color: white;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.instagram-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  color: white;
+}

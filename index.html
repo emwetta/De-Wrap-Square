@@ -43,11 +43,26 @@
     </div>
 
     <div class="cart-inputs">
-      <label>Delivery Details:</label>
+      <label>Order Type:</label>
+
+      <div class="order-type-switch">
+        <input type="radio" id="type-delivery" name="orderType" value="Delivery" checked onchange="toggleAddress(true)">
+        <label for="type-delivery" class="type-label">Delivery 🛵</label>
+
+        <input type="radio" id="type-pickup" name="orderType" value="Pick Up" onchange="toggleAddress(false)">
+        <label for="type-pickup" class="type-label">Pick Up 🏃</label>
+      </div>
+
+      <label>Your Details:</label>
       <input type="text" id="customer-name" placeholder="Your Name (Letters only)" class="cart-input"
         oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')">
+
       <input type="tel" id="customer-phone" placeholder="Ghana Phone (e.g. 055...)" class="cart-input" maxlength="10"
         oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
+      <div id="address-field">
+        <input type="text" id="customer-address" placeholder="Delivery Location / Address" class="cart-input">
+      </div>
     </div>
 
     <div class="cart-footer">

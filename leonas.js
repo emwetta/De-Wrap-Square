@@ -167,49 +167,75 @@ function checkout() {
     return;
   }
 
+  // 1. Get Inputs
   const customerName = document.getElementById('customer-name').value;
   const customerPhone = document.getElementById('customer-phone').value;
 
-  // 1. Validate Name (Letters & Spaces only)
+  // Get Order Type (Delivery or Pickup)
+  // We check which radio button is checked
+  const isDelivery = document.getElementById('type-delivery').checked;
+  const orderType = isDelivery ? "Delivery 🛵" : "Pick Up 🏃";
+
+  // Get Address (only relevant if delivery)
+  const customerAddress = document.getElementById('customer-address').value;
+
+  // 2. Validate Inputs
   const nameRegex = /^[a-zA-Z\s]+$/;
-  if (!nameRegex.test(customerName)) {
+  if (!customerName || !nameRegex.test(customerName)) {
     showCustomAlert("Invalid Name", "Please enter a valid name (letters only).");
     return;
   }
 
-  // 2. Validate Ghana Phone (Starts with 0, 10 digits)
   const phoneRegex = /^0\d{9}$/;
   if (!phoneRegex.test(customerPhone)) {
-    showCustomAlert("Invalid Phone", "Please enter a valid 10-digit Ghana phone number (e.g., 0551234567).");
+    showCustomAlert("Invalid Phone", "Please enter a valid 10-digit Ghana phone number.");
     return;
   }
 
-  const phoneNumber = "233596620696";
+  // Validate Address ONLY if Delivery is selected
+  if (isDelivery && customerAddress.trim() === "") {
+    showCustomAlert("Location Needed", "Please enter your delivery location.");
+    return;
+  }
 
-  let message = `Hello Leona's Pizzeria! New Order:\n`;
-  message += `1. Name: ${customerName}\n`;
-  message += `2. Phone: ${customerPhone}\n\n`;
-  message += `3.Order Details:\n`;
+  const phoneNumber = "233543723772"; // Your number
+
+  // 3. Build Message
+  let message = `*NEW ORDER - LEONA'S PIZZERIA* 🍕\n\n`;
+  message += `👤 *Name:* ${customerName}\n`;
+  message += `📞 *Phone:* ${customerPhone}\n`;
+  message += `📦 *Type:* ${orderType}\n`;
+
+  // Only add address to message if it is Delivery
+  if (isDelivery) {
+    message += `📍 *Location:* ${customerAddress}\n`;
+  }
+
+  message += `\n*📝 ORDER DETAILS:*\n`;
 
   let total = 0;
-
   cart.forEach(item => {
     const itemTotal = item.price * item.quantity;
     message += `- ${item.quantity}x ${item.size} ${item.name} (₵${itemTotal})\n`;
     total += itemTotal;
   });
 
-  message += `\n 4.*Total to Pay: ₵${total}*`;
-  message += `\n\nPlease confirm my order.`;
+  message += `\n💰 *TOTAL TO PAY: ₵${total}*`;
+
+  if (isDelivery) {
+    message += `\n_(Delivery fee will be added based on location)_`;
+  }
 
   const encodedMessage = encodeURIComponent(message);
   const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
   window.open(url, '_blank');
 
+  // Reset cart after 1 second
   setTimeout(() => {
     cart = [];
     document.getElementById('customer-name').value = "";
     document.getElementById('customer-phone').value = "";
+    document.getElementById('customer-address').value = "";
     updateCartUI();
     toggleCart();
   }, 1000);
@@ -263,3 +289,13 @@ checkShopStatus();
 
 // Optional: Re-check every minute (in case user keeps tab open)
 setInterval(checkShopStatus, 60000);
+
+// --- TOGGLE ADDRESS FIELD ---
+function toggleAddress(isDelivery) {
+  const addressField = document.getElementById('address-field');
+  if (isDelivery) {
+    addressField.style.display = "block";
+  } else {
+    addressField.style.display = "none";
+  }
+}

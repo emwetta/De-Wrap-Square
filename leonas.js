@@ -273,3 +273,46 @@ function toggleAddress(isDelivery) {
     addressField.style.display = "none";
   }
 }
+// --- SCROLL TO TOP LOGIC ---
+const scrollBtn = document.getElementById("scrollTopBtn");
+
+window.onscroll = function () {
+  if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+    scrollBtn.style.display = "block";
+  } else {
+    scrollBtn.style.display = "none";
+  }
+};
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// --- FAQ ACCORDION LOGIC ---
+const faqItems = document.querySelectorAll('.faq-item');
+
+faqItems.forEach(item => {
+  const question = item.querySelector('.faq-question');
+  const answer = item.querySelector('.faq-answer');
+
+  question.addEventListener('click', () => {
+    // 1. Toggle the active class
+    item.classList.toggle('active');
+
+    // 2. Handle the smooth slide animation
+    if (item.classList.contains('active')) {
+      answer.style.maxHeight = answer.scrollHeight + "px";
+    } else {
+      answer.style.maxHeight = 0;
+    }
+
+    // Optional: Close other items when one is opened (Accordion style)
+    /* faqItems.forEach(otherItem => {
+      if (otherItem !== item && otherItem.classList.contains('active')) {
+        otherItem.classList.remove('active');
+        otherItem.querySelector('.faq-answer').style.maxHeight = 0;
+      }
+    });
+    */
+  });
+});

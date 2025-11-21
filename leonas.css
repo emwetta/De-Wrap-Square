@@ -1347,3 +1347,124 @@ footer {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   color: white;
 }
+
+/* --- SCROLL TO TOP BUTTON --- */
+#scrollTopBtn {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  bottom: 90px;
+  /* Above the cart button */
+  right: 25px;
+  z-index: 1999;
+  background: #333;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
+  opacity: 0.8;
+}
+
+#scrollTopBtn:hover {
+  background: var(--brand-yellow);
+  color: black;
+  opacity: 1;
+}
+
+/* --- PROFESSIONAL FAQ SECTION --- */
+.faq-section {
+  padding: 80px 5%;
+  background-color: var(--bg-dark);
+  /* Matches page background */
+  border-top: 1px solid #eee;
+}
+
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* Space between cards */
+}
+
+.faq-item {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  border: 1px solid transparent;
+  /* Invisible border for transition */
+  transition: all 0.3s ease;
+}
+
+/* Hover Effect */
+.faq-item:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Active State (When Open) */
+.faq-item.active {
+  border-color: var(--brand-yellow);
+  /* Highlights the card */
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.15);
+}
+
+.faq-question {
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 500;
+  user-select: none;
+  /* Prevents highlighting text on click */
+}
+
+/* The Plus Icon */
+.faq-icon {
+  font-size: 1.5rem;
+  color: var(--brand-yellow);
+  font-weight: bold;
+  transition: transform 0.3s ease;
+  line-height: 1;
+}
+
+/* Rotate icon when active */
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+  /* Turns + into x */
+  color: #333;
+}
+
+/* The Answer (Hidden by default) */
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+  /* Smooth slide */
+  background-color: #fff;
+}
+
+.faq-answer p {
+  padding: 0 25px 25px 25px;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Make text darker when active */
+.faq-item.active .faq-question {
+  color: #000;
+}

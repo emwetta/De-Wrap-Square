@@ -234,4 +234,32 @@ function filterMenu(category) {
       item.style.display = 'none';
     }
   });
+}  // --- OPEN/CLOSED LOGIC ---
+function checkShopStatus() {
+  const now = new Date();
+  const hour = now.getHours(); // 0 to 23
+
+  // Get elements
+  const badge = document.getElementById('status-badge');
+  const text = document.getElementById('status-text');
+
+  // Logic: Open from 10:00 AM (10) to 10:00 PM (22)
+  // Change these numbers if your hours are different
+  const isOpen = hour >= 10 && hour < 22;
+
+  if (isOpen) {
+    badge.classList.add('status-open');
+    badge.classList.remove('status-closed');
+    text.innerText = "Open Now - Taking Orders";
+  } else {
+    badge.classList.add('status-closed');
+    badge.classList.remove('status-open');
+    text.innerText = "Closed (Opens 10:00 AM)";
+  }
 }
+
+// Run immediately when page loads
+checkShopStatus();
+
+// Optional: Re-check every minute (in case user keeps tab open)
+setInterval(checkShopStatus, 60000);

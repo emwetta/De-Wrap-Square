@@ -1093,3 +1093,78 @@ footer {
     right: 0;
   }
 }
+
+/* --- LIVE STATUS BADGE --- */
+.status-badge {
+  background: rgba(0, 0, 0, 0.6);
+  /* Dark background for contrast */
+  backdrop-filter: blur(5px);
+  padding: 8px 16px;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  /* Space above the main title */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ccc;
+  display: inline-block;
+}
+
+/* --- STATUS COLORS & ANIMATION --- */
+
+/* OPEN STYLE */
+.status-open .status-dot {
+  background-color: #00e676;
+  /* Bright Green */
+  box-shadow: 0 0 10px #00e676;
+  animation: blink-green 2s infinite;
+}
+
+.status-open {
+  border-color: #00e676;
+  /* Green border */
+}
+
+/* CLOSED STYLE */
+.status-closed .status-dot {
+  background-color: #ff1744;
+  /* Red */
+  box-shadow: 0 0 10px #ff1744;
+}
+
+.status-closed {
+  border-color: #ff1744;
+  /* Red border */
+  opacity: 0.8;
+}
+
+/* ANIMATION FRAMES */
+@keyframes blink-green {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

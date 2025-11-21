@@ -1468,3 +1468,15 @@ footer {
 .faq-item.active .faq-question {
   color: #000;
 }
+
+/* --- FIX IPHONE AUTO-ZOOM --- */
+@media (max-width: 768px) {
+
+  input,
+  select,
+  textarea,
+  .cart-input {
+    font-size: 16px !important;
+    /* Prevents zooming on tap */
+  }
+}

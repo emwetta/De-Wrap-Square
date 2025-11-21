@@ -438,24 +438,12 @@ header {
   font-size: 1.2rem;
 }
 
-/* Scrollable Review Text Fix */
+/* Reverted to Standard Look (No Scrollbar) */
 .review-card p {
   color: #555;
   font-style: italic;
   margin-bottom: 20px;
   line-height: 1.6;
-  max-height: 120px;
-  overflow-y: auto;
-  padding-right: 5px;
-}
-
-.review-card p::-webkit-scrollbar {
-  width: 4px;
-}
-
-.review-card p::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 10px;
 }
 
 .reviewer {
@@ -751,7 +739,6 @@ footer {
   border-top: 1px solid #eee;
   display: flex;
   flex-direction: column;
-  /* STACKS EVERYTHING VERTICALLY */
 }
 
 .cart-inputs label {
@@ -1064,7 +1051,7 @@ footer {
     }
   }
 
-  /* 1. HEADER & NAV */
+  /* 1. HEADER & NAV FIXES */
   header {
     padding: 10px 15px !important;
   }
@@ -1180,14 +1167,16 @@ footer {
     animation: floatSide 2s infinite;
   }
 
-  /* 5. MOBILE CONTACT SLIDER */
+  /* 5. MOBILE CONTACT SLIDER (FULL WIDTH, NO GAPS) */
   .contact-info {
     display: flex !important;
     grid-template-columns: none !important;
     overflow-x: auto !important;
     scroll-snap-type: x mandatory;
-    gap: 20px !important;
-    padding-bottom: 20px;
+    gap: 0 !important;
+    /* REMOVED GAP */
+    padding: 0 !important;
+    /* REMOVED PADDING */
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
@@ -1197,33 +1186,51 @@ footer {
   }
 
   .info-box {
-    min-width: 85vw;
+    min-width: 100%;
+    /* FULL WIDTH */
     scroll-snap-align: center;
-    background: rgba(255, 255, 255, 0.05);
+    background: transparent;
+    /* Remove bg if overlapping hero style */
     padding: 30px 20px !important;
-    border-radius: 15px;
-    border: 1px solid #333 !important;
+    border: none !important;
+    /* Remove box border */
     border-bottom: 1px solid #333 !important;
+    /* Center text vertically if needed */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Added container to handle full width properly */
+  .contact-slider-container {
+    width: 100%;
+    overflow: hidden;
   }
 
   .contact-section {
     position: relative;
+    padding-bottom: 60px;
   }
+
+  /* Added padding for hint */
 
   .contact-section::after {
     content: 'Swipe for details →';
     display: block;
     text-align: center;
     font-size: 0.8rem;
-    color: #666;
-    margin-top: 10px;
+    color: #888;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    left: 0;
     animation: floatSide 2s infinite;
   }
 
   /* 6. PADDING ADJUSTMENTS */
   .menu-section,
-  .gallery-section,
-  .contact-section {
+  .gallery-section {
     padding: 50px 5%;
   }
 

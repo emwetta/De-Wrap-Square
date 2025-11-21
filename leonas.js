@@ -23,13 +23,10 @@ document.querySelectorAll(".nav-link").forEach(n => n.addEventListener("click", 
   navMenu.classList.remove("active");
 }));
 
-// 4. CLOSE WHEN CLICKING OUTSIDE (The "Magic" Fix)
+// 4. CLOSE WHEN CLICKING OUTSIDE
 document.addEventListener('click', (e) => {
-  // If the menu is open...
   if (navMenu.classList.contains('active')) {
-    // And the click was NOT on the menu, and NOT on the hamburger...
     if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
-      // Close it!
       hamburger.classList.remove("active");
       navMenu.classList.remove("active");
     }
@@ -45,6 +42,26 @@ function nextSlide() {
   slides[currentSlide].classList.add('active');
 }
 setInterval(nextSlide, 5000);
+
+// --- AUTO SLIDE CONTACT INFO (Mobile) ---
+function autoSlideContact() {
+  const container = document.querySelector('.contact-info');
+  // Only run on mobile where flex is active
+  if (window.innerWidth <= 768 && container) {
+    // Scroll width of one item + gap
+    const scrollAmount = container.offsetWidth * 0.85 + 20;
+
+    // If we are at the end, scroll back to start
+    if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
+      container.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  }
+}
+// Slide contact info every 4 seconds
+setInterval(autoSlideContact, 4000);
+
 
 // --- CUSTOM ALERT LOGIC ---
 function showCustomAlert(title, message) {
@@ -90,16 +107,13 @@ function addToCart(name, size, price) {
   }
   updateCartUI();
 
-  // Open sidebar
   const sidebar = document.getElementById('cart-sidebar');
   const backdrop = document.getElementById('cart-backdrop');
   if (!sidebar.classList.contains('active')) {
     sidebar.classList.add('active');
     backdrop.classList.add('active');
 
-    // AUTO CLOSE LOGIC (Close after 2.5 seconds)
     setTimeout(() => {
-      // Only close if it's still open
       if (sidebar.classList.contains('active')) {
         toggleCart();
       }
@@ -141,7 +155,6 @@ function updateCartUI() {
 
       const itemDiv = document.createElement('div');
       itemDiv.classList.add('cart-item');
-      // Added the "X" remove-btn here at the start
       itemDiv.innerHTML = `
         <span class="remove-btn" onclick="removeItem(${index})">×</span>
         <div class="item-info">
@@ -167,19 +180,12 @@ function checkout() {
     return;
   }
 
-  // 1. Get Inputs
   const customerName = document.getElementById('customer-name').value;
   const customerPhone = document.getElementById('customer-phone').value;
-
-  // Get Order Type (Delivery or Pickup)
-  // We check which radio button is checked
   const isDelivery = document.getElementById('type-delivery').checked;
   const orderType = isDelivery ? "Delivery 🛵" : "Pick Up 🏃";
-
-  // Get Address (only relevant if delivery)
   const customerAddress = document.getElementById('customer-address').value;
 
-  // 2. Validate Inputs
   const nameRegex = /^[a-zA-Z\s]+$/;
   if (!customerName || !nameRegex.test(customerName)) {
     showCustomAlert("Invalid Name", "Please enter a valid name (letters only).");
@@ -192,21 +198,18 @@ function checkout() {
     return;
   }
 
-  // Validate Address ONLY if Delivery is selected
   if (isDelivery && customerAddress.trim() === "") {
     showCustomAlert("Location Needed", "Please enter your delivery location.");
     return;
   }
 
-  const phoneNumber = "233543723772"; // Your number
+  const phoneNumber = "233543723772";
 
-  // 3. Build Message
   let message = `*NEW ORDER - LEONA'S PIZZERIA* 🍕\n\n`;
   message += `👤 *Name:* ${customerName}\n`;
   message += `📞 *Phone:* ${customerPhone}\n`;
   message += `📦 *Type:* ${orderType}\n`;
 
-  // Only add address to message if it is Delivery
   if (isDelivery) {
     message += `📍 *Location:* ${customerAddress}\n`;
   }
@@ -230,7 +233,6 @@ function checkout() {
   const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
   window.open(url, '_blank');
 
-  // Reset cart after 1 second
   setTimeout(() => {
     cart = [];
     document.getElementById('customer-name').value = "";
@@ -245,14 +247,11 @@ function checkout() {
 function filterMenu(category) {
   const buttons = document.querySelectorAll('.filter-btn');
   buttons.forEach(btn => btn.classList.remove('active'));
-
   event.target.classList.add('active');
 
   const items = document.querySelectorAll('.pizza-card');
-
   items.forEach(item => {
     const itemCategory = item.getAttribute('data-category');
-
     if (category === 'all' || itemCategory === category) {
       item.style.display = 'flex';
       item.style.animation = 'fadeIn 0.5s ease';
@@ -260,17 +259,15 @@ function filterMenu(category) {
       item.style.display = 'none';
     }
   });
-}  // --- OPEN/CLOSED LOGIC ---
+}
+
+// --- OPEN/CLOSED LOGIC ---
 function checkShopStatus() {
   const now = new Date();
-  const hour = now.getHours(); // 0 to 23
-
-  // Get elements
+  const hour = now.getHours();
   const badge = document.getElementById('status-badge');
   const text = document.getElementById('status-text');
 
-  // Logic: Open from 10:00 AM (10) to 10:00 PM (22)
-  // Change these numbers if your hours are different
   const isOpen = hour >= 10 && hour < 22;
 
   if (isOpen) {
@@ -283,11 +280,7 @@ function checkShopStatus() {
     text.innerText = "Closed (Opens 10:00 AM)";
   }
 }
-
-// Run immediately when page loads
 checkShopStatus();
-
-// Optional: Re-check every minute (in case user keeps tab open)
 setInterval(checkShopStatus, 60000);
 
 // --- TOGGLE ADDRESS FIELD ---

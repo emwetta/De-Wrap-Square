@@ -1,4 +1,4 @@
-/* --- LEONA'S PIZZERIA: MASTER THEME (RESPONSIVE & POLISHED) --- */
+/* --- LEONA'S PIZZERIA: MASTER THEME (FINAL) --- */
 
 :root {
   --brand-yellow: #FFC107;
@@ -122,10 +122,7 @@ header {
 /* --- HERO SLIDER --- */
 .hero {
   height: 85vh;
-  /* Slightly reduced for better look */
   min-height: 550px;
-  max-height: 900px;
-  /* Prevents it being too tall on giant screens */
   width: 100%;
   position: relative;
   display: flex;
@@ -313,11 +310,9 @@ header {
 /* MENU GRID (Standard Desktop Layout) */
 .menu-grid {
   display: grid;
-  /* Keeps cards from getting too big or too small on PC */
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 30px;
   max-width: 1200px;
-  /* Prevents stretching on huge screens */
   margin: 0 auto;
 }
 
@@ -326,7 +321,6 @@ header {
   background-color: var(--bg-card);
   border-radius: 15px;
   overflow: hidden;
-  /* Ensures image stays inside rounded corners */
   border: 1px solid var(--border-light);
   display: flex;
   flex-direction: column;
@@ -343,7 +337,6 @@ header {
 .card-image {
   width: 100%;
   height: 220px;
-  /* Fixed height for uniformity */
   margin: 0;
   background: #f8f8f8;
   display: flex;
@@ -355,7 +348,6 @@ header {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* Crops image neatly to fill box */
   transition: 0.5s;
 }
 
@@ -446,19 +438,17 @@ header {
   font-size: 1.2rem;
 }
 
+/* Scrollable Review Text Fix */
 .review-card p {
   color: #555;
   font-style: italic;
   margin-bottom: 20px;
   line-height: 1.6;
   max-height: 120px;
-  /* Limits height */
   overflow-y: auto;
-  /* Enables scroll for long text */
   padding-right: 5px;
 }
 
-/* Scrollbar for reviews */
 .review-card p::-webkit-scrollbar {
   width: 4px;
 }
@@ -754,13 +744,14 @@ footer {
   background: var(--brand-yellow);
 }
 
-/* Inputs & Footer (Fixed Stacking) */
+/* Inputs & Footer (Fixed Stacking for PC & Mobile) */
 .cart-inputs {
   padding: 20px;
   background: white;
   border-top: 1px solid #eee;
   display: flex;
   flex-direction: column;
+  /* STACKS EVERYTHING VERTICALLY */
 }
 
 .cart-inputs label {
@@ -1013,6 +1004,66 @@ footer {
 
 @media (max-width: 768px) {
 
+  /* --- MOBILE MENU SLIDER (75vw = Visible Peek) --- */
+  .menu-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory;
+    gap: 20px !important;
+    padding-bottom: 30px;
+    padding-left: 5%;
+    padding-right: 5%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .menu-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 75vw width ensures the NEXT card is visible on the right */
+  .pizza-card {
+    min-width: 75vw;
+    max-width: 75vw;
+    scroll-snap-align: center;
+    margin-top: 0 !important;
+  }
+
+  /* BOLD YELLOW Swipe Hint */
+  .menu-section {
+    position: relative;
+  }
+
+  .menu-section::after {
+    content: 'Swipe for more →';
+    position: absolute;
+    right: 20px;
+    bottom: 40px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    /* Bold */
+    color: #333;
+    background: var(--brand-yellow);
+    /* Yellow Background */
+    padding: 5px 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    animation: floatSide 2s infinite;
+    pointer-events: none;
+  }
+
+  @keyframes floatSide {
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    50% {
+      transform: translateX(5px);
+    }
+  }
+
   /* 1. HEADER & NAV */
   header {
     padding: 10px 15px !important;
@@ -1040,7 +1091,6 @@ footer {
     margin-top: 15px;
   }
 
-  /* Close Button (Mobile Only) */
   .mobile-close-btn {
     display: block !important;
     position: absolute;
@@ -1088,65 +1138,7 @@ footer {
     font-size: 2.5rem;
   }
 
-  /* 3. MOBILE MENU SLIDER (App-Like Swipe) */
-  .menu-grid {
-    display: flex !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory;
-    gap: 20px !important;
-    padding-bottom: 30px;
-    padding-left: 5%;
-    padding-right: 5%;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .menu-grid::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* 80vw width allows next card to PEEK */
-  .pizza-card {
-    min-width: 80vw;
-    max-width: 80vw;
-    scroll-snap-align: center;
-    margin-top: 0 !important;
-  }
-
-  /* BOLD Swipe Hint */
-  .menu-section {
-    position: relative;
-  }
-
-  .menu-section::after {
-    content: 'Swipe for more →';
-    position: absolute;
-    right: 20px;
-    bottom: 40px;
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #555;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 5px 10px;
-    border-radius: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    animation: floatSide 2s infinite;
-    pointer-events: none;
-  }
-
-  @keyframes floatSide {
-
-    0%,
-    100% {
-      transform: translateX(0);
-    }
-
-    50% {
-      transform: translateX(5px);
-    }
-  }
-
-  /* 4. MOBILE GALLERY SWIPE */
+  /* 3. MOBILE GALLERY SWIPE */
   .gallery-grid {
     display: flex !important;
     flex-wrap: nowrap !important;

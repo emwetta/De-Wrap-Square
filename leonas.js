@@ -42,6 +42,19 @@ function toggleCart() {
   backdrop.classList.toggle('active');
 }
 
+function clearCart() {
+  if (cart.length === 0) return;
+  if (confirm("Are you sure you want to remove all items?")) {
+    cart = [];
+    updateCartUI();
+  }
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  updateCartUI();
+}
+
 function addToCart(name, size, price) {
   const existingItem = cart.find(item => item.name === name && item.size === size);
   if (existingItem) {
@@ -51,12 +64,20 @@ function addToCart(name, size, price) {
   }
   updateCartUI();
 
-  // Ensure sidebar opens
+  // Open sidebar
   const sidebar = document.getElementById('cart-sidebar');
   const backdrop = document.getElementById('cart-backdrop');
   if (!sidebar.classList.contains('active')) {
     sidebar.classList.add('active');
     backdrop.classList.add('active');
+
+    // AUTO CLOSE LOGIC (Close after 2.5 seconds)
+    setTimeout(() => {
+      // Only close if it's still open
+      if (sidebar.classList.contains('active')) {
+        toggleCart();
+      }
+    }, 2500);
   }
 }
 
@@ -94,7 +115,9 @@ function updateCartUI() {
 
       const itemDiv = document.createElement('div');
       itemDiv.classList.add('cart-item');
+      // Added the "X" remove-btn here at the start
       itemDiv.innerHTML = `
+        <span class="remove-btn" onclick="removeItem(${index})">×</span>
         <div class="item-info">
           <h5>${item.name} (${item.size})</h5>
           <small>₵${item.price} x ${item.quantity} = ₵${itemTotal}</small>
@@ -162,35 +185,27 @@ function checkout() {
     document.getElementById('customer-name').value = "";
     document.getElementById('customer-phone').value = "";
     updateCartUI();
-    toggleCart(); // Close sidebar using the toggle function which handles backdrop too
+    toggleCart();
   }, 1000);
 }
 
 // --- MENU FILTERING LOGIC ---
 function filterMenu(category) {
-  // 1. Update Buttons (Visuals)
   const buttons = document.querySelectorAll('.filter-btn');
   buttons.forEach(btn => btn.classList.remove('active'));
 
-  // Find the button that was clicked and make it active
-  // (We use event.target logic or just loop to find the matching text, but simpler:)
   event.target.classList.add('active');
 
-  // 2. Filter Items
   const items = document.querySelectorAll('.pizza-card');
 
   items.forEach(item => {
     const itemCategory = item.getAttribute('data-category');
 
     if (category === 'all' || itemCategory === category) {
-      item.style.display = 'flex'; // Show
-      // Optional: Add a fade-in animation
+      item.style.display = 'flex';
       item.style.animation = 'fadeIn 0.5s ease';
     } else {
-      item.style.display = 'none'; // Hide
+      item.style.display = 'none';
     }
   });
 }
-
-// Add simple fade animation to CSS if not exists
-// document.styleSheets[0].insertRule(`@keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }`, 0);

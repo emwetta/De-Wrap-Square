@@ -14,7 +14,6 @@
 
 <body>
 
-  <!-- CUSTOM ALERT MODAL -->
   <div id="custom-alert" class="modal-overlay">
     <div class="modal-box">
       <div class="modal-icon">⚠️</div>
@@ -24,32 +23,29 @@
     </div>
   </div>
 
-  <!-- CART BACKDROP (Clicking this closes the cart) -->
   <div id="cart-backdrop" class="cart-backdrop" onclick="toggleCart()"></div>
 
-  <!-- FLOATING CART BUTTON -->
   <div class="cart-icon" onclick="toggleCart()">
     🛒 <span id="cart-count">0</span>
   </div>
 
-  <!-- CART SIDEBAR -->
   <div class="cart-sidebar" id="cart-sidebar">
     <div class="cart-header">
       <h3>Your Order</h3>
-      <span class="close-cart" onclick="toggleCart()">×</span>
+      <div class="header-actions">
+        <span class="clear-cart-btn" onclick="clearCart()">Clear All</span>
+        <span class="close-cart" onclick="toggleCart()">×</span>
+      </div>
     </div>
 
     <div class="cart-items" id="cart-items">
       <p class="empty-msg">Your cart is empty.</p>
     </div>
 
-    <!-- Customer Inputs -->
     <div class="cart-inputs">
       <label>Delivery Details:</label>
-      <!-- oninput="this.value..." blocks numbers from being typed in name -->
       <input type="text" id="customer-name" placeholder="Your Name (Letters only)" class="cart-input"
         oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')">
-      <!-- type="tel" + maxlength="10" for Ghana numbers -->
       <input type="tel" id="customer-phone" placeholder="Ghana Phone (e.g. 055...)" class="cart-input" maxlength="10"
         oninput="this.value = this.value.replace(/[^0-9]/g, '')">
     </div>
@@ -107,7 +103,6 @@
       </div>
     </div>
   </section>
-  <!-- NEW: HOW IT WORKS SECTION -->
   <section class="how-it-works">
     <h2 class="section-title" style="margin-bottom: 40px;">How to Order</h2>
     <div class="steps-grid">
@@ -135,7 +130,6 @@
       <p class="section-subtitle">Authentic Ghanaian-Style Pizza</p>
     </div>
 
-    <!-- NEW: CATEGORY FILTERS -->
     <div class="menu-filters">
       <button class="filter-btn active" onclick="filterMenu('all')">All</button>
       <button class="filter-btn" onclick="filterMenu('pizza')">Pizzas</button>
@@ -145,7 +139,6 @@
 
     <div class="menu-grid">
 
-      <!-- PIZZAS (Added data-category="pizza") -->
       <div class="pizza-card" data-category="pizza">
         <div class="card-image"><img src="margherita.jpeg" alt="Margheritta"></div>
         <div class="card-content">
@@ -299,7 +292,6 @@
         </div>
       </div>
 
-      <!-- WRAPS (Added data-category="wrap") -->
       <div class="pizza-card" data-category="wrap">
         <div class="card-image"><img
             src="https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800" alt="Wrap">
@@ -353,7 +345,6 @@
         </div>
       </div>
 
-      <!-- DRINKS (Added data-category="drink") -->
       <div class="pizza-card" data-category="drink">
         <div class="card-image"><img
             src="https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=800"
@@ -472,7 +463,7 @@
       <a href="#" target="_blank">TikTok 🎵</a>
       <a href="#" target="_blank">Facebook 🔵</a>
     </div>
-    <p>&copy; 2025 Leona's Pizzeria. All rights reserved.</p>
+    <p>© 2025 Leona's Pizzeria. All rights reserved.</p>
     <div class="info-box">
       <P>DEVELOPED BY MR.WETTA</P>
     </div>

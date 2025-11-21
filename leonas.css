@@ -904,6 +904,74 @@ footer {
 
 @media (max-width: 768px) {
 
+  /* --- 7. MOBILE MENU SLIDER (App-Like Swipe) --- */
+
+  /* Turn the grid into a horizontal slider */
+  .menu-grid {
+    display: flex !important;
+    /* Lines items up in a row */
+    overflow-x: auto !important;
+    /* Allows scrolling sideways */
+    scroll-snap-type: x mandatory;
+    /* Makes it snap to the center */
+    gap: 20px !important;
+    /* Space between cards */
+    padding-bottom: 30px;
+    /* Room for scrollbar (hidden) */
+    padding-left: 5%;
+    /* Centers the first item */
+    padding-right: 5%;
+
+    /* Hide Scrollbar for cleaner look */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .menu-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Make the cards the right width for swiping */
+  .pizza-card {
+    min-width: 85vw;
+    /* Card takes 85% of screen width */
+    max-width: 85vw;
+    /* Ensures it doesn't get bigger */
+    scroll-snap-align: center;
+    /* Snaps to the middle of screen */
+    margin-top: 0 !important;
+  }
+
+  /* Add a subtle hint telling user to swipe */
+  .menu-section {
+    position: relative;
+  }
+
+  .menu-section::after {
+    content: 'Swipe for more →';
+    position: absolute;
+    right: 20px;
+    bottom: 40px;
+    /* Positioning it below the cards */
+    font-size: 0.8rem;
+    color: #999;
+    animation: floatSide 2s infinite;
+    pointer-events: none;
+    /* Let clicks pass through */
+  }
+
+  @keyframes floatSide {
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    50% {
+      transform: translateX(5px);
+    }
+  }
+
   /* 1. HEADER & NAV FIXES */
   header {
     padding: 10px 15px !important;

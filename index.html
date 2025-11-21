@@ -3,7 +3,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, 
+maximum-scale=1.0, user-scalable=no">
   <title>Leona's Pizzeria | Best Pizza & Wraps</title>
   <link rel="stylesheet" href="leonas.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,6 +37,7 @@
   </div>
 
   <div class="cart-sidebar" id="cart-sidebar">
+
     <div class="cart-header">
       <h3>Your Order</h3>
       <div class="header-actions">
@@ -44,30 +46,34 @@
       </div>
     </div>
 
-    <div class="cart-items" id="cart-items">
-      <p class="empty-msg">Your cart is empty.</p>
-    </div>
+    <div class="cart-scroll-wrapper">
 
-    <div class="cart-inputs">
-      <label>Order Type:</label>
-
-      <div class="order-type-switch">
-        <input type="radio" id="type-delivery" name="orderType" value="Delivery" checked onchange="toggleAddress(true)">
-        <label for="type-delivery" class="type-label">Delivery 🛵</label>
-
-        <input type="radio" id="type-pickup" name="orderType" value="Pick Up" onchange="toggleAddress(false)">
-        <label for="type-pickup" class="type-label">Pick Up 🏃</label>
+      <div class="cart-items" id="cart-items">
+        <p class="empty-msg">Your cart is empty.</p>
       </div>
 
-      <label>Your Details:</label>
-      <input type="text" id="customer-name" placeholder="Your Name (Letters only)" class="cart-input"
-        oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')">
+      <div class="cart-inputs">
+        <label>Order Type:</label>
 
-      <input type="tel" id="customer-phone" placeholder="Ghana Phone (e.g. 055...)" class="cart-input" maxlength="10"
-        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <div class="order-type-switch">
+          <input type="radio" id="type-delivery" name="orderType" value="Delivery" checked
+            onchange="toggleAddress(true)">
+          <label for="type-delivery" class="type-label">Delivery 🛵</label>
 
-      <div id="address-field">
-        <input type="text" id="customer-address" placeholder="Delivery Location / Address" class="cart-input">
+          <input type="radio" id="type-pickup" name="orderType" value="Pick Up" onchange="toggleAddress(false)">
+          <label for="type-pickup" class="type-label">Pick Up 🏃</label>
+        </div>
+
+        <label>Your Details:</label>
+        <input type="text" id="customer-name" placeholder="Your Name (Letters only)" class="cart-input"
+          oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')">
+
+        <input type="tel" id="customer-phone" placeholder="Ghana Phone (e.g. 055...)" class="cart-input" maxlength="10"
+          oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
+        <div id="address-field">
+          <input type="text" id="customer-address" placeholder="Delivery Location / Address" class="cart-input">
+        </div>
       </div>
     </div>
 
@@ -79,7 +85,6 @@
       <button class="checkout-btn" onclick="checkout()">Checkout on WhatsApp ➝</button>
     </div>
   </div>
-
   <header>
     <div class="logo">
       <img src="logo.svg" alt="Logo">

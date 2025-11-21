@@ -1469,14 +1469,102 @@ footer {
   color: #000;
 }
 
-/* --- FIX IPHONE AUTO-ZOOM --- */
-@media (max-width: 768px) {
+/* --- FORCE STOP IPHONE ZOOM --- */
+@media screen and (max-width: 768px) {
 
   input,
   select,
   textarea,
   .cart-input {
     font-size: 16px !important;
-    /* Prevents zooming on tap */
+    /* iPhone requires 16px to stop zooming */
+    transform: scale(1);
+    /* Forces reset */
   }
+
+  /* Fix for the error modal appearing zoomed */
+  .modal-box {
+    font-size: 1rem !important;
+    /* Ensures modal text stays readable */
+  }
+}
+
+/* --- CART SIDEBAR STRUCTURE FIX --- */
+
+/* 1. The Sidebar Container */
+.cart-sidebar {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  background: #f4f7f6;
+  z-index: 2001;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+  transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+  display: flex;
+  flex-direction: column;
+  /* Stack Header, Middle, Footer */
+}
+
+.cart-sidebar.active {
+  right: 0;
+}
+
+/* 2. The Header (Fixed Height) */
+.cart-header {
+  padding: 20px 25px;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+  /* Don't let header shrink */
+}
+
+/* 3. NEW SCROLL WRAPPER (The Middle Part) */
+.cart-scroll-wrapper {
+  flex-grow: 1;
+  /* Fill all remaining space */
+  overflow-y: auto;
+  /* Allow scrolling inside this area */
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 4. Cart Items (Inside Wrapper) */
+.cart-items {
+  padding: 20px;
+  flex-shrink: 0;
+  /* Allow it to grow as long as needed */
+  /* Removed overflow-y: auto from here, handled by wrapper now */
+}
+
+/* 5. Cart Inputs (Inside Wrapper) */
+.cart-inputs {
+  padding: 0 20px 20px 20px;
+  /* Adjusted padding */
+  background: transparent;
+  /* Blend with wrapper */
+  border-top: none;
+  /* Remove separator line */
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  /* Don't shrink, just scroll */
+}
+
+/* 6. The Footer (Fixed Height at Bottom) */
+.cart-footer {
+  padding: 25px;
+  background: white;
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+  /* Ensure footer is always visible */
+  margin-top: 0;
+  /* Remove auto margin */
+  z-index: 10;
 }

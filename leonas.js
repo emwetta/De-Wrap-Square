@@ -43,25 +43,6 @@ function nextSlide() {
 }
 setInterval(nextSlide, 5000);
 
-// --- AUTO SLIDE CONTACT INFO (Mobile) ---
-function autoSlideContact() {
-  const container = document.querySelector('.contact-info');
-  // Only run on mobile where flex is active
-  if (window.innerWidth <= 768 && container) {
-    // Scroll width of one item + gap
-    const scrollAmount = container.offsetWidth * 0.85 + 20;
-
-    // If we are at the end, scroll back to start
-    if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
-      container.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  }
-}
-// Slide contact info every 4 seconds
-setInterval(autoSlideContact, 4000);
-
 
 // --- CUSTOM ALERT LOGIC ---
 function showCustomAlert(title, message) {

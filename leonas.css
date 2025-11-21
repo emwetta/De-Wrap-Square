@@ -438,7 +438,6 @@ header {
   font-size: 1.2rem;
 }
 
-/* Reverted to Standard Look (No Scrollbar) */
 .review-card p {
   color: #555;
   font-style: italic;
@@ -732,7 +731,7 @@ footer {
   background: var(--brand-yellow);
 }
 
-/* Inputs & Footer (Fixed Stacking for PC & Mobile) */
+/* Inputs & Footer (Fixed Stacking) */
 .cart-inputs {
   padding: 20px;
   background: white;
@@ -1051,7 +1050,7 @@ footer {
     }
   }
 
-  /* 1. HEADER & NAV FIXES */
+  /* 1. HEADER & NAV */
   header {
     padding: 10px 15px !important;
   }
@@ -1167,80 +1166,63 @@ footer {
     animation: floatSide 2s infinite;
   }
 
-  /* 5. MOBILE CONTACT SLIDER (FULL WIDTH, NO GAPS) */
+  /* 5. MOBILE CONTACT (RESTORED TO NORMAL VERTICAL STACK) */
   .contact-info {
-    display: flex !important;
-    grid-template-columns: none !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory;
-    gap: 0 !important;
-    /* REMOVED GAP */
+    display: grid !important;
+    /* BACK TO GRID */
+    grid-template-columns: 1fr !important;
+    /* SINGLE COLUMN */
+    overflow-x: visible !important;
+    gap: 40px !important;
+    /* Space between stacked items */
     padding: 0 !important;
-    /* REMOVED PADDING */
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .contact-info::-webkit-scrollbar {
-    display: none;
   }
 
   .info-box {
-    min-width: 100%;
-    /* FULL WIDTH */
-    scroll-snap-align: center;
+    min-width: auto;
+    /* Remove width constraint */
+    border-right: none;
+    border-bottom: 1px solid #333;
+    padding-bottom: 30px;
     background: transparent;
-    /* Remove bg if overlapping hero style */
-    padding: 30px 20px !important;
-    border: none !important;
-    /* Remove box border */
+    /* No card background needed for vertical */
+    border-radius: 0;
+    border: none;
     border-bottom: 1px solid #333 !important;
-    /* Center text vertically if needed */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
   }
 
-  /* Added container to handle full width properly */
-  .contact-slider-container {
-    width: 100%;
-    overflow: hidden;
+  .info-box:last-child {
+    border-bottom: none !important;
   }
-
-  .contact-section {
-    position: relative;
-    padding-bottom: 60px;
-  }
-
-  /* Added padding for hint */
 
   .contact-section::after {
-    content: 'Swipe for details →';
-    display: block;
-    text-align: center;
-    font-size: 0.8rem;
-    color: #888;
-    position: absolute;
-    bottom: 20px;
-    width: 100%;
-    left: 0;
-    animation: floatSide 2s infinite;
+    content: none;
+    /* Remove swipe hint */
+    display: none;
   }
 
   /* 6. PADDING ADJUSTMENTS */
   .menu-section,
-  .gallery-section {
+  .gallery-section,
+  .contact-section {
     padding: 50px 5%;
   }
 
+  /* REDUCED REVIEWS SIZE */
   .reviews-section {
-    padding: 50px 15px;
+    padding: 30px 15px;
+  }
+
+  .reviews-grid {
+    grid-template-columns: 1fr !important;
+    /* Force 1 column */
+    gap: 20px;
   }
 
   .review-card {
-    padding: 20px;
-    margin-bottom: 15px;
+    padding: 15px 20px;
+    /* Tighter padding */
+    margin-bottom: 0;
   }
 
   /* 7. CART WIDTH (Shows strip behind) */

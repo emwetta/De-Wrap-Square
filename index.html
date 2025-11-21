@@ -91,7 +91,6 @@
     <nav>
       <ul class="nav-menu">
         <span class="mobile-close-btn">×</span>
-
         <li><a href="#home" class="nav-link">Home</a></li>
         <li><a href="#menu" class="nav-link">Menu</a></li>
         <li><a href="#contact" class="nav-btn desktop-btn">Call to Order</a></li>
@@ -117,6 +116,7 @@
         <span class="status-dot"></span>
         <span id="status-text">Checking status...</span>
       </div>
+
       <h1>Taste the <span class="highlight">Joy</span></h1>
       <p>Authentic Ghanaian-Style Pizza, Wraps, and Smoothies.</p>
       <div class="hero-btns">
@@ -159,7 +159,8 @@
       <button class="filter-btn" onclick="filterMenu('drink')">Drinks</button>
     </div>
 
-    <div class="menu-grid">
+    <div class="menu-grid" id="menu-grid">
+
       <div class="pizza-card" data-category="pizza">
         <div class="card-image"><img src="margherita.jpeg" alt="Margheritta"></div>
         <div class="card-content">
@@ -302,11 +303,9 @@
             <div class="size-row" onclick="addToCart('Leonas Special', 'Small', 85)"><span>Small</span> <span>₵85</span>
             </div>
             <div class="size-row" onclick="addToCart('Leonas Special', 'Medium', 105)"><span>Medium</span>
-              <span>₵105</span>
-            </div>
+              <span>₵105</span></div>
             <div class="size-row" onclick="addToCart('Leonas Special', 'Large', 155)"><span>Large</span>
-              <span>₵155</span>
-            </div>
+              <span>₵155</span></div>
             <div class="size-row" onclick="addToCart('Leonas Special', 'XL', 188)"><span>XL</span> <span>₵188</span>
             </div>
           </div>
@@ -322,8 +321,7 @@
           <p class="ingredients">Grilled chicken, fresh veggies</p>
           <div class="size-options">
             <div class="size-row" onclick="addToCart('Chicken Wrap', 'Regular', 35)"><span>Regular</span>
-              <span>₵35</span>
-            </div>
+              <span>₵35</span></div>
           </div>
         </div>
       </div>
@@ -347,8 +345,7 @@
           <p class="ingredients">Crispy golden fried potatoes</p>
           <div class="size-options">
             <div class="size-row" onclick="addToCart('French Fries', 'Portion', 20)"><span>Portion</span>
-              <span>₵20</span>
-            </div>
+              <span>₵20</span></div>
           </div>
         </div>
       </div>
@@ -360,8 +357,7 @@
           <p class="ingredients">Fries topped with cheese & beef</p>
           <div class="size-options">
             <div class="size-row" onclick="addToCart('Loaded Fries', 'Portion', 35)"><span>Portion</span>
-              <span>₵35</span>
-            </div>
+              <span>₵35</span></div>
           </div>
         </div>
       </div>
@@ -380,8 +376,7 @@
       </div>
 
       <div class="pizza-card" data-category="drink">
-        <div class="card-image"><img src="coca cola.jpeg" alt="Coke">
-        </div>
+        <div class="card-image"><img src="coca cola.jpeg" alt="Coke"></div>
         <div class="card-content">
           <h4>Coca Cola</h4>
           <div class="size-options">
@@ -460,6 +455,7 @@
   <section class="contact-section" id="contact">
     <h2 class="section-title" style="color:white;">Visit Us</h2>
     <p>We are open for Dine-inn, Takeout and Delivery!</p>
+
     <div class="contact-info">
       <div class="info-box">
         <h4>📞 Call Us</h4>
@@ -488,9 +484,9 @@
     <div class="info-box" style="border:none; margin-top: 20px;">
       <p style="font-size: 0.75rem; color: #666;">
         DEVELOPED BY
-        <a href="https://wa.me/233596620696?text=Hello%20Mr.Wetta,%20I%20saw%20your%20work%20on%20Leonas%20Pizzeria!"
-          target="_blank" style="color: var(--brand-yellow); font-weight: bold; text-decoration: underline;">
-          MR.WETTA
+        <a href="https://wa.me/233543723772" target="_blank"
+          style="color: var(--brand-yellow); font-weight: bold; text-decoration: underline;">
+          MR.WETTA ↗
         </a>
       </p>
     </div>

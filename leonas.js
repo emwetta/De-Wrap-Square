@@ -184,7 +184,7 @@ function checkout() {
     return;
   }
 
-  const phoneNumber = "233543723772";
+  const phoneNumber = "233596620696";
 
   let message = `*NEW ORDER - LEONA'S PIZZERIA* \n\n`;
   message += `1. *Name:* ${customerName}\n`;

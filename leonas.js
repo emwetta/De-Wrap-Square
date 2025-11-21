@@ -186,13 +186,13 @@ function checkout() {
 
   const phoneNumber = "233543723772";
 
-  let message = `*NEW ORDER - LEONA'S PIZZERIA* 🍕\n\n`;
-  message += `👤 *Name:* ${customerName}\n`;
-  message += `📞 *Phone:* ${customerPhone}\n`;
-  message += `📦 *Type:* ${orderType}\n`;
+  let message = `*NEW ORDER - LEONA'S PIZZERIA* \n\n`;
+  message += `1. *Name:* ${customerName}\n`;
+  message += `2. *Phone:* ${customerPhone}\n`;
+  message += `3. *Type:* ${orderType}\n`;
 
   if (isDelivery) {
-    message += `📍 *Location:* ${customerAddress}\n`;
+    message += `4. *Location:* ${customerAddress}\n`;
   }
 
   message += `\n*📝 ORDER DETAILS:*\n`;

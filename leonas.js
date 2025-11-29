@@ -261,7 +261,7 @@ function payWithPaystack(name, phone, address, amount, isDelivery) {
 
   // 3. Open Paystack
   // 🟢 REPLACE THIS WITH YOUR LIVE KEY 🟢
-  const publicKey = "pk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+  const publicKey = "pk_test_9b2e43f2332af4fff23f3967f1bf76e8b2a59d88";
 
   let handler = PaystackPop.setup({
     key: publicKey,
@@ -301,29 +301,28 @@ function sendToWhatsapp(orderData) {
   const paymentLabel = orderData.status === 'verified' ? "✅ PAYMENT CONFIRMED" : "⚠️ UNVERIFIED (CHECK APP)";
 
   let message = `*NEW PAID ORDER - DE WRAP SQUARE* \n`;
-  message += `--------------------------------\n`;
+
   message += `${paymentLabel}\n`;
-  message += `💳 *Ref:* ${orderData.ref}\n`;
-  message += `--------------------------------\n`;
-  message += `👤 *Name:* ${orderData.name}\n`;
-  message += `📞 *Phone:* ${orderData.phone}\n`;
-  message += `📦 *Type:* ${orderType}\n`;
+  message += ` *Ref:* ${orderData.ref}\n`;
+
+  message += ` *Name:* ${orderData.name}\n`;
+  message += ` *Phone:* ${orderData.phone}\n`;
+  message += ` *Type:* ${orderType}\n`;
 
   if (orderData.isDelivery) {
-    message += `📍 *Location:* ${orderData.address}\n`;
+    message += ` *Location:* ${orderData.address}\n`;
   }
 
-  message += `\n*📝 ORDER DETAILS:*\n`;
+  message += `\n* ORDER DETAILS: \n`;
 
   orderData.items.forEach(item => {
     message += `- ${item.quantity}x ${item.name} (${item.size})\n`;
   });
 
-  message += `\n💰 *FOOD TOTAL PAID: ₵${orderData.total}*\n`;
+  message += `\n *FOOD TOTAL PAID: ₵${orderData.total}*\n`;
 
-  if (orderData.isDelivery) {
-    message += `🛵 *DELIVERY FEE:* ❌ Unpaid (Rider must collect)\n`;
-  }
+
+
 
   const encodedMessage = encodeURIComponent(message);
   const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;

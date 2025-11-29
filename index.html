@@ -19,13 +19,30 @@
 </head>
 
 <body>
+  <div id="recovery-btn" class="recovery-wrapper" style="display: none;">
+    <div class="recovery-box">
+      <span>⚠️ Order Not Sent?</span>
+      <div class="recovery-actions">
+        <button onclick="resendLastOrder()" class="resend-btn">Resend to WhatsApp 📲</button>
+        <button onclick="clearSavedOrder()" class="dismiss-btn">I Sent It ✅</button>
+      </div>
+    </div>
+  </div>
 
   <div id="custom-alert" class="modal-overlay">
     <div class="modal-box">
-      <div class="modal-icon">⚠️</div>
-      <h3 id="modal-title">Notice</h3>
-      <p id="modal-message">Something went wrong.</p>
-      <button onclick="closeAlert()">OK, Got it</button>
+      <div class="modal-header">
+        <span class="modal-icon" id="modal-icon">🔔</span>
+        <h3 id="modal-title">Notification</h3>
+      </div>
+
+      <div class="modal-body">
+        <div id="modal-message">Here is the message.</div>
+      </div>
+
+      <div class="modal-actions" id="modal-actions">
+        <button class="modal-btn-secondary" onclick="closeAlert()">Close</button>
+      </div>
     </div>
   </div>
 
@@ -72,6 +89,12 @@
 
         <div id="address-field">
           <input type="text" id="customer-address" placeholder="Delivery Location / Address" class="cart-input">
+
+          <div class="delivery-notice">
+            ⚠️ <strong>Delivery Fee Notice:</strong><br>
+            The fee is <strong>NOT</strong> included in the online payment.<br>
+            Please pay the rider in cash upon arrival.
+          </div>
         </div>
       </div>
     </div>
@@ -784,7 +807,7 @@
       <div class="info-box">
         <h4>📍 Location</h4>
         <p><a href="https://www.google.com/maps/search/?api=1&query=Leona's+Pizzeria+JMMF%2B4R3+Accra" target="_blank"
-            class="contact-link">Leona's Pizzeria<br>JMMF+4R3, Accra</a></p>
+            class="contact-link">DE WRAP SQUARE<br>JMMF+4R3, Accra</a></p>
       </div>
       <div class="info-box">
         <h4>⏰ Hours</h4>
@@ -833,7 +856,7 @@
       <a href="#" target="_blank">TikTok 🎵</a>
       <a href="#" target="_blank">Facebook 🔵</a>
     </div>
-    <p>© 2025 Leona's Pizzeria. All rights reserved.</p>
+    <p>© 2025 DE WRAP SQUARE. All rights reserved.</p>
     <div class="info-box" style="border:none; margin-top: 20px;">
       <p style="font-size: 0.75rem; color: #666;">
         DEVELOPED BY

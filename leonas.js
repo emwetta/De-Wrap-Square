@@ -4,10 +4,12 @@ const navMenu = document.querySelector(".nav-menu");
 const closeBtn = document.querySelector(".mobile-close-btn");
 
 // 1. Open/Close on Hamburger Click
-hamburger.addEventListener("click", () => {
-  hamburger.classList.toggle("active");
-  navMenu.classList.toggle("active");
-});
+if (hamburger) {
+  hamburger.addEventListener("click", () => {
+    hamburger.classList.toggle("active");
+    navMenu.classList.toggle("active");
+  });
+}
 
 // 2. Close when clicking the "Close Menu X" button
 if (closeBtn) {
@@ -38,18 +40,52 @@ const slides = document.querySelectorAll('.slide');
 let currentSlide = 0;
 
 function nextSlide() {
-  slides[currentSlide].classList.remove('active');
-  currentSlide = (currentSlide + 1) % slides.length;
-  slides[currentSlide].classList.add('active');
+  if (slides.length > 0) {
+    slides[currentSlide].classList.remove('active');
+    currentSlide = (currentSlide + 1) % slides.length;
+    slides[currentSlide].classList.add('active');
+  }
 }
 setInterval(nextSlide, 5000);
 
 
-// --- CUSTOM ALERT LOGIC ---
-function showCustomAlert(title, message) {
-  document.getElementById('modal-title').innerText = title;
-  document.getElementById('modal-message').innerText = message;
-  document.getElementById('custom-alert').classList.add('active');
+// ============================================================
+//  PROFESSIONAL NOTIFICATION SYSTEM
+// ============================================================
+
+function showCustomAlert(title, message, type = 'normal') {
+  const modal = document.getElementById('custom-alert');
+  const titleEl = document.getElementById('modal-title');
+  const msgEl = document.getElementById('modal-message');
+  const iconEl = document.querySelector('.modal-icon'); // Fixed selector
+  const headerEl = document.querySelector('.modal-header');
+  const actionsEl = document.querySelector('.modal-actions'); // Fixed selector
+
+  // 1. Set Content
+  titleEl.innerText = title;
+  msgEl.innerHTML = message; // Allow HTML (links/bold text)
+
+  // 2. Set Theme (Colors & Icons)
+  if (type === 'success') {
+    iconEl.innerText = '✅';
+    headerEl.style.backgroundColor = '#25D366'; // WhatsApp Green
+  } else if (type === 'error') {
+    iconEl.innerText = '⚠️';
+    headerEl.style.backgroundColor = '#B71C1C'; // Error Red
+  } else {
+    iconEl.innerText = '🔔';
+    headerEl.style.backgroundColor = '#B71C1C'; // Default Brand Red
+  }
+
+  // 3. Set Buttons
+  // If the message is just text, show "Okay". If it has a link, show "Close".
+  if (message.includes('<a href')) {
+    actionsEl.innerHTML = `<button class="modal-btn-secondary" onclick="closeAlert()">Close</button>`;
+  } else {
+    actionsEl.innerHTML = `<button class="modal-btn-primary" onclick="closeAlert()">Okay, Got it</button>`;
+  }
+
+  modal.classList.add('active');
 }
 
 function closeAlert() {
@@ -61,10 +97,10 @@ let cart = [];
 
 function toggleCart() {
   const sidebar = document.getElementById('cart-sidebar');
-  const backdrop = document.getElementById('cart-backdrop');
+  // const backdrop = document.getElementById('cart-backdrop'); // Optional if you removed backdrop
 
   sidebar.classList.toggle('active');
-  backdrop.classList.toggle('active');
+  // if(backdrop) backdrop.classList.toggle('active'); 
 }
 
 function clearCart() {
@@ -95,11 +131,8 @@ function addToCart(name, size, price) {
   updateCartUI();
 
   const sidebar = document.getElementById('cart-sidebar');
-  const backdrop = document.getElementById('cart-backdrop');
   if (!sidebar.classList.contains('active')) {
     sidebar.classList.add('active');
-    backdrop.classList.add('active');
-
     setTimeout(() => {
       if (sidebar.classList.contains('active')) {
         toggleCart();
@@ -168,7 +201,7 @@ function updateCartUI() {
 function checkout() {
   // 1. Check if Cart is Empty
   if (cart.length === 0) {
-    showCustomAlert("Cart Empty", "Please add items to your cart first!");
+    showCustomAlert("Cart Empty", "Please add items to your cart first!", "error");
     return;
   }
 
@@ -181,18 +214,18 @@ function checkout() {
   // 3. Validate Inputs
   const nameRegex = /^[a-zA-Z\s]+$/;
   if (!customerName || !nameRegex.test(customerName)) {
-    showCustomAlert("Invalid Name", "Please enter a valid name (letters only).");
+    showCustomAlert("Invalid Name", "Please enter a valid name (letters only).", "error");
     return;
   }
 
   const phoneRegex = /^0\d{9}$/;
   if (!phoneRegex.test(customerPhone)) {
-    showCustomAlert("Invalid Phone", "Please enter a valid 10-digit Ghana phone number.");
+    showCustomAlert("Invalid Phone", "Please enter a valid 10-digit Ghana phone number.", "error");
     return;
   }
 
   if (isDelivery && customerAddress.trim() === "") {
-    showCustomAlert("Location Needed", "Please enter your delivery location.");
+    showCustomAlert("Location Needed", "Please enter your delivery location.", "error");
     return;
   }
 
@@ -206,40 +239,52 @@ function checkout() {
   payWithPaystack(customerName, customerPhone, customerAddress, totalAmount, isDelivery);
 }
 
-// --- PAYSTACK INTEGRATION ---
+// --- PAYSTACK INTEGRATION (PRE-SAVE STRATEGY) ---
 function payWithPaystack(name, phone, address, amount, isDelivery) {
 
-  // YOUR PUBLIC KEY
-  const publicKey = "pk_test_9b2e43f2332af4fff23f3967f1bf76e8b2a59d88";
+  // 1. Generate Reference FIRST
+  const paymentRef = '' + Math.floor((Math.random() * 1000000000) + 1);
+
+  // 2. Save "Pending" Order
+  const orderData = {
+    name: name,
+    phone: phone,
+    address: address,
+    total: amount,
+    isDelivery: isDelivery,
+    ref: paymentRef,
+    items: cart,
+    status: 'pending',
+    timestamp: new Date().getTime()
+  };
+  localStorage.setItem('backup_order', JSON.stringify(orderData));
+
+  // 3. Open Paystack
+  // 🟢 REPLACE THIS WITH YOUR LIVE KEY 🟢
+  const publicKey = "pk_live_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
   let handler = PaystackPop.setup({
     key: publicKey,
-    email: "orders@dewrapsquare.com", // Dummy email for the system
-    amount: amount * 100, // Amount in pesewas
+    email: "orders@dewrapsquare.com",
+    amount: amount * 100, // Pesewas
     currency: "GHS",
-    ref: '' + Math.floor((Math.random() * 1000000000) + 1), // Unique Ref
+    ref: paymentRef,
     metadata: {
-      custom_fields: [{
-        display_name: "Customer Name",
-        variable_name: "customer_name",
-        value: name
-      },
-      {
-        display_name: "Phone Number",
-        variable_name: "mobile_number",
-        value: phone
-      }
+      custom_fields: [
+        { display_name: "Customer Name", variable_name: "customer_name", value: name },
+        { display_name: "Phone Number", variable_name: "mobile_number", value: phone }
       ]
     },
     callback: function (response) {
-      // 🟢 SUCCESS! Payment verified by Paystack.
-      // ONLY NOW do we generate the WhatsApp order.
-      const paymentRef = response.reference;
-      sendToWhatsapp(name, phone, address, amount, isDelivery, paymentRef);
+      // 🟢 SUCCESS
+      orderData.status = 'verified';
+      localStorage.setItem('backup_order', JSON.stringify(orderData));
+
+      // Send to WhatsApp
+      sendToWhatsapp(orderData);
     },
     onClose: function () {
-      // 🔴 FAILED/CLOSED. No WhatsApp message is sent.
-      showCustomAlert("Payment Cancelled", "Order was not placed because payment was cancelled.");
+      showCustomAlert("Payment Cancelled", "Order was not placed because payment was cancelled.", "error");
     }
   });
 
@@ -247,47 +292,60 @@ function payWithPaystack(name, phone, address, amount, isDelivery) {
 }
 
 // --- WHATSAPP SENDER ---
-function sendToWhatsapp(name, phone, address, total, isDelivery, paymentRef) {
+function sendToWhatsapp(orderData) {
 
-  // 🔴 CHANGE TO COMPANY NUMBER WHEN READY
+  // 🟢 COMPANY NUMBER
   const phoneNumber = "233596620696";
 
-  const orderType = isDelivery ? "DELIVERY" : "PICK UP";
+  const orderType = orderData.isDelivery ? "DELIVERY" : "PICK UP";
+  const paymentLabel = orderData.status === 'verified' ? "✅ PAYMENT CONFIRMED" : "⚠️ UNVERIFIED (CHECK APP)";
 
   let message = `*NEW PAID ORDER - DE WRAP SQUARE* \n`;
+  message += `--------------------------------\n`;
+  message += `${paymentLabel}\n`;
+  message += `💳 *Ref:* ${orderData.ref}\n`;
+  message += `--------------------------------\n`;
+  message += `👤 *Name:* ${orderData.name}\n`;
+  message += `📞 *Phone:* ${orderData.phone}\n`;
+  message += `📦 *Type:* ${orderType}\n`;
 
-  message += ` *PAYMENT CONFIRMED*\n`;
-  message += ` *Ref:* ${paymentRef}\n`; // This proves it is paid
-
-  message += ` *Name:* ${name}\n`;
-  message += ` *Phone:* ${phone}\n`;
-  message += ` *Type:* ${orderType}\n`;
-
-  if (isDelivery) {
-    message += ` *Location:* ${address}\n`;
+  if (orderData.isDelivery) {
+    message += `📍 *Location:* ${orderData.address}\n`;
   }
 
-  message += `\n* ORDER DETAILS:*\n`;
+  message += `\n*📝 ORDER DETAILS:*\n`;
 
-  cart.forEach(item => {
-    const itemTotal = item.price * item.quantity;
+  orderData.items.forEach(item => {
     message += `- ${item.quantity}x ${item.name} (${item.size})\n`;
   });
 
-  message += `\n *FOOD TOTAL PAID: ₵${total}*\n`;
+  message += `\n💰 *FOOD TOTAL PAID: ₵${orderData.total}*\n`;
 
-  if (isDelivery) {
-    message += ` *NOTE:* Delivery fee is NOT included. Customer pays rider.\n`;
+  if (orderData.isDelivery) {
+    message += `🛵 *DELIVERY FEE:* ❌ Unpaid (Rider must collect)\n`;
   }
 
   const encodedMessage = encodeURIComponent(message);
   const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-  window.location.href = url;
 
-  // Success Message to user
-  showCustomAlert("Order Sent!", "Payment received. We are processing your order on WhatsApp.");
+  // Try to open automatically
+  const newWindow = window.open(url, '_blank');
 
-  // Clear cart
+  // If blocked, show the new BEAUTIFUL popup
+  if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+
+    const successMsg = `
+      <p><strong>Payment Verified!</strong></p>
+      <p>Your order is ready to be sent to the restaurant.</p>
+      <a href="${url}" target="_blank" class="modal-btn-primary" style="color:white; text-decoration:none; margin-top:15px; display:block;">
+        SEND ORDER TO WHATSAPP 📲
+      </a>
+    `;
+
+    showCustomAlert("Order Ready", successMsg, 'success');
+  }
+
+  // Clear visual cart
   setTimeout(() => {
     cart = [];
     document.getElementById('customer-name').value = "";
@@ -299,10 +357,59 @@ function sendToWhatsapp(name, phone, address, total, isDelivery, paymentRef) {
 }
 
 // ============================================================
+//  ORDER RECOVERY SYSTEM
+// ============================================================
+
+function checkPendingOrder() {
+  const savedOrder = localStorage.getItem('backup_order');
+
+  if (savedOrder) {
+    const order = JSON.parse(savedOrder);
+
+    const now = new Date().getTime();
+    if (now - order.timestamp > 86400000) {
+      localStorage.removeItem('backup_order');
+      return;
+    }
+
+    const btn = document.getElementById('recovery-btn');
+    const actionBtn = document.querySelector('.resend-btn');
+    const msgSpan = document.querySelector('.recovery-box span');
+
+    if (btn) {
+      btn.style.display = 'flex';
+
+      if (order.status === 'pending') {
+        msgSpan.innerText = "Did your payment go through?";
+        actionBtn.innerText = "Yes, I Paid! Send Order 📲";
+        actionBtn.style.background = "#FF9800"; // Orange
+
+        actionBtn.onclick = function () {
+          if (confirm("Only click OK if money was deducted.\nThe shop owner will verify the ID.")) {
+            sendToWhatsapp(order);
+          }
+        };
+      } else {
+        msgSpan.innerText = "⚠️ Order Not Sent?";
+        actionBtn.innerText = "Resend to WhatsApp 📲";
+        actionBtn.style.background = "#25D366";
+        actionBtn.onclick = function () { sendToWhatsapp(order); };
+      }
+    }
+  }
+}
+
+function clearSavedOrder() {
+  if (confirm("Clear this backup?")) {
+    localStorage.removeItem('backup_order');
+    document.getElementById('recovery-btn').style.display = 'none';
+  }
+}
+
+// ============================================================
 //  UI HELPERS
 // ============================================================
 
-// --- MENU FILTERING LOGIC ---
 function filterMenu(category) {
   const buttons = document.querySelectorAll('.filter-btn');
   buttons.forEach(btn => btn.classList.remove('active'));
@@ -318,34 +425,33 @@ function filterMenu(category) {
       item.style.display = 'none';
     }
   });
-
-  // Reset scroll to start when filtering
   document.getElementById('menu-grid').scrollLeft = 0;
 }
 
-// --- OPEN/CLOSED LOGIC ---
 function checkShopStatus() {
   const now = new Date();
   const hour = now.getHours();
   const badge = document.getElementById('status-badge');
   const text = document.getElementById('status-text');
 
+  // Simple open check (10am to 10pm)
   const isOpen = hour >= 10 && hour < 22;
 
   if (isOpen) {
-    badge.classList.add('status-open');
-    badge.classList.remove('status-closed');
-    text.innerText = "Open Now - Taking Orders";
+    if (badge) {
+      badge.classList.add('status-open');
+      badge.classList.remove('status-closed');
+      text.innerText = "Open Now - Taking Orders";
+    }
   } else {
-    badge.classList.add('status-closed');
-    badge.classList.remove('status-open');
-    text.innerText = "Closed (Opens 10:00 AM)";
+    if (badge) {
+      badge.classList.add('status-closed');
+      badge.classList.remove('status-open');
+      text.innerText = "Closed (Opens 10:00 AM)";
+    }
   }
 }
-checkShopStatus();
-setInterval(checkShopStatus, 60000);
 
-// --- TOGGLE ADDRESS FIELD ---
 function toggleAddress(isDelivery) {
   const addressField = document.getElementById('address-field');
   if (isDelivery) {
@@ -355,36 +461,26 @@ function toggleAddress(isDelivery) {
   }
 }
 
-// --- SCROLL TO TOP LOGIC ---
 const scrollBtn = document.getElementById("scrollTopBtn");
-
 window.onscroll = function () {
   if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-    scrollBtn.style.display = "block";
+    if (scrollBtn) scrollBtn.style.display = "block";
   } else {
-    scrollBtn.style.display = "none";
+    if (scrollBtn) scrollBtn.style.display = "none";
   }
 };
 
 function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// --- FAQ ACCORDION LOGIC ---
+// FAQ Logic
 const faqItems = document.querySelectorAll('.faq-item');
-
 faqItems.forEach(item => {
   const question = item.querySelector('.faq-question');
   const answer = item.querySelector('.faq-answer');
-
   question.addEventListener('click', () => {
-    // 1. Toggle the active class
     item.classList.toggle('active');
-
-    // 2. Handle the smooth slide animation
     if (item.classList.contains('active')) {
       answer.style.maxHeight = answer.scrollHeight + "px";
     } else {
@@ -393,57 +489,47 @@ faqItems.forEach(item => {
   });
 });
 
-// --- MENU AUTO-SLIDER & CONTROLS ---
-
+// Menu Scroll
 const menuGrid = document.getElementById('menu-grid');
 let autoScrollInterval;
 
-// 1. Manual Slide Function (for Arrows)
 function slideMenu(direction) {
-  // Determine width of card + gap (320px + 30px gap = 350px)
   const scrollAmount = 350;
-
   if (direction === 1) {
     menuGrid.scrollLeft += scrollAmount;
     if (menuGrid.scrollLeft + menuGrid.clientWidth >= menuGrid.scrollWidth - 10) {
-      menuGrid.scrollTo({
-        left: 0,
-        behavior: 'smooth'
-      });
+      menuGrid.scrollTo({ left: 0, behavior: 'smooth' });
     }
   } else {
     menuGrid.scrollLeft -= scrollAmount;
   }
 }
 
-// 2. Auto Scroll Logic
 function startAutoScroll() {
+  if (!menuGrid) return;
   autoScrollInterval = setInterval(() => {
-    // If user is NOT hovering, scroll right
     if (!menuGrid.matches(':hover')) {
       if (menuGrid.scrollLeft + menuGrid.clientWidth >= menuGrid.scrollWidth - 10) {
-        menuGrid.scrollTo({
-          left: 0,
-          behavior: 'smooth'
-        });
+        menuGrid.scrollTo({ left: 0, behavior: 'smooth' });
       } else {
-        menuGrid.scrollBy({
-          left: 350,
-          behavior: 'smooth'
-        });
+        menuGrid.scrollBy({ left: 350, behavior: 'smooth' });
       }
     }
-  }, 4000); // Slides every 4 seconds
+  }, 4000);
 }
 
-// 3. Pause Auto-Scroll on Hover
-menuGrid.parentElement.addEventListener('mouseenter', () => {
-  clearInterval(autoScrollInterval);
-});
+if (menuGrid) {
+  menuGrid.parentElement.addEventListener('mouseenter', () => {
+    clearInterval(autoScrollInterval);
+  });
+  menuGrid.parentElement.addEventListener('mouseleave', () => {
+    startAutoScroll();
+  });
+}
 
-menuGrid.parentElement.addEventListener('mouseleave', () => {
+// Init
+window.onload = function () {
+  checkPendingOrder();
+  checkShopStatus();
   startAutoScroll();
-});
-
-// Initialize
-startAutoScroll();
+};

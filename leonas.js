@@ -282,7 +282,7 @@ function sendToWhatsapp(name, phone, address, total, isDelivery, paymentRef) {
 
   const encodedMessage = encodeURIComponent(message);
   const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-  window.open(url, '_blank');
+  window.location.href = url;
 
   // Success Message to user
   showCustomAlert("Order Sent!", "Payment received. We are processing your order on WhatsApp.");

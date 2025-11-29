@@ -229,6 +229,80 @@ header {
   color: #f0f0f0;
 }
 
+/* --- BEAUTIFUL STATUS BADGE (ADDED HERE) --- */
+.status-badge {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 8px 20px;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+#status-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* OPEN STATE (Green Neon Pulse) */
+.status-badge.status-open {
+  border-color: #00E676;
+  background: rgba(0, 50, 0, 0.6);
+}
+
+.status-badge.status-open .status-dot {
+  background-color: #00E676;
+  box-shadow: 0 0 15px #00E676, 0 0 5px #00E676;
+  animation: pulse-green 1.5s infinite;
+}
+
+/* CLOSED STATE (Red Dim) */
+.status-badge.status-closed {
+  border-color: #FF1744;
+  background: rgba(50, 0, 0, 0.6);
+}
+
+.status-badge.status-closed .status-dot {
+  background-color: #FF1744;
+  box-shadow: 0 0 10px #FF1744;
+}
+
+@keyframes pulse-green {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 10px rgba(0, 230, 118, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 230, 118, 0);
+  }
+}
+
 .cta-button {
   background: var(--brand-primary);
   color: white;
@@ -1447,6 +1521,10 @@ footer {
   font-size: 0.95rem;
   line-height: 1.6;
   margin: 0;
+}
+
+.faq-item.active .faq-question {
+  color: #000;
 }
 
 /* --- MOBILE SPECIFIC --- */

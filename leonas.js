@@ -57,13 +57,13 @@ function showCustomAlert(title, message, type = 'normal') {
   const modal = document.getElementById('custom-alert');
   const titleEl = document.getElementById('modal-title');
   const msgEl = document.getElementById('modal-message');
-  const iconEl = document.querySelector('.modal-icon'); // Fixed selector
+  const iconEl = document.querySelector('.modal-icon');
   const headerEl = document.querySelector('.modal-header');
-  const actionsEl = document.querySelector('.modal-actions'); // Fixed selector
+  const actionsEl = document.querySelector('.modal-actions');
 
   // 1. Set Content
   titleEl.innerText = title;
-  msgEl.innerHTML = message; // Allow HTML (links/bold text)
+  msgEl.innerHTML = message;
 
   // 2. Set Theme (Colors & Icons)
   if (type === 'success') {
@@ -78,7 +78,6 @@ function showCustomAlert(title, message, type = 'normal') {
   }
 
   // 3. Set Buttons
-  // If the message is just text, show "Okay". If it has a link, show "Close".
   if (message.includes('<a href')) {
     actionsEl.innerHTML = `<button class="modal-btn-secondary" onclick="closeAlert()">Close</button>`;
   } else {
@@ -97,10 +96,7 @@ let cart = [];
 
 function toggleCart() {
   const sidebar = document.getElementById('cart-sidebar');
-  // const backdrop = document.getElementById('cart-backdrop'); // Optional if you removed backdrop
-
   sidebar.classList.toggle('active');
-  // if(backdrop) backdrop.classList.toggle('active'); 
 }
 
 function clearCart() {
@@ -199,19 +195,16 @@ function updateCartUI() {
 // ============================================================
 
 function checkout() {
-  // 1. Check if Cart is Empty
   if (cart.length === 0) {
     showCustomAlert("Cart Empty", "Please add items to your cart first!", "error");
     return;
   }
 
-  // 2. Get Input Values
   const customerName = document.getElementById('customer-name').value;
   const customerPhone = document.getElementById('customer-phone').value;
   const isDelivery = document.getElementById('type-delivery').checked;
   const customerAddress = document.getElementById('customer-address').value;
 
-  // 3. Validate Inputs
   const nameRegex = /^[a-zA-Z\s]+$/;
   if (!customerName || !nameRegex.test(customerName)) {
     showCustomAlert("Invalid Name", "Please enter a valid name (letters only).", "error");
@@ -229,23 +222,21 @@ function checkout() {
     return;
   }
 
-  // 4. Calculate Total
   let totalAmount = 0;
   cart.forEach(item => {
     totalAmount += item.price * item.quantity;
   });
 
-  // 5. Trigger Paystack directly
   payWithPaystack(customerName, customerPhone, customerAddress, totalAmount, isDelivery);
 }
 
-// --- PAYSTACK INTEGRATION (PRE-SAVE STRATEGY) ---
+// --- PAYSTACK INTEGRATION ---
 function payWithPaystack(name, phone, address, amount, isDelivery) {
 
-  // 1. Generate Reference FIRST
+  // 1. Generate Reference
   const paymentRef = '' + Math.floor((Math.random() * 1000000000) + 1);
 
-  // 2. Save "Pending" Order
+  // 2. Save Pending Order
   const orderData = {
     name: name,
     phone: phone,
@@ -259,14 +250,13 @@ function payWithPaystack(name, phone, address, amount, isDelivery) {
   };
   localStorage.setItem('backup_order', JSON.stringify(orderData));
 
-  // 3. Open Paystack
-  // 🟢 REPLACE THIS WITH YOUR LIVE KEY 🟢
+  // 3. Open Paystack (LIVE KEY)
   const publicKey = "pk_test_9b2e43f2332af4fff23f3967f1bf76e8b2a59d88";
 
   let handler = PaystackPop.setup({
     key: publicKey,
     email: "orders@dewrapsquare.com",
-    amount: amount * 100, // Pesewas
+    amount: amount * 100,
     currency: "GHS",
     ref: paymentRef,
     metadata: {
@@ -276,11 +266,8 @@ function payWithPaystack(name, phone, address, amount, isDelivery) {
       ]
     },
     callback: function (response) {
-      // 🟢 SUCCESS
       orderData.status = 'verified';
       localStorage.setItem('backup_order', JSON.stringify(orderData));
-
-      // Send to WhatsApp
       sendToWhatsapp(orderData);
     },
     onClose: function () {
@@ -293,17 +280,14 @@ function payWithPaystack(name, phone, address, amount, isDelivery) {
 
 // --- WHATSAPP SENDER ---
 function sendToWhatsapp(orderData) {
-
-  // 🟢 COMPANY NUMBER
-  const phoneNumber = "233596620696";
+  const phoneNumber = "233596620696"; // Company Number
 
   const orderType = orderData.isDelivery ? "DELIVERY" : "PICK UP";
   const paymentLabel = orderData.status === 'verified' ? "✅ PAYMENT CONFIRMED" : "⚠️ UNVERIFIED (CHECK APP)";
 
   let message = `*NEW PAID ORDER - DE WRAP SQUARE* \n`;
-
   message += `${paymentLabel}\n`;
-  message += ` *Ref:* ${orderData.ref}\n`;
+  message += `*Ref:* ${orderData.ref}\n`;
 
   message += ` *Name:* ${orderData.name}\n`;
   message += ` *Phone:* ${orderData.phone}\n`;
@@ -313,7 +297,7 @@ function sendToWhatsapp(orderData) {
     message += ` *Location:* ${orderData.address}\n`;
   }
 
-  message += `\n* ORDER DETAILS: \n`;
+  message += `\n* ORDER DETAILS:\n`;
 
   orderData.items.forEach(item => {
     message += `- ${item.quantity}x ${item.name} (${item.size})\n`;
@@ -323,16 +307,12 @@ function sendToWhatsapp(orderData) {
 
 
 
-
   const encodedMessage = encodeURIComponent(message);
   const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-  // Try to open automatically
   const newWindow = window.open(url, '_blank');
 
-  // If blocked, show the new BEAUTIFUL popup
   if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-
     const successMsg = `
       <p><strong>Payment Verified!</strong></p>
       <p>Your order is ready to be sent to the restaurant.</p>
@@ -340,11 +320,9 @@ function sendToWhatsapp(orderData) {
         SEND ORDER TO WHATSAPP 📲
       </a>
     `;
-
     showCustomAlert("Order Ready", successMsg, 'success');
   }
 
-  // Clear visual cart
   setTimeout(() => {
     cart = [];
     document.getElementById('customer-name').value = "";
@@ -355,16 +333,11 @@ function sendToWhatsapp(orderData) {
   }, 2000);
 }
 
-// ============================================================
-//  ORDER RECOVERY SYSTEM
-// ============================================================
-
+// --- ORDER RECOVERY ---
 function checkPendingOrder() {
   const savedOrder = localStorage.getItem('backup_order');
-
   if (savedOrder) {
     const order = JSON.parse(savedOrder);
-
     const now = new Date().getTime();
     if (now - order.timestamp > 86400000) {
       localStorage.removeItem('backup_order');
@@ -377,12 +350,10 @@ function checkPendingOrder() {
 
     if (btn) {
       btn.style.display = 'flex';
-
       if (order.status === 'pending') {
         msgSpan.innerText = "Did your payment go through?";
         actionBtn.innerText = "Yes, I Paid! Send Order 📲";
-        actionBtn.style.background = "#FF9800"; // Orange
-
+        actionBtn.style.background = "#FF9800";
         actionBtn.onclick = function () {
           if (confirm("Only click OK if money was deducted.\nThe shop owner will verify the ID.")) {
             sendToWhatsapp(order);
@@ -427,27 +398,27 @@ function filterMenu(category) {
   document.getElementById('menu-grid').scrollLeft = 0;
 }
 
+// --- OPEN/CLOSED LOGIC (FIXED) ---
 function checkShopStatus() {
-  const now = new Date();
-  const hour = now.getHours();
   const badge = document.getElementById('status-badge');
   const text = document.getElementById('status-text');
 
-  // Simple open check (10am to 10pm)
+  if (!badge || !text) return; // Safety check
+
+  // 1. Get Current Time in GMT (Accra is UTC+0)
+  const now = new Date();
+  const hour = now.getUTCHours();
+
+  // 2. Define Shop Hours (10 AM to 10 PM)
   const isOpen = hour >= 10 && hour < 22;
 
+  // 3. Update the UI
   if (isOpen) {
-    if (badge) {
-      badge.classList.add('status-open');
-      badge.classList.remove('status-closed');
-      text.innerText = "Open Now - Taking Orders";
-    }
+    badge.className = 'status-badge status-open';
+    text.innerText = "Open Now - Taking Orders";
   } else {
-    if (badge) {
-      badge.classList.add('status-closed');
-      badge.classList.remove('status-open');
-      text.innerText = "Closed (Opens 10:00 AM)";
-    }
+    badge.className = 'status-badge status-closed';
+    text.innerText = "Closed (Opens 10:00 AM)";
   }
 }
 
@@ -526,9 +497,12 @@ if (menuGrid) {
   });
 }
 
-// Init
+// --- INIT (RUNS ON LOAD) ---
 window.onload = function () {
   checkPendingOrder();
-  checkShopStatus();
+  checkShopStatus(); // Runs status check immediately
   startAutoScroll();
 };
+
+// Also verify status when DOM is ready (extra safety)
+document.addEventListener('DOMContentLoaded', checkShopStatus);

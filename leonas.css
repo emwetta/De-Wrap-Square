@@ -1,13 +1,23 @@
-/* --- LEONA'S PIZZERIA: MASTER THEME (FINAL) --- */
+/* --- DE WRAP SQUARE: MASTER THEME (RED EDITION) --- */
 
 :root {
-  --brand-yellow: #FFC107;
-  --brand-dark-gold: #FFA000;
-  --bg-dark: #f4f7f6;
+  /* NEW BRAND COLORS FROM FLYER */
+  --brand-primary: #B71C1C;
+  /* Deep Red */
+  --brand-accent: #FB8C00;
+  /* Warm Orange */
+  --brand-dark: #8c0e0e;
+  /* Darker Red for hovers */
+
+  --bg-body: #FAF5EF;
+  /* Creamy Beige from Flyer Background */
   --bg-card: #ffffff;
-  --text-main: #333333;
+
+  --text-main: #2d2d2d;
   --text-muted: #666666;
   --border-light: #e0e0e0;
+  --star-yellow: #FFC107;
+  /* Kept yellow only for rating stars */
 }
 
 * {
@@ -22,7 +32,8 @@ html {
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: var(--bg-dark);
+  background-color: var(--bg-body);
+  /* Updated to Cream */
   color: var(--text-main);
   line-height: 1.6;
   overflow-x: hidden;
@@ -55,26 +66,48 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #ddd;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-bottom: 2px solid var(--brand-primary);
+  /* Red Border */
+  box-shadow: 0 4px 15px rgba(183, 28, 28, 0.1);
 }
 
+/* --- NEW CSS LOGO (Matches Flyer) --- */
 .logo {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
   font-family: 'Oswald', sans-serif;
-  font-size: 1.4rem;
-  color: var(--brand-yellow);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-shadow: 1px 1px 0px #333;
+  line-height: 1;
+  background-color: var(--brand-primary);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
   cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: 0 4px 10px rgba(183, 28, 28, 0.3);
 }
 
+.logo .logo-top {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.logo .logo-bottom {
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  margin-top: 2px;
+  padding-top: 2px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Hide the old img inside logo if it exists */
 .logo img {
-  height: 45px;
-  width: auto;
+  display: none;
 }
 
 .nav-menu {
@@ -84,23 +117,28 @@ header {
 }
 
 .nav-menu a {
-  font-weight: 500;
+  font-weight: 600;
   color: #333;
   font-size: 0.95rem;
 }
 
 .nav-menu a:hover {
-  color: var(--brand-yellow);
+  color: var(--brand-primary);
 }
 
 /* Desktop Button Style */
 .nav-btn {
-  background-color: var(--brand-yellow);
-  color: #000 !important;
+  background-color: var(--brand-primary);
+  color: white !important;
+  /* White text on Red */
   padding: 10px 25px;
   border-radius: 50px;
   font-weight: bold !important;
-  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
+  box-shadow: 0 4px 15px rgba(183, 28, 28, 0.4);
+}
+
+.nav-btn:hover {
+  background-color: var(--brand-dark);
 }
 
 /* By default, hide mobile specific elements */
@@ -162,7 +200,8 @@ header {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+  /* Slightly darker overlay for Red text */
 }
 
 .slide.active {
@@ -186,7 +225,8 @@ header {
 }
 
 .hero .highlight {
-  color: var(--brand-yellow);
+  color: var(--brand-primary);
+  /* Red Highlight */
 }
 
 .hero p {
@@ -196,19 +236,22 @@ header {
 }
 
 .cta-button {
-  background: var(--brand-yellow);
-  color: black;
+  background: var(--brand-primary);
+  color: white;
+  /* White on Red */
   padding: 15px 40px;
   border-radius: 50px;
   font-weight: bold;
   text-transform: uppercase;
-  border: 2px solid var(--brand-yellow);
+  border: 2px solid var(--brand-primary);
   display: inline-block;
+  box-shadow: 0 5px 20px rgba(183, 28, 28, 0.4);
 }
 
 .cta-button:hover {
   transform: scale(1.05);
-  background: #ffca2c;
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
 }
 
 /* --- HOW IT WORKS --- */
@@ -237,7 +280,8 @@ header {
 .step-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-  background: #fff8e1;
+  background: #fff5f5;
+  /* Very light red tint on hover */
 }
 
 .step-icon {
@@ -255,7 +299,7 @@ header {
 /* --- MENU SECTION --- */
 .menu-section {
   padding: 80px 5%;
-  background-color: var(--bg-dark);
+  background-color: var(--bg-body);
 }
 
 .section-header {
@@ -271,27 +315,40 @@ header {
 }
 
 .section-subtitle {
-  color: var(--brand-dark-gold);
+  color: var(--brand-primary);
   letter-spacing: 2px;
   text-transform: uppercase;
   font-size: 0.9rem;
   font-weight: bold;
 }
 
-/* MENU FILTERS */
+/* --- SCROLLABLE MENU FILTERS (APP STYLE) --- */
+
 .menu-filters {
   display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 5px 5%;
+  margin-bottom: 35px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.menu-filters::-webkit-scrollbar {
+  display: none;
 }
 
 .filter-btn {
+  flex: 0 0 auto;
+  white-space: nowrap;
   background: transparent;
-  border: 2px solid var(--brand-yellow);
+  border: 2px solid var(--brand-primary);
   color: #333;
-  padding: 8px 20px;
+  padding: 10px 24px;
   border-radius: 50px;
   font-weight: bold;
   cursor: pointer;
@@ -302,22 +359,48 @@ header {
 
 .filter-btn:hover,
 .filter-btn.active {
-  background: var(--brand-yellow);
-  color: black;
-  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.4);
+  background: var(--brand-primary);
+  color: white;
+  /* White on Red */
+  box-shadow: 0 4px 10px rgba(183, 28, 28, 0.4);
+  transform: translateY(-2px);
 }
 
-/* MENU GRID (Standard Desktop Layout) */
-.menu-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
+@media (min-width: 900px) {
+  .menu-filters {
+    justify-content: center;
+  }
+}
+
+/* --- MENU SLIDER & CARDS --- */
+
+.menu-slider-wrapper {
+  position: relative;
+  max-width: 1300px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
-/* --- STANDARD CARD DESIGN --- */
+.menu-grid {
+  display: flex !important;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 30px;
+  padding: 20px 5px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  align-items: flex-start !important;
+}
+
+.menu-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* CARD STYLING */
 .pizza-card {
+  min-width: 320px;
+  max-width: 320px;
+  flex: 0 0 auto;
   background-color: var(--bg-card);
   border-radius: 15px;
   overflow: hidden;
@@ -330,8 +413,9 @@ header {
 
 .pizza-card:hover {
   transform: translateY(-5px);
-  border-color: var(--brand-yellow);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  border-color: var(--brand-primary);
+  box-shadow: 0 15px 30px rgba(183, 28, 28, 0.15);
+  /* Red shadow */
 }
 
 .card-image {
@@ -403,65 +487,222 @@ header {
 }
 
 .size-row:hover {
-  background-color: #fff8e1;
+  background-color: #fff5f5;
+  /* Light Red Hover */
   padding-left: 25px;
   padding-right: 20px;
+  color: var(--brand-primary);
+  font-weight: bold;
 }
 
-/* --- REVIEWS SECTION --- */
+/* FIX: COMPACT CARDS & DRINK IMAGES */
+.pizza-card[data-category="drink"] .card-image,
+.pizza-card[data-category="juice"] .card-image {
+  background-color: #fff;
+}
+
+.pizza-card[data-category="drink"] .card-image img,
+.pizza-card[data-category="juice"] .card-image img {
+  object-fit: contain !important;
+  transform: scale(0.85);
+  transition: transform 0.5s ease;
+}
+
+.pizza-card[data-category="drink"]:hover .card-image img,
+.pizza-card[data-category="juice"]:hover .card-image img {
+  transform: scale(0.95);
+}
+
+/* Slider Buttons */
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  color: var(--brand-primary);
+  border: 1px solid var(--brand-primary);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 10;
+  transition: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider-btn:hover {
+  background-color: var(--brand-primary);
+  color: white;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prev-btn {
+  left: -25px;
+}
+
+.next-btn {
+  right: -25px;
+}
+
+@media (max-width: 768px) {
+  .slider-btn {
+    display: none;
+  }
+
+  .menu-slider-wrapper {
+    padding: 0;
+  }
+}
+
+
+/* --- NEW MODERN REVIEWS SECTION --- */
 .reviews-section {
-  padding: 80px 5%;
-  background-color: #f9f9f9;
-  border-top: 1px solid #eee;
+  padding: 80px 0;
+  background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+  /* Keep Dark Grey for contrast */
+  border-top: 4px solid var(--brand-primary);
+  position: relative;
+  overflow: hidden;
 }
 
-.reviews-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  max-width: 1200px;
-  margin: 0 auto;
+.reviews-section .section-header {
+  padding: 0 20px;
+  margin-bottom: 40px;
+}
+
+.reviews-scroll-container {
+  display: flex;
+  gap: 25px;
+  overflow-x: auto;
+  padding: 20px 5%;
+  padding-bottom: 40px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.reviews-scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
 .review-card {
-  background: white;
+  min-width: 320px;
+  max-width: 320px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
   padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-  transition: 0.3s;
-  border: 1px solid #eee;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  scroll-snap-align: center;
+  position: relative;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
 }
 
-.stars {
-  color: var(--brand-dark-gold);
-  margin-bottom: 15px;
-  font-size: 1.2rem;
+.review-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--brand-primary);
+}
+
+.quote-icon {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-family: serif;
+  font-size: 5rem;
+  color: var(--brand-primary);
+  opacity: 0.4;
+  line-height: 1;
 }
 
 .review-card p {
-  color: #555;
   font-style: italic;
-  margin-bottom: 20px;
+  font-size: 0.95rem;
   line-height: 1.6;
+  color: #ddd;
+  margin-bottom: 25px;
+  flex-grow: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.review-card .stars {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: var(--star-yellow);
 }
 
 .reviewer {
   display: flex;
   align-items: center;
   gap: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 15px;
 }
 
 .reviewer img {
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  border: 2px solid var(--brand-yellow);
+  border: 2px solid var(--brand-primary);
 }
 
-.reviewer span {
+.reviewer-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewer-info span {
   font-weight: bold;
   font-family: 'Oswald', sans-serif;
-  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  color: white;
+}
+
+.reviewer-info small {
+  color: #888;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.reviews-footer {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.review-btn {
+  display: inline-block;
+  padding: 12px 30px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50px;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.review-btn:hover {
+  background: white;
+  color: black;
+  border-color: white;
+}
+
+@media (max-width: 768px) {
+  .review-card {
+    min-width: 85vw;
+    max-width: 85vw;
+  }
+
+  .reviews-scroll-container {
+    padding: 20px 7.5%;
+  }
 }
 
 /* --- CONTACT SECTION --- */
@@ -469,6 +710,8 @@ header {
   background-color: #111;
   padding: 60px 5%;
   color: white;
+  border-top: 4px solid var(--brand-accent);
+  /* Orange Top Border */
 }
 
 .contact-info {
@@ -489,7 +732,8 @@ header {
 }
 
 .info-box h4 {
-  color: var(--brand-yellow);
+  color: var(--brand-accent);
+  /* Orange Text */
   font-family: 'Oswald', sans-serif;
   margin-bottom: 15px;
 }
@@ -526,8 +770,8 @@ footer {
 }
 
 .social-links a:hover {
-  color: var(--brand-yellow);
-  border-color: var(--brand-yellow);
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
 }
 
 /* --- MODERN PRO CART UI --- */
@@ -535,8 +779,9 @@ footer {
   position: fixed;
   bottom: 25px;
   right: 25px;
-  background: linear-gradient(135deg, #FFC107, #FF9800);
-  color: #000;
+  background: linear-gradient(135deg, var(--brand-primary), #D32F2F);
+  color: #fff;
+  /* White icon on Red */
   width: 65px;
   height: 65px;
   border-radius: 50%;
@@ -546,7 +791,7 @@ footer {
   font-size: 1.8rem;
   cursor: pointer;
   z-index: 2000;
-  box-shadow: 0 10px 25px rgba(255, 193, 7, 0.4);
+  box-shadow: 0 10px 25px rgba(183, 28, 28, 0.5);
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   animation: softPulse 2s infinite;
 }
@@ -557,15 +802,15 @@ footer {
 
 @keyframes softPulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+    box-shadow: 0 0 0 0 rgba(183, 28, 28, 0.7);
   }
 
   70% {
-    box-shadow: 0 0 0 15px rgba(255, 193, 7, 0);
+    box-shadow: 0 0 0 15px rgba(183, 28, 28, 0);
   }
 
   100% {
-    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+    box-shadow: 0 0 0 0 rgba(183, 28, 28, 0);
   }
 }
 
@@ -573,8 +818,9 @@ footer {
   position: absolute;
   top: -2px;
   right: -2px;
-  background-color: #D32F2F;
-  color: white;
+  background-color: var(--brand-accent);
+  /* Orange Count Badge */
+  color: black;
   font-size: 0.75rem;
   width: 24px;
   height: 24px;
@@ -613,7 +859,7 @@ footer {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #eee;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  flex-shrink: 0;
 }
 
 .cart-header h3 {
@@ -630,7 +876,7 @@ footer {
 
 .clear-cart-btn {
   font-size: 0.85rem;
-  color: #D32F2F;
+  color: var(--brand-primary);
   cursor: pointer;
   font-weight: bold;
   text-transform: uppercase;
@@ -645,15 +891,21 @@ footer {
 }
 
 .close-cart:hover {
-  color: #d32f2f;
+  color: var(--brand-primary);
   transform: rotate(90deg);
 }
 
-/* Cart Items */
-.cart-items {
+.cart-scroll-wrapper {
   flex-grow: 1;
   overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-items {
   padding: 20px;
+  flex-shrink: 0;
 }
 
 .cart-item {
@@ -670,7 +922,7 @@ footer {
 }
 
 .remove-btn {
-  color: #D32F2F;
+  color: var(--brand-primary);
   font-weight: bold;
   font-size: 1.2rem;
   cursor: pointer;
@@ -702,7 +954,6 @@ footer {
   font-size: 0.75rem;
 }
 
-/* Qty Buttons */
 .qty-controls {
   display: flex;
   align-items: center;
@@ -728,16 +979,17 @@ footer {
 }
 
 .qty-btn:hover {
-  background: var(--brand-yellow);
+  background: var(--brand-primary);
+  color: white;
 }
 
-/* Inputs & Footer (Fixed Stacking) */
 .cart-inputs {
-  padding: 20px;
-  background: white;
-  border-top: 1px solid #eee;
+  padding: 0 20px 20px 20px;
+  background: transparent;
+  border-top: none;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 }
 
 .cart-inputs label {
@@ -754,7 +1006,7 @@ footer {
 
 .cart-input {
   width: 100%;
-  background: #f9f9f9;
+  background: #fff;
   border: 2px solid #eee;
   padding: 12px;
   border-radius: 10px;
@@ -765,7 +1017,7 @@ footer {
 
 .cart-input:focus {
   background: white;
-  border-color: var(--brand-yellow);
+  border-color: var(--brand-primary);
   outline: none;
 }
 
@@ -773,7 +1025,9 @@ footer {
   padding: 25px;
   background: white;
   box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
-  margin-top: auto;
+  flex-shrink: 0;
+  margin-top: 0;
+  z-index: 10;
 }
 
 .total-row {
@@ -801,12 +1055,11 @@ footer {
   letter-spacing: 1px;
 }
 
-/* Order Type Toggle */
 .order-type-switch {
   display: flex;
   gap: 10px;
   margin-bottom: 15px;
-  background: #f0f0f0;
+  background: #e0e0e0;
   padding: 5px;
   border-radius: 10px;
 }
@@ -830,9 +1083,9 @@ footer {
 
 .order-type-switch input[type="radio"]:checked+label {
   background-color: white;
-  color: #000;
+  color: var(--brand-primary);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  border-color: var(--brand-yellow);
+  border-color: var(--brand-primary);
 }
 
 #address-field {
@@ -840,7 +1093,6 @@ footer {
   overflow: hidden;
 }
 
-/* Live Status Badge */
 .status-badge {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(5px);
@@ -904,7 +1156,6 @@ footer {
   }
 }
 
-/* Gallery Section */
 .gallery-section {
   padding: 80px 5%;
   background: white;
@@ -914,7 +1165,6 @@ footer {
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  /* Max width logic for PC */
   gap: 20px;
   max-width: 1200px;
   margin: 0 auto;
@@ -925,6 +1175,7 @@ footer {
   border-radius: 15px;
   overflow: hidden;
   cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .gallery-item img {
@@ -932,14 +1183,73 @@ footer {
   height: 100%;
   aspect-ratio: 1/1;
   object-fit: cover;
-  transition: 0.5s;
+  transition: transform 0.5s ease;
+}
+
+.gallery-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.gallery-item::after {
+  content: '❤️';
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  font-size: 1.8rem;
+  color: white;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .gallery-item:hover img {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
-/* Custom Alert Modal */
+.gallery-item:hover::before {
+  opacity: 1;
+}
+
+.gallery-item:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gallery-footer {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.instagram-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
+  color: white;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.instagram-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -968,13 +1278,13 @@ footer {
   text-align: center;
   width: 90%;
   max-width: 400px;
-  border-top: 5px solid var(--brand-yellow);
+  border-top: 5px solid var(--brand-primary);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .modal-box button {
-  background: var(--brand-yellow);
-  color: black;
+  background: var(--brand-primary);
+  color: white;
   border: none;
   padding: 10px 30px;
   border-radius: 50px;
@@ -982,15 +1292,8 @@ footer {
   cursor: pointer;
 }
 
-
-/* ==============================================================
-   MASTER MOBILE QUERY (MAX-WIDTH 768PX)
-   All mobile changes happen HERE.
-   ============================================================== */
-
+/* --- MOBILE QUERY (MAX-WIDTH 768PX) --- */
 @media (max-width: 768px) {
-
-  /* --- MOBILE MENU SLIDER (75vw = Visible Peek) --- */
   .menu-grid {
     display: flex !important;
     overflow-x: auto !important;
@@ -1007,7 +1310,6 @@ footer {
     display: none;
   }
 
-  /* 75vw width ensures the NEXT card is visible on the right */
   .pizza-card {
     min-width: 75vw;
     max-width: 75vw;
@@ -1015,7 +1317,6 @@ footer {
     margin-top: 0 !important;
   }
 
-  /* BOLD YELLOW Swipe Hint */
   .menu-section {
     position: relative;
   }
@@ -1027,10 +1328,8 @@ footer {
     bottom: 40px;
     font-size: 0.85rem;
     font-weight: 800;
-    /* Bold */
-    color: #333;
-    background: var(--brand-yellow);
-    /* Yellow Background */
+    color: white;
+    background: var(--brand-primary);
     padding: 5px 15px;
     border-radius: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -1050,7 +1349,6 @@ footer {
     }
   }
 
-  /* 1. HEADER & NAV */
   header {
     padding: 10px 15px !important;
   }
@@ -1105,7 +1403,7 @@ footer {
     background: white;
     width: 100%;
     padding: 40px 0;
-    border-bottom: 4px solid var(--brand-yellow);
+    border-bottom: 4px solid var(--brand-primary);
     transition: 0.3s;
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
   }
@@ -1114,7 +1412,6 @@ footer {
     left: 0;
   }
 
-  /* 2. MOBILE HERO FIX */
   .hero {
     height: 60vh !important;
     min-height: auto !important;
@@ -1124,7 +1421,6 @@ footer {
     font-size: 2.5rem;
   }
 
-  /* 4. MOBILE GALLERY SWIPE (Fixed Hint Position) */
   .gallery-grid {
     display: flex !important;
     flex-wrap: nowrap !important;
@@ -1154,13 +1450,9 @@ footer {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   }
 
-  /* REMOVED .gallery-section::after */
-
-  /* NEW: Put the Swipe Hint ABOVE the Instagram Button */
   .gallery-footer {
     position: relative;
     margin-top: 10px;
-    /* Pull it closer to images */
   }
 
   .gallery-footer::before {
@@ -1171,30 +1463,23 @@ footer {
     font-weight: bold;
     color: #666;
     margin-bottom: 15px;
-    /* Space between text and button */
     animation: floatSide 2s infinite;
   }
 
-  /* 5. MOBILE CONTACT (RESTORED TO NORMAL VERTICAL STACK) */
   .contact-info {
     display: grid !important;
-    /* BACK TO GRID */
     grid-template-columns: 1fr !important;
-    /* SINGLE COLUMN */
     overflow-x: visible !important;
     gap: 40px !important;
-    /* Space between stacked items */
     padding: 0 !important;
   }
 
   .info-box {
     min-width: auto;
-    /* Remove width constraint */
     border-right: none;
     border-bottom: 1px solid #333;
     padding-bottom: 30px;
     background: transparent;
-    /* No card background needed for vertical */
     border-radius: 0;
     border: none;
     border-bottom: 1px solid #333 !important;
@@ -1204,37 +1489,26 @@ footer {
     border-bottom: none !important;
   }
 
-  .contact-section::after {
-    content: none;
-    /* Remove swipe hint */
-    display: none;
-  }
-
-  /* 6. PADDING ADJUSTMENTS */
   .menu-section,
   .gallery-section,
   .contact-section {
     padding: 50px 5%;
   }
 
-  /* REDUCED REVIEWS SIZE */
   .reviews-section {
     padding: 30px 15px;
   }
 
   .reviews-grid {
     grid-template-columns: 1fr !important;
-    /* Force 1 column */
     gap: 20px;
   }
 
   .review-card {
     padding: 15px 20px;
-    /* Tighter padding */
     margin-bottom: 0;
   }
 
-  /* 7. CART WIDTH (Shows strip behind) */
   .cart-sidebar {
     width: 85%;
     max-width: 350px;
@@ -1244,117 +1518,26 @@ footer {
   .cart-sidebar.active {
     right: 0;
   }
-}
 
-/* --- PROFESSIONAL GALLERY HOVER EFFECTS (Bottom Right) --- */
+  /* FORCE STOP IPHONE ZOOM */
+  input,
+  select,
+  textarea,
+  .cart-input {
+    font-size: 16px !important;
+    transform: scale(1);
+  }
 
-.gallery-item {
-  position: relative;
-  /* Needed to trap the overlay inside */
-  border-radius: 15px;
-  overflow: hidden;
-  /* Crops the image if it zooms */
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* The Image itself */
-.gallery-item img {
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 1/1;
-  /* Forces perfect squares */
-  object-fit: cover;
-  transition: transform 0.5s ease;
-}
-
-/* 1. The Subtle Bottom Gradient Overlay */
-.gallery-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* Gradient from transparent top to dark bottom */
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 50%);
-  opacity: 0;
-  /* Hidden by default */
-  transition: opacity 0.3s ease;
-  z-index: 1;
-}
-
-/* 2. The Heart Icon in Bottom Right */
-.gallery-item::after {
-  content: '❤️';
-  position: absolute;
-  bottom: 15px;
-  /* Position at bottom */
-  right: 15px;
-  /* Position at right */
-  font-size: 1.8rem;
-  /* Nice corner size */
-  color: white;
-  z-index: 2;
-  opacity: 0;
-  /* Hidden by default */
-  /* Start slightly pushed down */
-  transform: translateY(20px);
-  /* Smooth bouncy transition */
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* --- HOVER ACTIONS --- */
-
-/* Zoom the image slightly */
-.gallery-item:hover img {
-  transform: scale(1.08);
-}
-
-/* Show the bottom gradient */
-.gallery-item:hover::before {
-  opacity: 1;
-}
-
-/* Slide the heart up and fade it in */
-.gallery-item:hover::after {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* --- FOLLOW BUTTON CONTAINER --- */
-.gallery-footer {
-  text-align: center;
-  margin-top: 40px;
-}
-
-.instagram-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
-  color: white;
-  padding: 12px 30px;
-  border-radius: 50px;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 0.9rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.instagram-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-  color: white;
+  .modal-box {
+    font-size: 1rem !important;
+  }
 }
 
 /* --- SCROLL TO TOP BUTTON --- */
 #scrollTopBtn {
   display: none;
-  /* Hidden by default */
   position: fixed;
   bottom: 90px;
-  /* Above the cart button */
   right: 25px;
   z-index: 1999;
   background: #333;
@@ -1372,16 +1555,15 @@ footer {
 }
 
 #scrollTopBtn:hover {
-  background: var(--brand-yellow);
-  color: black;
+  background: var(--brand-primary);
+  color: white;
   opacity: 1;
 }
 
 /* --- PROFESSIONAL FAQ SECTION --- */
 .faq-section {
   padding: 80px 5%;
-  background-color: var(--bg-dark);
-  /* Matches page background */
+  background-color: var(--bg-body);
   border-top: 1px solid #eee;
 }
 
@@ -1391,7 +1573,6 @@ footer {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  /* Space between cards */
 }
 
 .faq-item {
@@ -1400,21 +1581,17 @@ footer {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
   overflow: hidden;
   border: 1px solid transparent;
-  /* Invisible border for transition */
   transition: all 0.3s ease;
 }
 
-/* Hover Effect */
 .faq-item:hover {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
 }
 
-/* Active State (When Open) */
 .faq-item.active {
-  border-color: var(--brand-yellow);
-  /* Highlights the card */
-  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.15);
+  border-color: var(--brand-primary);
+  box-shadow: 0 8px 25px rgba(183, 28, 28, 0.15);
 }
 
 .faq-question {
@@ -1428,31 +1605,25 @@ footer {
   color: #333;
   font-weight: 500;
   user-select: none;
-  /* Prevents highlighting text on click */
 }
 
-/* The Plus Icon */
 .faq-icon {
   font-size: 1.5rem;
-  color: var(--brand-yellow);
+  color: var(--brand-primary);
   font-weight: bold;
   transition: transform 0.3s ease;
   line-height: 1;
 }
 
-/* Rotate icon when active */
 .faq-item.active .faq-icon {
   transform: rotate(45deg);
-  /* Turns + into x */
   color: #333;
 }
 
-/* The Answer (Hidden by default) */
 .faq-answer {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
-  /* Smooth slide */
   background-color: #fff;
 }
 
@@ -1464,107 +1635,29 @@ footer {
   margin: 0;
 }
 
-/* Make text darker when active */
 .faq-item.active .faq-question {
   color: #000;
 }
 
-/* --- FORCE STOP IPHONE ZOOM --- */
-@media screen and (max-width: 768px) {
+/* --- FIX: RESTORE FULL SIZE IMAGES --- */
 
-  input,
-  select,
-  textarea,
-  .cart-input {
-    font-size: 16px !important;
-    /* iPhone requires 16px to stop zooming */
-    transform: scale(1);
-    /* Forces reset */
-  }
-
-  /* Fix for the error modal appearing zoomed */
-  .modal-box {
-    font-size: 1rem !important;
-    /* Ensures modal text stays readable */
-  }
+/* 1. Reset the background to match pizzas */
+.pizza-card[data-category="drink"] .card-image,
+.pizza-card[data-category="juice"] .card-image {
+  background-color: #f8f8f8 !important;
 }
 
-/* --- CART SIDEBAR STRUCTURE FIX --- */
-
-/* 1. The Sidebar Container */
-.cart-sidebar {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 100%;
-  max-width: 400px;
-  height: 100%;
-  background: #f4f7f6;
-  z-index: 2001;
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
-  transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
-  display: flex;
-  flex-direction: column;
-  /* Stack Header, Middle, Footer */
+/* 2. Force images to fill the box (Cover) */
+.pizza-card[data-category="drink"] .card-image img,
+.pizza-card[data-category="juice"] .card-image img {
+  object-fit: cover !important;
+  /* Fills the whole area */
+  transform: scale(1) !important;
+  /* Resets the size */
 }
 
-.cart-sidebar.active {
-  right: 0;
-}
-
-/* 2. The Header (Fixed Height) */
-.cart-header {
-  padding: 20px 25px;
-  background: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-  flex-shrink: 0;
-  /* Don't let header shrink */
-}
-
-/* 3. NEW SCROLL WRAPPER (The Middle Part) */
-.cart-scroll-wrapper {
-  flex-grow: 1;
-  /* Fill all remaining space */
-  overflow-y: auto;
-  /* Allow scrolling inside this area */
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 4. Cart Items (Inside Wrapper) */
-.cart-items {
-  padding: 20px;
-  flex-shrink: 0;
-  /* Allow it to grow as long as needed */
-  /* Removed overflow-y: auto from here, handled by wrapper now */
-}
-
-/* 5. Cart Inputs (Inside Wrapper) */
-.cart-inputs {
-  padding: 0 20px 20px 20px;
-  /* Adjusted padding */
-  background: transparent;
-  /* Blend with wrapper */
-  border-top: none;
-  /* Remove separator line */
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  /* Don't shrink, just scroll */
-}
-
-/* 6. The Footer (Fixed Height at Bottom) */
-.cart-footer {
-  padding: 25px;
-  background: white;
-  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.05);
-  flex-shrink: 0;
-  /* Ensure footer is always visible */
-  margin-top: 0;
-  /* Remove auto margin */
-  z-index: 10;
+/* 3. Restore the original zoom-on-hover effect */
+.pizza-card[data-category="drink"]:hover .card-image img,
+.pizza-card[data-category="juice"]:hover .card-image img {
+  transform: scale(1.05) !important;
 }

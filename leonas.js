@@ -36,6 +36,7 @@ document.addEventListener('click', (e) => {
 // --- HERO SLIDER ---
 const slides = document.querySelectorAll('.slide');
 let currentSlide = 0;
+
 function nextSlide() {
   slides[currentSlide].classList.remove('active');
   currentSlide = (currentSlide + 1) % slides.length;
@@ -84,7 +85,12 @@ function addToCart(name, size, price) {
   if (existingItem) {
     existingItem.quantity += 1;
   } else {
-    cart.push({ name, size, price, quantity: 1 });
+    cart.push({
+      name,
+      size,
+      price,
+      quantity: 1
+    });
   }
   updateCartUI();
 
@@ -155,18 +161,24 @@ function updateCartUI() {
   cartTotal.innerText = '₵' + totalPrice;
 }
 
+// ============================================================
+//  STRICT CHECKOUT SYSTEM (NO PAY = NO ORDER)
+// ============================================================
+
 function checkout() {
+  // 1. Check if Cart is Empty
   if (cart.length === 0) {
-    showCustomAlert("Cart Empty", "Please add some delicious items to your cart first!");
+    showCustomAlert("Cart Empty", "Please add items to your cart first!");
     return;
   }
 
+  // 2. Get Input Values
   const customerName = document.getElementById('customer-name').value;
   const customerPhone = document.getElementById('customer-phone').value;
   const isDelivery = document.getElementById('type-delivery').checked;
-  const orderType = isDelivery ? "Delivery 🛵" : "Pick Up 🏃";
   const customerAddress = document.getElementById('customer-address').value;
 
+  // 3. Validate Inputs
   const nameRegex = /^[a-zA-Z\s]+$/;
   if (!customerName || !nameRegex.test(customerName)) {
     showCustomAlert("Invalid Name", "Please enter a valid name (letters only).");
@@ -184,36 +196,98 @@ function checkout() {
     return;
   }
 
+  // 4. Calculate Total
+  let totalAmount = 0;
+  cart.forEach(item => {
+    totalAmount += item.price * item.quantity;
+  });
+
+  // 5. Trigger Paystack directly
+  payWithPaystack(customerName, customerPhone, customerAddress, totalAmount, isDelivery);
+}
+
+// --- PAYSTACK INTEGRATION ---
+function payWithPaystack(name, phone, address, amount, isDelivery) {
+
+  // YOUR PUBLIC KEY
+  const publicKey = "pk_test_9b2e43f2332af4fff23f3967f1bf76e8b2a59d88";
+
+  let handler = PaystackPop.setup({
+    key: publicKey,
+    email: "orders@dewrapsquare.com", // Dummy email for the system
+    amount: amount * 100, // Amount in pesewas
+    currency: "GHS",
+    ref: '' + Math.floor((Math.random() * 1000000000) + 1), // Unique Ref
+    metadata: {
+      custom_fields: [{
+        display_name: "Customer Name",
+        variable_name: "customer_name",
+        value: name
+      },
+      {
+        display_name: "Phone Number",
+        variable_name: "mobile_number",
+        value: phone
+      }
+      ]
+    },
+    callback: function (response) {
+      // 🟢 SUCCESS! Payment verified by Paystack.
+      // ONLY NOW do we generate the WhatsApp order.
+      const paymentRef = response.reference;
+      sendToWhatsapp(name, phone, address, amount, isDelivery, paymentRef);
+    },
+    onClose: function () {
+      // 🔴 FAILED/CLOSED. No WhatsApp message is sent.
+      showCustomAlert("Payment Cancelled", "Order was not placed because payment was cancelled.");
+    }
+  });
+
+  handler.openIframe();
+}
+
+// --- WHATSAPP SENDER ---
+function sendToWhatsapp(name, phone, address, total, isDelivery, paymentRef) {
+
+  // 🔴 CHANGE TO COMPANY NUMBER WHEN READY
   const phoneNumber = "233596620696";
 
-  let message = `*NEW ORDER - LEONA'S PIZZERIA* \n\n`;
-  message += `1. *Name:* ${customerName}\n`;
-  message += `2. *Phone:* ${customerPhone}\n`;
-  message += `3. *Type:* ${orderType}\n`;
+  const orderType = isDelivery ? "DELIVERY" : "PICK UP";
+
+  let message = `*NEW PAID ORDER - DE WRAP SQUARE* \n`;
+  message += `--------------------------------\n`;
+  message += `✅ *PAYMENT CONFIRMED*\n`;
+  message += `💳 *Ref:* ${paymentRef}\n`; // This proves it is paid
+  message += `--------------------------------\n`;
+  message += `👤 *Name:* ${name}\n`;
+  message += `📞 *Phone:* ${phone}\n`;
+  message += `📦 *Type:* ${orderType}\n`;
 
   if (isDelivery) {
-    message += `4. *Location:* ${customerAddress}\n`;
+    message += `📍 *Location:* ${address}\n`;
   }
 
   message += `\n*📝 ORDER DETAILS:*\n`;
 
-  let total = 0;
   cart.forEach(item => {
     const itemTotal = item.price * item.quantity;
-    message += `- ${item.quantity}x ${item.size} ${item.name} (₵${itemTotal})\n`;
-    total += itemTotal;
+    message += `- ${item.quantity}x ${item.name} (${item.size})\n`;
   });
 
-  message += `\n💰 *TOTAL TO PAY: ₵${total}*`;
+  message += `\n💰 *FOOD TOTAL PAID: ₵${total}*\n`;
 
   if (isDelivery) {
-    message += `\n_(Delivery fee will be added based on location)_`;
+    message += `⚠️ *NOTE:* Delivery fee is NOT included. Customer pays rider.\n`;
   }
 
   const encodedMessage = encodeURIComponent(message);
   const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
   window.open(url, '_blank');
 
+  // Success Message to user
+  showCustomAlert("Order Sent!", "Payment received. We are processing your order on WhatsApp.");
+
+  // Clear cart
   setTimeout(() => {
     cart = [];
     document.getElementById('customer-name').value = "";
@@ -221,8 +295,12 @@ function checkout() {
     document.getElementById('customer-address').value = "";
     updateCartUI();
     toggleCart();
-  }, 1000);
+  }, 2000);
 }
+
+// ============================================================
+//  UI HELPERS
+// ============================================================
 
 // --- MENU FILTERING LOGIC ---
 function filterMenu(category) {
@@ -240,6 +318,9 @@ function filterMenu(category) {
       item.style.display = 'none';
     }
   });
+
+  // Reset scroll to start when filtering
+  document.getElementById('menu-grid').scrollLeft = 0;
 }
 
 // --- OPEN/CLOSED LOGIC ---
@@ -273,6 +354,7 @@ function toggleAddress(isDelivery) {
     addressField.style.display = "none";
   }
 }
+
 // --- SCROLL TO TOP LOGIC ---
 const scrollBtn = document.getElementById("scrollTopBtn");
 
@@ -285,7 +367,10 @@ window.onscroll = function () {
 };
 
 function scrollToTop() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
 }
 
 // --- FAQ ACCORDION LOGIC ---
@@ -305,14 +390,60 @@ faqItems.forEach(item => {
     } else {
       answer.style.maxHeight = 0;
     }
-
-    // Optional: Close other items when one is opened (Accordion style)
-    /* faqItems.forEach(otherItem => {
-      if (otherItem !== item && otherItem.classList.contains('active')) {
-        otherItem.classList.remove('active');
-        otherItem.querySelector('.faq-answer').style.maxHeight = 0;
-      }
-    });
-    */
   });
 });
+
+// --- MENU AUTO-SLIDER & CONTROLS ---
+
+const menuGrid = document.getElementById('menu-grid');
+let autoScrollInterval;
+
+// 1. Manual Slide Function (for Arrows)
+function slideMenu(direction) {
+  // Determine width of card + gap (320px + 30px gap = 350px)
+  const scrollAmount = 350;
+
+  if (direction === 1) {
+    menuGrid.scrollLeft += scrollAmount;
+    if (menuGrid.scrollLeft + menuGrid.clientWidth >= menuGrid.scrollWidth - 10) {
+      menuGrid.scrollTo({
+        left: 0,
+        behavior: 'smooth'
+      });
+    }
+  } else {
+    menuGrid.scrollLeft -= scrollAmount;
+  }
+}
+
+// 2. Auto Scroll Logic
+function startAutoScroll() {
+  autoScrollInterval = setInterval(() => {
+    // If user is NOT hovering, scroll right
+    if (!menuGrid.matches(':hover')) {
+      if (menuGrid.scrollLeft + menuGrid.clientWidth >= menuGrid.scrollWidth - 10) {
+        menuGrid.scrollTo({
+          left: 0,
+          behavior: 'smooth'
+        });
+      } else {
+        menuGrid.scrollBy({
+          left: 350,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, 4000); // Slides every 4 seconds
+}
+
+// 3. Pause Auto-Scroll on Hover
+menuGrid.parentElement.addEventListener('mouseenter', () => {
+  clearInterval(autoScrollInterval);
+});
+
+menuGrid.parentElement.addEventListener('mouseleave', () => {
+  startAutoScroll();
+});
+
+// Initialize
+startAutoScroll();

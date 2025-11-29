@@ -255,29 +255,29 @@ function sendToWhatsapp(name, phone, address, total, isDelivery, paymentRef) {
   const orderType = isDelivery ? "DELIVERY" : "PICK UP";
 
   let message = `*NEW PAID ORDER - DE WRAP SQUARE* \n`;
-  message += `--------------------------------\n`;
-  message += `✅ *PAYMENT CONFIRMED*\n`;
-  message += `💳 *Ref:* ${paymentRef}\n`; // This proves it is paid
-  message += `--------------------------------\n`;
-  message += `👤 *Name:* ${name}\n`;
-  message += `📞 *Phone:* ${phone}\n`;
-  message += `📦 *Type:* ${orderType}\n`;
+
+  message += ` *PAYMENT CONFIRMED*\n`;
+  message += ` *Ref:* ${paymentRef}\n`; // This proves it is paid
+
+  message += ` *Name:* ${name}\n`;
+  message += ` *Phone:* ${phone}\n`;
+  message += ` *Type:* ${orderType}\n`;
 
   if (isDelivery) {
-    message += `📍 *Location:* ${address}\n`;
+    message += ` *Location:* ${address}\n`;
   }
 
-  message += `\n*📝 ORDER DETAILS:*\n`;
+  message += `\n* ORDER DETAILS:*\n`;
 
   cart.forEach(item => {
     const itemTotal = item.price * item.quantity;
     message += `- ${item.quantity}x ${item.name} (${item.size})\n`;
   });
 
-  message += `\n💰 *FOOD TOTAL PAID: ₵${total}*\n`;
+  message += `\n *FOOD TOTAL PAID: ₵${total}*\n`;
 
   if (isDelivery) {
-    message += `⚠️ *NOTE:* Delivery fee is NOT included. Customer pays rider.\n`;
+    message += ` *NOTE:* Delivery fee is NOT included. Customer pays rider.\n`;
   }
 
   const encodedMessage = encodeURIComponent(message);

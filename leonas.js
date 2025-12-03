@@ -3,7 +3,6 @@ const hamburger = document.querySelector(".hamburger");
 const navMenu = document.querySelector(".nav-menu");
 const closeBtn = document.querySelector(".mobile-close-btn");
 
-// 1. Open/Close on Hamburger Click
 if (hamburger) {
   hamburger.addEventListener("click", () => {
     hamburger.classList.toggle("active");
@@ -11,7 +10,6 @@ if (hamburger) {
   });
 }
 
-// 2. Close when clicking the "Close Menu X" button
 if (closeBtn) {
   closeBtn.addEventListener("click", () => {
     hamburger.classList.remove("active");
@@ -19,13 +17,11 @@ if (closeBtn) {
   });
 }
 
-// 3. Close when clicking any link
 document.querySelectorAll(".nav-link").forEach(n => n.addEventListener("click", () => {
   hamburger.classList.remove("active");
   navMenu.classList.remove("active");
 }));
 
-// 4. CLOSE WHEN CLICKING OUTSIDE
 document.addEventListener('click', (e) => {
   if (navMenu.classList.contains('active')) {
     if (!navMenu.contains(e.target) && !hamburger.contains(e.target)) {
@@ -48,40 +44,39 @@ function nextSlide() {
 }
 setInterval(nextSlide, 5000);
 
-
-// ============================================================
-//  PROFESSIONAL NOTIFICATION SYSTEM
-// ============================================================
+// --- NOTIFICATION & TOAST SYSTEMS ---
+const icons = {
+  success: `<svg xmlns="http://www.w3.org/2000/svg" class="modal-icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>`,
+  error: `<svg xmlns="http://www.w3.org/2000/svg" class="modal-icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>`,
+  info: `<svg xmlns="http://www.w3.org/2000/svg" class="modal-icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>`
+};
 
 function showCustomAlert(title, message, type = 'normal') {
   const modal = document.getElementById('custom-alert');
+  const modalBox = modal.querySelector('.modal-box');
+  const iconContainer = document.getElementById('modal-icon-container');
   const titleEl = document.getElementById('modal-title');
   const msgEl = document.getElementById('modal-message');
-  const iconEl = document.querySelector('.modal-icon');
-  const headerEl = document.querySelector('.modal-header');
-  const actionsEl = document.querySelector('.modal-actions');
+  const actionsEl = document.getElementById('modal-actions');
 
-  // 1. Set Content
+  modalBox.className = 'modal-box';
+
+  if (type === 'success') {
+    modalBox.classList.add('modal-theme-success');
+    iconContainer.innerHTML = icons.success;
+  } else if (type === 'error') {
+    modalBox.classList.add('modal-theme-error');
+    iconContainer.innerHTML = icons.error;
+  } else {
+    modalBox.classList.add('modal-theme-normal');
+    iconContainer.innerHTML = icons.info;
+  }
+
   titleEl.innerText = title;
   msgEl.innerHTML = message;
 
-  // 2. Set Theme (Colors & Icons)
-  if (type === 'success') {
-    iconEl.innerText = '✅';
-    headerEl.style.backgroundColor = '#25D366'; // WhatsApp Green
-  } else if (type === 'error') {
-    iconEl.innerText = '⚠️';
-    headerEl.style.backgroundColor = '#B71C1C'; // Error Red
-  } else {
-    iconEl.innerText = '🔔';
-    headerEl.style.backgroundColor = '#B71C1C'; // Default Brand Red
-  }
-
-  // 3. Set Buttons
-  if (message.includes('<a href')) {
-    actionsEl.innerHTML = `<button class="modal-btn-secondary" onclick="closeAlert()">Close</button>`;
-  } else {
-    actionsEl.innerHTML = `<button class="modal-btn-primary" onclick="closeAlert()">Okay, Got it</button>`;
+  if (!actionsEl.innerHTML.includes('<a')) {
+    actionsEl.innerHTML = `<button class="modal-btn-primary" onclick="closeAlert()">Okay</button>`;
   }
 
   modal.classList.add('active');
@@ -89,10 +84,24 @@ function showCustomAlert(title, message, type = 'normal') {
 
 function closeAlert() {
   document.getElementById('custom-alert').classList.remove('active');
+  setTimeout(() => {
+    document.getElementById('modal-actions').innerHTML = '';
+  }, 300);
 }
 
-// --- CART LOGIC ---
+function showToast(message) {
+  const x = document.getElementById("toast-box");
+  if (x) {
+    x.innerText = message;
+    x.className = "show";
+    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+  }
+}
+
+// --- CART & COUPON LOGIC ---
 let cart = [];
+let currentDiscount = 0;
+let appliedCode = "";
 
 function toggleCart() {
   const sidebar = document.getElementById('cart-sidebar');
@@ -117,22 +126,17 @@ function addToCart(name, size, price) {
   if (existingItem) {
     existingItem.quantity += 1;
   } else {
-    cart.push({
-      name,
-      size,
-      price,
-      quantity: 1
-    });
+    cart.push({ name, size, price, quantity: 1 });
   }
+
   updateCartUI();
+  showToast(`Added: ${name} 🍕`);
 
   const sidebar = document.getElementById('cart-sidebar');
   if (!sidebar.classList.contains('active')) {
     sidebar.classList.add('active');
     setTimeout(() => {
-      if (sidebar.classList.contains('active')) {
-        toggleCart();
-      }
+      if (sidebar.classList.contains('active')) toggleCart();
     }, 2500);
   }
 }
@@ -152,6 +156,14 @@ function decreaseQty(index) {
 }
 
 function updateCartUI() {
+  // Reset Discount on Change
+  currentDiscount = 0;
+  appliedCode = "";
+  const promoInput = document.getElementById('promo-input');
+  const promoMsg = document.getElementById('promo-message');
+  if (promoInput) promoInput.value = "";
+  if (promoMsg) promoMsg.innerText = "";
+
   const cartItemsContainer = document.getElementById('cart-items');
   const cartCount = document.getElementById('cart-count');
   const cartTotal = document.getElementById('cart-total');
@@ -186,14 +198,50 @@ function updateCartUI() {
       cartItemsContainer.appendChild(itemDiv);
     });
   }
-
   cartTotal.innerText = '₵' + totalPrice;
 }
 
-// ============================================================
-//  STRICT CHECKOUT SYSTEM (NO PAY = NO ORDER)
-// ============================================================
+function applyPromo() {
+  const input = document.getElementById('promo-input');
+  const msg = document.getElementById('promo-message');
+  const code = input.value.trim().toUpperCase();
+  const cartTotalElement = document.getElementById('cart-total');
 
+  let subtotal = 0;
+  cart.forEach(item => subtotal += item.price * item.quantity);
+
+  if (subtotal === 0) {
+    showToast("Cart is empty!");
+    return;
+  }
+
+  if (code === "LEONA10") {
+    currentDiscount = subtotal * 0.10;
+    appliedCode = "LEONA10";
+    msg.style.color = "#25D366";
+    msg.innerText = `✅ 10% Discount Applied (-₵${currentDiscount.toFixed(2)})`;
+    showToast("Discount Applied! 🔥");
+  }
+  else {
+    currentDiscount = 0;
+    appliedCode = "";
+    msg.style.color = "#B71C1C";
+    msg.innerText = "❌ Invalid Code";
+    // Recalculate original total
+    cartTotalElement.innerText = '₵' + subtotal;
+    return;
+  }
+
+  const newTotal = subtotal - currentDiscount;
+  const finalTotal = newTotal > 0 ? newTotal : 0;
+
+  cartTotalElement.innerHTML = `
+    <span style="text-decoration: line-through; color: #999; font-size: 0.9em;">₵${subtotal}</span>
+    <br>₵${finalTotal.toFixed(2)}
+  `;
+}
+
+// --- CHECKOUT & PAYSTACK ---
 function checkout() {
   if (cart.length === 0) {
     showCustomAlert("Cart Empty", "Please add items to your cart first!", "error");
@@ -222,21 +270,21 @@ function checkout() {
     return;
   }
 
-  let totalAmount = 0;
+  let subtotal = 0;
   cart.forEach(item => {
-    totalAmount += item.price * item.quantity;
+    subtotal += item.price * item.quantity;
   });
+
+  // Calculate Final Amount to Charge
+  let totalAmount = subtotal - currentDiscount;
+  if (totalAmount < 0) totalAmount = 0;
 
   payWithPaystack(customerName, customerPhone, customerAddress, totalAmount, isDelivery);
 }
 
-// --- PAYSTACK INTEGRATION ---
 function payWithPaystack(name, phone, address, amount, isDelivery) {
-
-  // 1. Generate Reference
   const paymentRef = '' + Math.floor((Math.random() * 1000000000) + 1);
 
-  // 2. Save Pending Order
   const orderData = {
     name: name,
     phone: phone,
@@ -245,18 +293,19 @@ function payWithPaystack(name, phone, address, amount, isDelivery) {
     isDelivery: isDelivery,
     ref: paymentRef,
     items: cart,
+    discount: currentDiscount,
+    code: appliedCode,
     status: 'pending',
     timestamp: new Date().getTime()
   };
   localStorage.setItem('backup_order', JSON.stringify(orderData));
 
-  // 3. Open Paystack (LIVE KEY)
   const publicKey = "pk_test_9b2e43f2332af4fff23f3967f1bf76e8b2a59d88";
 
   let handler = PaystackPop.setup({
     key: publicKey,
     email: "orders@dewrapsquare.com",
-    amount: amount * 100,
+    amount: amount * 100, // Paystack expects pesewas
     currency: "GHS",
     ref: paymentRef,
     metadata: {
@@ -278,20 +327,13 @@ function payWithPaystack(name, phone, address, amount, isDelivery) {
   handler.openIframe();
 }
 
-// ============================================================
-//  UPDATED WHATSAPP SENDER (Fixes the "Return" issue)
-// ============================================================
-
 function sendToWhatsapp(orderData) {
-  const phoneNumber = "233596620696"; // Company Number
-
+  const phoneNumber = "233596620696";
   const orderType = orderData.isDelivery ? "DELIVERY" : "PICK UP";
-  const paymentLabel = "✅ PAYMENT CONFIRMED";
 
   let message = `*NEW PAID ORDER - DE WRAP SQUARE* \n`;
-  message += `${paymentLabel}\n`;
+  message += `✅ PAYMENT CONFIRMED\n`;
   message += `*Ref:* ${orderData.ref}\n`;
-
   message += ` *Name:* ${orderData.name}\n`;
   message += ` *Phone:* ${orderData.phone}\n`;
   message += ` *Type:* ${orderType}\n`;
@@ -301,101 +343,86 @@ function sendToWhatsapp(orderData) {
   }
 
   message += `\n* ORDER DETAILS:\n`;
-
   orderData.items.forEach(item => {
     message += `- ${item.quantity}x ${item.name} (${item.size})\n`;
   });
 
-  message += `\n *FOOD TOTAL PAID: ₵${orderData.total}*\n`;
+  if (orderData.discount && orderData.discount > 0) {
+    message += `\n *Discount (${orderData.code}):* -₵${orderData.discount.toFixed(2)}`;
+  }
+
+  message += `\n *TOTAL PAID:* ₵${orderData.total}\n`;
 
   const encodedMessage = encodeURIComponent(message);
   const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-  // 1. OPEN WHATSAPP
-  window.open(url, '_blank');
-
-  // 2. CRITICAL FIX: Update LocalStorage to mark as SENT immediately
-  // This ensures if they return or reload, the button won't show.
-  orderData.status = 'sent';
-  localStorage.setItem('backup_order', JSON.stringify(orderData));
-
-  // 3. HIDE THE RECOVERY BUTTON IMMEDIATELY (Visual Fix)
-  const recoveryBtn = document.getElementById('recovery-btn');
-  if (recoveryBtn) recoveryBtn.style.display = 'none';
-
-  // 4. CLEAR CART & FORMS
   cart = [];
   updateCartUI();
   document.getElementById('customer-name').value = "";
   document.getElementById('customer-phone').value = "";
   document.getElementById('customer-address').value = "";
 
-  // Close Sidebar if open
   const sidebar = document.getElementById('cart-sidebar');
-  if (sidebar.classList.contains('active')) {
-    toggleCart();
-  }
+  if (sidebar.classList.contains('active')) toggleCart();
 
-  // 5. SHOW SUCCESS MESSAGE (Visible when they return to the tab)
-  const successMsg = `
-    <p><strong>Order Sent Successfully! ✅</strong></p>
-    <p>We have received your payment.</p>
-    <p>Your order has been forwarded to the kitchen.</p>
+  orderData.status = 'sent';
+  localStorage.setItem('backup_order', JSON.stringify(orderData));
+
+  const actionsEl = document.getElementById('modal-actions');
+
+  actionsEl.innerHTML = `
+    <a href="${url}" target="_blank" class="modal-btn-primary btn-whatsapp" onclick="finishOrderProcess()" style="text-decoration:none;">
+       <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.017-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+       Open WhatsApp & Send 🚀
+    </a>
   `;
 
-  // Slight delay to allow the window switch to happen smoothly first
-  setTimeout(() => {
-    showCustomAlert("Order Confirmed", successMsg, 'success');
-  }, 1000);
+  showCustomAlert("Order Paid! 🎉", "Tap below to send details to the kitchen.", "success");
 }
 
-// ============================================================
-//  UPDATED RECOVERY LOGIC (Checks status before showing button)
-// ============================================================
+function finishOrderProcess() {
+  document.getElementById('custom-alert').classList.remove('active');
+  localStorage.removeItem('backup_order');
+  showToast("Order Process Completed ✅");
+}
 
+// --- RECOVERY LOGIC ---
 function checkPendingOrder() {
   const savedOrder = localStorage.getItem('backup_order');
+  const btn = document.getElementById('recovery-btn');
 
-  // If no data, do nothing
-  if (!savedOrder) return;
+  if (!savedOrder) {
+    if (btn) btn.style.display = 'none';
+    return;
+  }
 
   const order = JSON.parse(savedOrder);
   const now = new Date().getTime();
 
-  // 1. Expire old orders (24 hours)
   if (now - order.timestamp > 86400000) {
     localStorage.removeItem('backup_order');
+    if (btn) btn.style.display = 'none';
     return;
   }
 
-  // 2. CRITICAL FIX: If status is 'sent', DELETE IT and DO NOT show button
-  if (order.status === 'sent') {
-    localStorage.removeItem('backup_order');
-    return;
-  }
-
-  // 3. Only show button if status is 'pending' (not paid) or 'verified' (paid but not sent)
-  const btn = document.getElementById('recovery-btn');
   const actionBtn = document.querySelector('.resend-btn');
   const msgSpan = document.querySelector('.recovery-box span');
 
   if (btn) {
-    btn.style.display = 'flex';
-
     if (order.status === 'pending') {
-      // Logic: User clicked pay, but we aren't sure if they finished payment
+      btn.style.display = 'flex';
       msgSpan.innerText = "Did your payment go through?";
       actionBtn.innerText = "Yes, I Paid! Send Order 📲";
       actionBtn.style.background = "#FF9800";
       actionBtn.onclick = function () {
-        if (confirm("Only click OK if money was deducted.\nThe shop owner will verify the ID.")) {
-          // If they force send, we verify it manually
+        if (confirm("Only click OK if money was deducted.")) {
           order.status = 'verified';
           sendToWhatsapp(order);
         }
       };
-    } else if (order.status === 'verified') {
-      // Logic: User Paid, Paystack confirmed, but they closed browser before WhatsApp opened
+    }
+    else if (order.status === 'verified') {
+      btn.style.display = 'flex';
       msgSpan.innerText = "⚠️ Order Not Sent?";
       actionBtn.innerText = "Resend to WhatsApp 📲";
       actionBtn.style.background = "#25D366";
@@ -403,12 +430,20 @@ function checkPendingOrder() {
         sendToWhatsapp(order);
       };
     }
+    else {
+      btn.style.display = 'none';
+    }
   }
 }
-// ============================================================
-//  UI HELPERS
-// ============================================================
 
+function clearSavedOrder() {
+  if (confirm("Clear this backup?")) {
+    localStorage.removeItem('backup_order');
+    document.getElementById('recovery-btn').style.display = 'none';
+  }
+}
+
+// --- UI HELPERS ---
 function filterMenu(category) {
   const buttons = document.querySelectorAll('.filter-btn');
   buttons.forEach(btn => btn.classList.remove('active'));
@@ -427,21 +462,15 @@ function filterMenu(category) {
   document.getElementById('menu-grid').scrollLeft = 0;
 }
 
-// --- OPEN/CLOSED LOGIC (FIXED) ---
 function checkShopStatus() {
   const badge = document.getElementById('status-badge');
   const text = document.getElementById('status-text');
+  if (!badge || !text) return;
 
-  if (!badge || !text) return; // Safety check
-
-  // 1. Get Current Time in GMT (Accra is UTC+0)
   const now = new Date();
   const hour = now.getUTCHours();
-
-  // 2. Define Shop Hours (10 AM to 10 PM)
   const isOpen = hour >= 10 && hour < 22;
 
-  // 3. Update the UI
   if (isOpen) {
     badge.className = 'status-badge status-open';
     text.innerText = "Open Now - Taking Orders";
@@ -473,7 +502,6 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// FAQ Logic
 const faqItems = document.querySelectorAll('.faq-item');
 faqItems.forEach(item => {
   const question = item.querySelector('.faq-question');
@@ -488,7 +516,6 @@ faqItems.forEach(item => {
   });
 });
 
-// Menu Scroll
 const menuGrid = document.getElementById('menu-grid');
 let autoScrollInterval;
 
@@ -526,19 +553,96 @@ if (menuGrid) {
   });
 }
 
+// --- NEW SEARCH FUNCTION ---
+function searchMenu() {
+  const input = document.getElementById('menu-search');
+  const filter = input.value.toUpperCase();
+  const menuGrid = document.getElementById('menu-grid');
+  const cards = menuGrid.getElementsByClassName('pizza-card');
+
+  for (let i = 0; i < cards.length; i++) {
+    let title = cards[i].querySelector("h4");
+    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+      cards[i].style.display = "";
+    } else {
+      cards[i].style.display = "none";
+    }
+  }
+}
+
+// --- SHARE BUTTON LOGIC ---
+async function shareWebsite() {
+  const shareData = {
+    title: "Leona's Pizzeria",
+    text: "Order the best Pizza in Accra! 🍕",
+    url: window.location.href,
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      showToast("Link Copied to Clipboard! 📋");
+    }
+  } catch (err) {
+    console.log('Error sharing:', err);
+  }
+}
+
+// --- TUESDAY PROMO LOGIC ---
+function checkTuesdayPromo() {
+  const date = new Date();
+  const day = date.getDay(); // 0 is Sunday, 1 is Monday, 2 is Tuesday...
+
+  // Check if it's Tuesday (2)
+  if (day === 2) {
+    if (!sessionStorage.getItem('promoShown')) {
+
+      const modal = document.getElementById('custom-alert');
+      const titleEl = document.getElementById('modal-title');
+      const msgEl = document.getElementById('modal-message');
+      const iconContainer = document.getElementById('modal-icon-container');
+      const actionsEl = document.getElementById('modal-actions');
+
+      // Customize for Promo
+      iconContainer.innerHTML = "🔥";
+      iconContainer.style.fontSize = "3rem";
+
+      titleEl.innerText = "It's Tera Tuesday! 🍕";
+
+      msgEl.innerHTML = `
+        <img src="promo.webp" style="width:100%; border-radius:10px; margin-bottom:10px;">
+        <p>Buy 1 Get 1 Free on all Large Pizzas today!</p>
+      `;
+
+      actionsEl.innerHTML = `
+        <button class="modal-btn-primary" onclick="closeAlert()">Order Now</button>
+      `;
+
+      modal.classList.add('active');
+      sessionStorage.setItem('promoShown', 'true');
+    }
+  }
+}
+
 // --- INIT (RUNS ON LOAD) ---
 window.onload = function () {
   checkPendingOrder();
-  checkShopStatus(); // Runs status check immediately
+  checkShopStatus();
   startAutoScroll();
+  setTimeout(checkTuesdayPromo, 2000);
+
+  // PRELOADER FADE OUT
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    setTimeout(() => {
+      preloader.style.opacity = '0';
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, 500);
+    }, 800);
+  }
 };
 
-// Also verify status when DOM is ready (extra safety)
 document.addEventListener('DOMContentLoaded', checkShopStatus);
-
-function showToast(message) {
-  const x = document.getElementById("toast-box");
-  x.innerText = message;
-  x.className = "show";
-  setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
-}

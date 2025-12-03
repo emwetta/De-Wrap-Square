@@ -26,6 +26,9 @@
 </head>
 
 <body>
+  <div id="preloader">
+    <div class="spinner"></div>
+  </div>
 
   <div id="toast-box">Added to Cart! 🍕</div>
 
@@ -41,16 +44,10 @@
 
   <div id="custom-alert" class="modal-overlay">
     <div class="modal-box">
-      <div class="modal-header">
-        <span class="modal-icon" id="modal-icon">🔔</span>
-        <h3 id="modal-title">Notification</h3>
-      </div>
-      <div class="modal-body">
-        <div id="modal-message">Here is the message.</div>
-      </div>
-      <div class="modal-actions" id="modal-actions">
-        <button class="modal-btn-secondary" onclick="closeAlert()">Close</button>
-      </div>
+      <div id="modal-icon-container" class="modal-icon-wrapper"></div>
+      <h3 id="modal-title">Notification</h3>
+      <div id="modal-message">Message details.</div>
+      <div class="modal-actions" id="modal-actions"></div>
     </div>
   </div>
 
@@ -75,6 +72,18 @@
       </div>
 
       <div class="cart-inputs">
+        <div class="promo-section" style="padding: 0 20px; margin-bottom: 15px; margin-top: 10px;">
+          <label style="font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; display: block;">Have a
+            Coupon?</label>
+          <div style="display: flex; gap: 10px;">
+            <input type="text" id="promo-input" placeholder="Enter Code" class="cart-input"
+              style="margin-bottom: 0; text-transform: uppercase;">
+            <button onclick="applyPromo()" class="modal-btn-secondary"
+              style="width: auto; padding: 10px 15px; white-space: nowrap;">Apply</button>
+          </div>
+          <small id="promo-message" style="display: block; margin-top: 5px; font-size: 0.8rem;"></small>
+        </div>
+
         <label>Order Type:</label>
         <div class="order-type-switch">
           <input type="radio" id="type-delivery" name="orderType" value="Delivery" checked
@@ -107,9 +116,6 @@
         <span>Food Total:</span>
         <span id="cart-total">₵0</span>
       </div>
-      <p style="font-size: 0.75rem; color: #666; margin-bottom: 15px; text-align: center;">
-        * Delivery fee is paid directly to the rider upon arrival.
-      </p>
       <button class="checkout-btn" onclick="checkout()">
         Pay Now & Order
       </button>
@@ -188,10 +194,30 @@
     </div>
   </section>
 
+  <section class="promo-banner" data-aos="fade-up">
+    <div class="promo-container">
+      <div class="promo-text">
+        <span class="promo-tag">🔥 Tera Tuesday Special</span>
+        <h2>Buy 1 Get 1 Free!</h2>
+        <p>Every Tuesday, order any Extra Large Pizza and get a Large Pizza for free, order Large Pizza and get a Medium
+          Pizza for free.</p>
+        <a href="#menu" class="promo-btn">Order Now</a>
+      </div>
+      <div class="promo-image">
+        <img src="promo.webp" alt="Tuesday Promo" loading="lazy">
+      </div>
+    </div>
+  </section>
+
   <section class="menu-section" id="menu">
     <div class="section-header" data-aos="fade-up">
       <h2 class="section-title">Our Menu</h2>
       <p class="section-subtitle">Authentic Ghanaian-Style Pizza</p>
+    </div>
+
+    <div class="search-wrapper" data-aos="fade-down">
+      <input type="text" id="menu-search" placeholder="Search for pizza (e.g. Chicken)..." onkeyup="searchMenu()">
+      <span class="search-icon">🔍</span>
     </div>
 
     <div class="menu-filters" data-aos="fade-right">
@@ -206,8 +232,9 @@
       <button class="slider-btn prev-btn" onclick="slideMenu(-1)">❮</button>
 
       <div class="menu-grid" id="menu-grid">
+
         <div class="pizza-card" data-category="pizza">
-          <div class="card-image"><img src="margherita.jpeg" alt="Margheritta"></div>
+          <div class="card-image"><img src="margherita.jpeg" alt="Margheritta" loading="lazy"></div>
           <div class="card-content">
             <h4>Margheritta</h4>
             <p class="ingredients">Mozzarella, Oregano, Pizza Sauce</p>
@@ -225,7 +252,7 @@
         </div>
 
         <div class="pizza-card" data-category="pizza">
-          <div class="card-image"><img src="vegetarian.jpeg" alt="Vegetarian"></div>
+          <div class="card-image"><img src="vegetarian.jpeg" alt="Vegetarian" loading="lazy"></div>
           <div class="card-content">
             <h4>Leona's Vegetarian</h4>
             <p class="ingredients">Mozzarella, Oregano, Vegetables</p>
@@ -242,7 +269,7 @@
         </div>
 
         <div class="pizza-card" data-category="pizza">
-          <div class="card-image"><img src="chicken.jpeg" alt="Chicken"></div>
+          <div class="card-image"><img src="chicken.jpeg" alt="Chicken" loading="lazy"></div>
           <div class="card-content">
             <h4>Leona's Chicken</h4>
             <p class="ingredients">Mozzarella, Mix meat, Chicken</p>
@@ -259,7 +286,7 @@
         </div>
 
         <div class="pizza-card" data-category="pizza">
-          <div class="card-image"><img src="beef.jpeg" alt="Beef"></div>
+          <div class="card-image"><img src="beef.jpeg" alt="Beef" loading="lazy"></div>
           <div class="card-content">
             <h4>Leona's Beef</h4>
             <p class="ingredients">Mozzarella, Oregano, Beef</p>
@@ -273,7 +300,10 @@
         </div>
 
         <div class="pizza-card" data-category="pizza">
-          <div class="card-image"><img src="meatfeast.jpeg" alt="Meat Feast"></div>
+          <div class="card-image">
+            <span class="food-badge badge-star">⭐ Best Seller</span>
+            <img src="meatfeast.jpeg" alt="Meat Feast" loading="lazy">
+          </div>
           <div class="card-content">
             <h4>Meat Feast</h4>
             <p class="ingredients">Beef, Chicken, Pepperoni, Mix Meat</p>
@@ -290,7 +320,7 @@
         </div>
 
         <div class="pizza-card" data-category="pizza">
-          <div class="card-image"><img src="pepperoni.jpeg" alt="Pepperoni"></div>
+          <div class="card-image"><img src="pepperoni.jpeg" alt="Pepperoni" loading="lazy"></div>
           <div class="card-content">
             <h4>Leona's Pepperoni</h4>
             <p class="ingredients">Mozzarella, Oregano, Pepperoni</p>
@@ -307,7 +337,7 @@
         </div>
 
         <div class="pizza-card" data-category="pizza">
-          <div class="card-image"><img src="deluxe.jpeg" alt="Deluxe"></div>
+          <div class="card-image"><img src="deluxe.jpeg" alt="Deluxe" loading="lazy"></div>
           <div class="card-content">
             <h4>Deluxe Special</h4>
             <p class="ingredients">Corn beef, Mushroom, Beef, Olives</p>
@@ -324,8 +354,8 @@
 
         <div class="pizza-card" data-category="pizza">
           <div class="card-image"><img
-              src="https://images.unsplash.com/photo-1552539618-7eec9b4d1796?auto=format&fit=crop&w=800" alt="Odoyewu">
-          </div>
+              src="https://images.unsplash.com/photo-1552539618-7eec9b4d1796?auto=format&fit=crop&w=800" alt="Odoyewu"
+              loading="lazy"></div>
           <div class="card-content">
             <h4>Odoyewu</h4>
             <p class="ingredients">Tuna, Mushroom, Chicken, Corn</p>
@@ -344,7 +374,7 @@
         <div class="pizza-card" data-category="pizza">
           <div class="card-image"><img
               src="https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&w=800"
-              alt="Leona's Special"></div>
+              alt="Leona's Special" loading="lazy"></div>
           <div class="card-content">
             <h4>Leona's Special</h4>
             <p class="ingredients">Pepperoni, Tuna, Mushroom, Corn</p>
@@ -362,7 +392,7 @@
         </div>
 
         <div class="pizza-card" data-category="wrap">
-          <div class="card-image"><img src="legacy wrap.jpeg" alt="Legacy Wrap"></div>
+          <div class="card-image"><img src="legacy wrap.jpeg" alt="Legacy Wrap" loading="lazy"></div>
           <div class="card-content">
             <h4>Legacy Wrap</h4>
             <p class="ingredients">Chicken breast, onion, lettuce, green pepper, carrot, special sauce</p>
@@ -374,7 +404,7 @@
         </div>
 
         <div class="pizza-card" data-category="wrap">
-          <div class="card-image"><img src="beef wrap.jpeg" alt="Congressman"></div>
+          <div class="card-image"><img src="beef wrap.jpeg" alt="Congressman" loading="lazy"></div>
           <div class="card-content">
             <h4>Congressman Wrap</h4>
             <p class="ingredients">Beef, potatoes, veggies, BBQ sauce, special sauce</p>
@@ -386,7 +416,7 @@
         </div>
 
         <div class="pizza-card" data-category="wrap">
-          <div class="card-image"><img src="tuna vibe.jpeg" alt="Tuna Vibe"></div>
+          <div class="card-image"><img src="tuna vibe.jpeg" alt="Tuna Vibe" loading="lazy"></div>
           <div class="card-content">
             <h4>Tuna Vibe</h4>
             <p class="ingredients">Tuna flakes, vegetables, black pepper, chilly sauce</p>
@@ -398,7 +428,7 @@
         </div>
 
         <div class="pizza-card" data-category="wrap">
-          <div class="card-image"><img src="odoyewu.jpeg" alt="Odeyewu Wrap"></div>
+          <div class="card-image"><img src="odoyewu.jpeg" alt="Odeyewu Wrap" loading="lazy"></div>
           <div class="card-content">
             <h4>Odeyewu Wrap</h4>
             <p class="ingredients">Smoked salmon, baked beans, mayo, veggies, special sauce</p>
@@ -410,7 +440,7 @@
         </div>
 
         <div class="pizza-card" data-category="wrap">
-          <div class="card-image"><img src="Chicken wrap.jpeg" alt="Chicken Mama"></div>
+          <div class="card-image"><img src="Chicken wrap.jpeg" alt="Chicken Mama" loading="lazy"></div>
           <div class="card-content">
             <h4>Chicken Mama</h4>
             <p class="ingredients">Chicken, beef, vegetables, Nido, special sauce</p>
@@ -424,7 +454,7 @@
         <div class="pizza-card" data-category="wrap">
           <div class="card-image"><img
               src="https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=800"
-              alt="Sweet Wrap"></div>
+              alt="Sweet Wrap" loading="lazy"></div>
           <div class="card-content">
             <h4>Sweet Wrap</h4>
             <p class="ingredients">Chicken, egg, turmeric, BBQ sauce, mayonnaise</p>
@@ -436,7 +466,7 @@
         </div>
 
         <div class="pizza-card" data-category="wrap">
-          <div class="card-image"><img src="Smoked tuna.jpeg" alt="Smoked Tuna"></div>
+          <div class="card-image"><img src="Smoked tuna.jpeg" alt="Smoked Tuna" loading="lazy"></div>
           <div class="card-content">
             <h4>Smoked Tuna Wrap</h4>
             <p class="ingredients">Smoked tuna, boiled egg, veggies, ketchup, chilly sauce</p>
@@ -448,7 +478,7 @@
         </div>
 
         <div class="pizza-card" data-category="wrap">
-          <div class="card-image"><img src="beef wrap.jpeg" alt="Full House"></div>
+          <div class="card-image"><img src="beef wrap.jpeg" alt="Full House" loading="lazy"></div>
           <div class="card-content">
             <h4>Full House Wrap</h4>
             <p class="ingredients">Chicken, beef, corned beef, potatoes, mayo, special sauce</p>
@@ -460,7 +490,7 @@
         </div>
 
         <div class="pizza-card" data-category="wrap">
-          <div class="card-image"><img src="Fries and Chicken.jpeg" alt="Fries"></div>
+          <div class="card-image"><img src="Fries and Chicken.jpeg" alt="Fries" loading="lazy"></div>
           <div class="card-content">
             <h4>Fries & Chicken</h4>
             <p class="ingredients">Crispy fries with 5 pieces of Chicken</p>
@@ -472,7 +502,7 @@
         </div>
 
         <div class="pizza-card" data-category="wrap">
-          <div class="card-image"><img src="loaded fries.jpeg" alt="Loaded Fries"></div>
+          <div class="card-image"><img src="loaded fries.jpeg" alt="Loaded Fries" loading="lazy"></div>
           <div class="card-content">
             <h4>Loaded Fries</h4>
             <p class="ingredients">Fries topped with cheese & beef</p>
@@ -486,7 +516,7 @@
         <div class="pizza-card" data-category="drink">
           <div class="card-image"><img
               src="https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=800"
-              alt="First Date"></div>
+              alt="First Date" loading="lazy"></div>
           <div class="card-content">
             <h4>First Date</h4>
             <p class="ingredients">Banana, coconut, milk, ice cubes</p>
@@ -497,7 +527,7 @@
         </div>
 
         <div class="pizza-card" data-category="drink">
-          <div class="card-image"><img src="carrot.jpeg" alt="Mariot Puree"></div>
+          <div class="card-image"><img src="carrot.jpeg" alt="Mariot Puree" loading="lazy"></div>
           <div class="card-content">
             <h4>Mariot Puree</h4>
             <p class="ingredients">Carrot, peanut butter, honey, milk, banana</p>
@@ -509,7 +539,7 @@
         </div>
 
         <div class="pizza-card" data-category="drink">
-          <div class="card-image"><img src="peanut plessure.jpeg" alt="Peanut Pleasure"></div>
+          <div class="card-image"><img src="peanut plessure.jpeg" alt="Peanut Pleasure" loading="lazy"></div>
           <div class="card-content">
             <h4>Peanut Pleasure</h4>
             <p class="ingredients">Peanut butter, milk, honey, Nido, banana</p>
@@ -523,7 +553,7 @@
         <div class="pizza-card" data-category="drink">
           <div class="card-image"><img
               src="https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=800"
-              alt="Oreo Cream Latte"></div>
+              alt="Oreo Cream Latte" loading="lazy"></div>
           <div class="card-content">
             <h4>Oreo Cream Latte</h4>
             <p class="ingredients">Milk, Oreo powder, chocolate syrup, ice</p>
@@ -537,7 +567,7 @@
         <div class="pizza-card" data-category="drink">
           <div class="card-image"><img
               src="https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800"
-              alt="Milky Oreo"></div>
+              alt="Milky Oreo" loading="lazy"></div>
           <div class="card-content">
             <h4>Milky Oreo</h4>
             <p class="ingredients">Condensed milk, Oreo, fresh milk</p>
@@ -548,7 +578,7 @@
         </div>
 
         <div class="pizza-card" data-category="drink">
-          <div class="card-image"><img src="corect strawberry.jpeg" alt="Strawberry Oreo"></div>
+          <div class="card-image"><img src="corect strawberry.jpeg" alt="Strawberry Oreo" loading="lazy"></div>
           <div class="card-content">
             <h4>Strawberry Oreo</h4>
             <p class="ingredients">Strawberry, Oreo, milk, syrup</p>
@@ -560,7 +590,7 @@
         </div>
 
         <div class="pizza-card" data-category="drink">
-          <div class="card-image"><img src="Students milk.jpeg" alt="Student"></div>
+          <div class="card-image"><img src="Students milk.jpeg" alt="Student" loading="lazy"></div>
           <div class="card-content">
             <h4>Student Smoothie</h4>
             <p class="ingredients">Mango, pawpaw, banana, milk</p>
@@ -572,7 +602,7 @@
         </div>
 
         <div class="pizza-card" data-category="drink">
-          <div class="card-image"><img src="Banana cocoa.jpeg" alt="Banana Cocoa"></div>
+          <div class="card-image"><img src="Banana cocoa.jpeg" alt="Banana Cocoa" loading="lazy"></div>
           <div class="card-content">
             <h4>Banana Cocoa</h4>
             <p class="ingredients">Banana, cocoa, milk, condensed milk</p>
@@ -584,7 +614,7 @@
         </div>
 
         <div class="pizza-card" data-category="drink">
-          <div class="card-image"><img src="cocoa oreo.jpeg" alt="Cocoa Oreo Love"></div>
+          <div class="card-image"><img src="cocoa oreo.jpeg" alt="Cocoa Oreo Love" loading="lazy"></div>
           <div class="card-content">
             <h4>Cocoa Oreo Love</h4>
             <p class="ingredients">Milo, milk, cocoa powder, Oreo, condensed milk</p>
@@ -596,7 +626,7 @@
         </div>
 
         <div class="pizza-card" data-category="drink">
-          <div class="card-image"><img src="coca cola.jpeg" alt="coke"></div>
+          <div class="card-image"><img src="coca cola.jpeg" alt="coke" loading="lazy"></div>
           <div class="card-content">
             <h4>Coca Cola</h4>
             <div class="size-options">
@@ -606,7 +636,7 @@
         </div>
 
         <div class="pizza-card" data-category="drink">
-          <div class="card-image"><img src="water.jpeg" alt="Water"></div>
+          <div class="card-image"><img src="water.jpeg" alt="Water" loading="lazy"></div>
           <div class="card-content">
             <h4>Water</h4>
             <div class="size-options">
@@ -616,7 +646,7 @@
         </div>
 
         <div class="pizza-card" data-category="Juice">
-          <div class="card-image"><img src="Orange juice o.jpeg" alt="Orange Juice"></div>
+          <div class="card-image"><img src="Orange juice o.jpeg" alt="Orange Juice" loading="lazy"></div>
           <div class="card-content">
             <h4>Orange Juice</h4>
             <div class="size-options">
@@ -627,7 +657,7 @@
         </div>
 
         <div class="pizza-card" data-category="Juice">
-          <div class="card-image"><img src="Pineapple Juice.jpeg" alt="Pineapple Juice"></div>
+          <div class="card-image"><img src="Pineapple Juice.jpeg" alt="Pineapple Juice" loading="lazy"></div>
           <div class="card-content">
             <h4> Pineapple Juice</h4>
             <div class="size-options">
@@ -638,7 +668,7 @@
         </div>
 
         <div class="pizza-card" data-category="Juice">
-          <div class="card-image"><img src="Apple Juice.jpeg" alt="Apple Juice"></div>
+          <div class="card-image"><img src="Apple Juice.jpeg" alt="Apple Juice" loading="lazy"></div>
           <div class="card-content">
             <h4> Apple Juice</h4>
             <div class="size-options">
@@ -649,7 +679,7 @@
         </div>
 
         <div class="pizza-card" data-category="Juice">
-          <div class="card-image"><img src="Passion juice o.jpeg" alt="PassionJuice"></div>
+          <div class="card-image"><img src="Passion juice o.jpeg" alt="PassionJuice" loading="lazy"></div>
           <div class="card-content">
             <h4> PassionJuice Cocktail</h4>
             <div class="size-options">
@@ -660,7 +690,7 @@
         </div>
 
         <div class="pizza-card" data-category="Juice">
-          <div class="card-image"><img src="Watermelon cocktail o.jpeg" alt="Watermelon Cocktail"></div>
+          <div class="card-image"><img src="Watermelon cocktail o.jpeg" alt="Watermelon Cocktail" loading="lazy"></div>
           <div class="card-content">
             <h4>Watermelon Cocktail</h4>
             <div class="size-options">
@@ -669,6 +699,7 @@
             </div>
           </div>
         </div>
+
       </div>
       <button class="slider-btn next-btn" onclick="slideMenu(1)">❯</button>
     </div>
@@ -681,20 +712,18 @@
     </div>
 
     <div class="gallery-grid">
-      <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100"><img src="2024-10-06.webp" alt="Customer Joy">
-      </div>
+      <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100"><img src="2024-10-06.webp" alt="Customer Joy"
+          loading="lazy"></div>
       <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200"><img src="2024-10-06 (1).webp"
-          alt="Customer Joy"></div>
+          alt="Customer Joy" loading="lazy"></div>
       <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300"><img src="2024-10-06 (2).webp"
-          alt="Customer Joy"></div>
+          alt="Customer Joy" loading="lazy"></div>
       <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400"><img src="2024-10-06 (3).webp"
-          alt="Customer Joy"></div>
+          alt="Customer Joy" loading="lazy"></div>
     </div>
 
     <div class="gallery-footer">
-      <a href="#" class="instagram-btn">
-        See More on Instagram 📸
-      </a>
+      <a href="#" class="instagram-btn">See More on Instagram 📸</a>
     </div>
   </section>
 
@@ -835,11 +864,14 @@
       <a href="#" target="_blank">TikTok 🎵</a>
       <a href="#" target="_blank">Facebook 🔵</a>
     </div>
-    <p>© 2025 DE WRAP SQUARE. All rights reserved.</p>
+
+    <button onclick="shareWebsite()" class="share-btn">Share with Friends 🔗</button>
+
+    <p style="margin-top: 20px;">© 2025 DE WRAP SQUARE. All rights reserved.</p>
     <div class="info-box" style="border:none; margin-top: 20px;">
       <p style="font-size: 0.75rem; color: #666;">
         DEVELOPED BY
-        <a href="https://wa.me/233596620696" target="_blank" style="color: var(--brand-yellow); font-weight: bold; ">
+        <a href="https://wa.me/233596620696" target="_blank" style="color: var(--brand-yellow); font-weight: bold;">
           MR.WETTA
         </a>
       </p>
@@ -850,7 +882,6 @@
 
   <script src="leonas.js"></script>
   <script src="https://js.paystack.co/v1/inline.js"></script>
-
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init({

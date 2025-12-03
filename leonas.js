@@ -278,7 +278,7 @@ function payWithPaystack(name, phone, address, amount, isDelivery) {
   handler.openIframe();
 }
 
-// --- WHATSAPP SENDER ---
+// --- WHATSAPP SENDER (MODIFIED FOR SUCCESS NOTIFICATION) ---
 function sendToWhatsapp(orderData) {
   const phoneNumber = "233596620696"; // Company Number
 
@@ -305,32 +305,38 @@ function sendToWhatsapp(orderData) {
 
   message += `\n *FOOD TOTAL PAID: ₵${orderData.total}*\n`;
 
-
-
   const encodedMessage = encodeURIComponent(message);
   const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
+  // 1. Open WhatsApp in new tab
   const newWindow = window.open(url, '_blank');
 
-  if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
-    const successMsg = `
-      <p><strong>Payment Verified!</strong></p>
-      <p>Your order is ready to be sent to the restaurant.</p>
-      <a href="${url}" target="_blank" class="modal-btn-primary" style="color:white; text-decoration:none; margin-top:15px; display:block;">
-        SEND ORDER TO WHATSAPP 📲
-      </a>
-    `;
-    showCustomAlert("Order Ready", successMsg, 'success');
-  }
+  // 2. REMOVE THE RECOVERY POPUP IMMEDIATELY
+  // This ensures when the user returns, the "Order Not Sent" button is GONE.
+  localStorage.removeItem('backup_order');
+  const recoveryBtn = document.getElementById('recovery-btn');
+  if (recoveryBtn) recoveryBtn.style.display = 'none';
 
-  setTimeout(() => {
-    cart = [];
-    document.getElementById('customer-name').value = "";
-    document.getElementById('customer-phone').value = "";
-    document.getElementById('customer-address').value = "";
-    updateCartUI();
+  // 3. Clear Cart & Forms
+  cart = [];
+  updateCartUI();
+  const sidebar = document.getElementById('cart-sidebar');
+  // Close the cart sidebar if it's open
+  if (sidebar.classList.contains('active')) {
     toggleCart();
-  }, 2000);
+  }
+  document.getElementById('customer-name').value = "";
+  document.getElementById('customer-phone').value = "";
+  document.getElementById('customer-address').value = "";
+
+  // 4. SHOW THE SUCCESS NOTIFICATION ON THE SITE
+  // This will be visible when the user switches back to this tab.
+  const successMsg = `
+    <p><strong>Order Sent Successfully! ✅</strong></p>
+    <p>We have received your payment.</p>
+    <p>Your order has been forwarded to the kitchen!</p>
+  `;
+  showCustomAlert("Order Confirmed", successMsg, 'success');
 }
 
 // --- ORDER RECOVERY ---
@@ -366,6 +372,10 @@ function checkPendingOrder() {
         actionBtn.onclick = function () { sendToWhatsapp(order); };
       }
     }
+  } else {
+    // Ensure it is hidden if no order exists
+    const btn = document.getElementById('recovery-btn');
+    if (btn) btn.style.display = 'none';
   }
 }
 
@@ -398,12 +408,12 @@ function filterMenu(category) {
   document.getElementById('menu-grid').scrollLeft = 0;
 }
 
-// --- OPEN/CLOSED LOGIC (FIXED) ---
+// --- OPEN/CLOSED LOGIC ---
 function checkShopStatus() {
   const badge = document.getElementById('status-badge');
   const text = document.getElementById('status-text');
 
-  if (!badge || !text) return; // Safety check
+  if (!badge || !text) return;
 
   // 1. Get Current Time in GMT (Accra is UTC+0)
   const now = new Date();
@@ -500,9 +510,8 @@ if (menuGrid) {
 // --- INIT (RUNS ON LOAD) ---
 window.onload = function () {
   checkPendingOrder();
-  checkShopStatus(); // Runs status check immediately
+  checkShopStatus();
   startAutoScroll();
 };
 
-// Also verify status when DOM is ready (extra safety)
 document.addEventListener('DOMContentLoaded', checkShopStatus);

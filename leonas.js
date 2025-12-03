@@ -535,3 +535,10 @@ window.onload = function () {
 
 // Also verify status when DOM is ready (extra safety)
 document.addEventListener('DOMContentLoaded', checkShopStatus);
+
+function showToast(message) {
+  const x = document.getElementById("toast-box");
+  x.innerText = message;
+  x.className = "show";
+  setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+}

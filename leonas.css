@@ -346,7 +346,7 @@ header {
   color: #333;
 }
 
-/* PROMO BANNER */
+/* --- PROMO BANNER SECTION (UPDATED) --- */
 .promo-banner {
   padding: 60px 5%;
   background-color: var(--bg-body);
@@ -355,74 +355,135 @@ header {
 .promo-container {
   max-width: 1100px;
   margin: 0 auto;
-  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-  border-radius: 25px;
+  background: linear-gradient(145deg, #1a1a1a, #252525);
+  /* More subtle premium gradient */
+  border-radius: 24px;
   display: flex;
   align-items: center;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+  /* Softer, deeper shadow */
   color: white;
+  position: relative;
+  /* Fix for Safari/iOS border-radius clipping */
+  transform: translateZ(0);
 }
 
 .promo-text {
   flex: 1;
-  padding: 50px;
+  padding: 60px;
+  z-index: 2;
+  /* Ensure text sits above any background effects */
 }
 
 .promo-tag {
   background-color: var(--brand-primary);
   color: white;
-  padding: 5px 15px;
+  padding: 6px 16px;
   border-radius: 50px;
-  font-size: 0.8rem;
-  font-weight: bold;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
-  margin-bottom: 15px;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
   display: inline-block;
+  box-shadow: 0 4px 15px rgba(183, 28, 28, 0.4);
 }
 
 .promo-text h2 {
   font-family: 'Oswald', sans-serif;
-  font-size: 3rem;
-  margin-bottom: 15px;
+  font-size: 3.5rem;
+  margin-bottom: 20px;
   line-height: 1.1;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .promo-text p {
-  color: #ccc;
-  margin-bottom: 30px;
-  font-size: 1rem;
+  color: #d1d5db;
+  /* Softer grey text */
+  margin-bottom: 35px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 90%;
 }
 
 .promo-btn {
   background-color: white;
-  color: black;
-  padding: 12px 30px;
+  color: #111;
+  padding: 16px 35px;
   border-radius: 50px;
-  font-weight: bold;
+  font-weight: 800;
   text-transform: uppercase;
-  transition: 0.3s;
+  transition: all 0.3s ease;
+  display: inline-block;
+  border: 2px solid white;
 }
 
 .promo-btn:hover {
-  background-color: var(--brand-accent);
+  background-color: transparent;
   color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .promo-image {
   flex: 1;
-  height: 400px;
+  height: 100%;
+  min-height: 450px;
+  /* Ensure it's tall enough on desktop */
+  position: relative;
 }
 
 .promo-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s;
+  display: block;
+  transition: transform 0.6s ease;
 }
 
+/* Hover Effect on Desktop */
 .promo-container:hover .promo-image img {
-  transform: scale(1.05);
+  transform: scale(1.03);
+}
+
+/* --- MOBILE & ANDROID FIXES --- */
+@media (max-width: 900px) {
+  .promo-container {
+    flex-direction: column-reverse;
+    /* Stacks Image on Top, Text on Bottom */
+    border-radius: 20px;
+  }
+
+  .promo-image {
+    width: 100%;
+    min-height: 300px;
+    /* Shorter height for mobile */
+    height: 300px;
+    /* Add a "Fade" at the bottom of the image so it blends into the text */
+    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  }
+
+  .promo-text {
+    padding: 30px 25px 40px 25px;
+    /* Tighter padding */
+    text-align: center;
+  }
+
+  .promo-text h2 {
+    font-size: 2.2rem;
+    /* Smaller font for mobile */
+  }
+
+  .promo-text p {
+    font-size: 0.95rem;
+    max-width: 100%;
+  }
+
+  .promo-tag {
+    margin-bottom: 15px;
+  }
 }
 
 /* MENU SECTION */

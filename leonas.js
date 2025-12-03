@@ -573,7 +573,7 @@ function searchMenu() {
 // --- SHARE BUTTON LOGIC ---
 async function shareWebsite() {
   const shareData = {
-    title: "Leona's Pizzeria",
+    title: "De Wrap Square",
     text: "Order the best Pizza in Accra! 🍕",
     url: window.location.href,
   };

@@ -278,12 +278,15 @@ function payWithPaystack(name, phone, address, amount, isDelivery) {
   handler.openIframe();
 }
 
-// --- WHATSAPP SENDER (MODIFIED FOR SUCCESS NOTIFICATION) ---
+// ============================================================
+//  UPDATED WHATSAPP SENDER (Fixes the "Return" issue)
+// ============================================================
+
 function sendToWhatsapp(orderData) {
   const phoneNumber = "233596620696"; // Company Number
 
   const orderType = orderData.isDelivery ? "DELIVERY" : "PICK UP";
-  const paymentLabel = orderData.status === 'verified' ? "✅ PAYMENT CONFIRMED" : "⚠️ UNVERIFIED (CHECK APP)";
+  const paymentLabel = "✅ PAYMENT CONFIRMED";
 
   let message = `*NEW PAID ORDER - DE WRAP SQUARE* \n`;
   message += `${paymentLabel}\n`;
@@ -308,84 +311,100 @@ function sendToWhatsapp(orderData) {
   const encodedMessage = encodeURIComponent(message);
   const url = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-  // 1. Open WhatsApp in new tab
-  const newWindow = window.open(url, '_blank');
+  // 1. OPEN WHATSAPP
+  window.open(url, '_blank');
 
-  // 2. REMOVE THE RECOVERY POPUP IMMEDIATELY
-  // This ensures when the user returns, the "Order Not Sent" button is GONE.
-  localStorage.removeItem('backup_order');
+  // 2. CRITICAL FIX: Update LocalStorage to mark as SENT immediately
+  // This ensures if they return or reload, the button won't show.
+  orderData.status = 'sent';
+  localStorage.setItem('backup_order', JSON.stringify(orderData));
+
+  // 3. HIDE THE RECOVERY BUTTON IMMEDIATELY (Visual Fix)
   const recoveryBtn = document.getElementById('recovery-btn');
   if (recoveryBtn) recoveryBtn.style.display = 'none';
 
-  // 3. Clear Cart & Forms
+  // 4. CLEAR CART & FORMS
   cart = [];
   updateCartUI();
-  const sidebar = document.getElementById('cart-sidebar');
-  // Close the cart sidebar if it's open
-  if (sidebar.classList.contains('active')) {
-    toggleCart();
-  }
   document.getElementById('customer-name').value = "";
   document.getElementById('customer-phone').value = "";
   document.getElementById('customer-address').value = "";
 
-  // 4. SHOW THE SUCCESS NOTIFICATION ON THE SITE
-  // This will be visible when the user switches back to this tab.
+  // Close Sidebar if open
+  const sidebar = document.getElementById('cart-sidebar');
+  if (sidebar.classList.contains('active')) {
+    toggleCart();
+  }
+
+  // 5. SHOW SUCCESS MESSAGE (Visible when they return to the tab)
   const successMsg = `
     <p><strong>Order Sent Successfully! ✅</strong></p>
     <p>We have received your payment.</p>
-    <p>Your order has been forwarded to the kitchen!</p>
+    <p>Your order has been forwarded to the kitchen.</p>
   `;
-  showCustomAlert("Order Confirmed", successMsg, 'success');
+
+  // Slight delay to allow the window switch to happen smoothly first
+  setTimeout(() => {
+    showCustomAlert("Order Confirmed", successMsg, 'success');
+  }, 1000);
 }
 
-// --- ORDER RECOVERY ---
+// ============================================================
+//  UPDATED RECOVERY LOGIC (Checks status before showing button)
+// ============================================================
+
 function checkPendingOrder() {
   const savedOrder = localStorage.getItem('backup_order');
-  if (savedOrder) {
-    const order = JSON.parse(savedOrder);
-    const now = new Date().getTime();
-    if (now - order.timestamp > 86400000) {
-      localStorage.removeItem('backup_order');
-      return;
-    }
 
-    const btn = document.getElementById('recovery-btn');
-    const actionBtn = document.querySelector('.resend-btn');
-    const msgSpan = document.querySelector('.recovery-box span');
+  // If no data, do nothing
+  if (!savedOrder) return;
 
-    if (btn) {
-      btn.style.display = 'flex';
-      if (order.status === 'pending') {
-        msgSpan.innerText = "Did your payment go through?";
-        actionBtn.innerText = "Yes, I Paid! Send Order 📲";
-        actionBtn.style.background = "#FF9800";
-        actionBtn.onclick = function () {
-          if (confirm("Only click OK if money was deducted.\nThe shop owner will verify the ID.")) {
-            sendToWhatsapp(order);
-          }
-        };
-      } else {
-        msgSpan.innerText = "⚠️ Order Not Sent?";
-        actionBtn.innerText = "Resend to WhatsApp 📲";
-        actionBtn.style.background = "#25D366";
-        actionBtn.onclick = function () { sendToWhatsapp(order); };
-      }
-    }
-  } else {
-    // Ensure it is hidden if no order exists
-    const btn = document.getElementById('recovery-btn');
-    if (btn) btn.style.display = 'none';
-  }
-}
+  const order = JSON.parse(savedOrder);
+  const now = new Date().getTime();
 
-function clearSavedOrder() {
-  if (confirm("Clear this backup?")) {
+  // 1. Expire old orders (24 hours)
+  if (now - order.timestamp > 86400000) {
     localStorage.removeItem('backup_order');
-    document.getElementById('recovery-btn').style.display = 'none';
+    return;
+  }
+
+  // 2. CRITICAL FIX: If status is 'sent', DELETE IT and DO NOT show button
+  if (order.status === 'sent') {
+    localStorage.removeItem('backup_order');
+    return;
+  }
+
+  // 3. Only show button if status is 'pending' (not paid) or 'verified' (paid but not sent)
+  const btn = document.getElementById('recovery-btn');
+  const actionBtn = document.querySelector('.resend-btn');
+  const msgSpan = document.querySelector('.recovery-box span');
+
+  if (btn) {
+    btn.style.display = 'flex';
+
+    if (order.status === 'pending') {
+      // Logic: User clicked pay, but we aren't sure if they finished payment
+      msgSpan.innerText = "Did your payment go through?";
+      actionBtn.innerText = "Yes, I Paid! Send Order 📲";
+      actionBtn.style.background = "#FF9800";
+      actionBtn.onclick = function () {
+        if (confirm("Only click OK if money was deducted.\nThe shop owner will verify the ID.")) {
+          // If they force send, we verify it manually
+          order.status = 'verified';
+          sendToWhatsapp(order);
+        }
+      };
+    } else if (order.status === 'verified') {
+      // Logic: User Paid, Paystack confirmed, but they closed browser before WhatsApp opened
+      msgSpan.innerText = "⚠️ Order Not Sent?";
+      actionBtn.innerText = "Resend to WhatsApp 📲";
+      actionBtn.style.background = "#25D366";
+      actionBtn.onclick = function () {
+        sendToWhatsapp(order);
+      };
+    }
   }
 }
-
 // ============================================================
 //  UI HELPERS
 // ============================================================
@@ -408,12 +427,12 @@ function filterMenu(category) {
   document.getElementById('menu-grid').scrollLeft = 0;
 }
 
-// --- OPEN/CLOSED LOGIC ---
+// --- OPEN/CLOSED LOGIC (FIXED) ---
 function checkShopStatus() {
   const badge = document.getElementById('status-badge');
   const text = document.getElementById('status-text');
 
-  if (!badge || !text) return;
+  if (!badge || !text) return; // Safety check
 
   // 1. Get Current Time in GMT (Accra is UTC+0)
   const now = new Date();
@@ -510,8 +529,9 @@ if (menuGrid) {
 // --- INIT (RUNS ON LOAD) ---
 window.onload = function () {
   checkPendingOrder();
-  checkShopStatus();
+  checkShopStatus(); // Runs status check immediately
   startAutoScroll();
 };
 
+// Also verify status when DOM is ready (extra safety)
 document.addEventListener('DOMContentLoaded', checkShopStatus);

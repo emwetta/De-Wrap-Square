@@ -72,17 +72,7 @@
       </div>
 
       <div class="cart-inputs">
-        <div class="promo-section" style="padding: 0 20px; margin-bottom: 15px; margin-top: 10px;">
-          <label style="font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; display: block;">Have a
-            Coupon?</label>
-          <div style="display: flex; gap: 10px;">
-            <input type="text" id="promo-input" placeholder="Enter Code" class="cart-input"
-              style="margin-bottom: 0; text-transform: uppercase;">
-            <button onclick="applyPromo()" class="modal-btn-secondary"
-              style="width: auto; padding: 10px 15px; white-space: nowrap;">Apply</button>
-          </div>
-          <small id="promo-message" style="display: block; margin-top: 5px; font-size: 0.8rem;"></small>
-        </div>
+
 
         <label>Order Type:</label>
         <div class="order-type-switch">
@@ -101,11 +91,30 @@
           oninput="this.value = this.value.replace(/[^0-9]/g, '')">
 
         <div id="address-field">
-          <input type="text" id="customer-address" placeholder="Delivery Location / Address" class="cart-input">
-          <div class="delivery-notice">
-            ⚠️ <strong>Delivery Fee Notice:</strong><br>
-            The fee is <strong>NOT</strong> included in the online payment.<br>
-            Please pay the rider in cash upon arrival.
+          <label>Delivery Location:</label>
+          <input type="text" id="customer-address" placeholder="Start typing location..." class="cart-input">
+          <input type="hidden" id="cust-lat">
+          <input type="hidden" id="cust-lng">
+
+          <div class="delivery-notice" id="delivery-status-box"
+            style="display:none; margin-top:10px; border:1px solid #ddd; background:#f9f9f9; text-align:left;">
+
+            <div style="display: flex; justify-content: space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-size:0.9rem; color:#555;">Distance:</span>
+              <strong id="dist-val" style="font-size:0.95rem;">0 km</strong>
+            </div>
+
+            <div
+              style="display: flex; justify-content: space-between; align-items:center; padding:10px 0; border-top:1px dashed #ccc; border-bottom:1px dashed #ccc;">
+              <span style="font-size:1rem; color:#333; font-weight:bold;">Rider Fee:</span>
+              <strong id="fee-val" style="font-size:1.2rem; color:#B71C1C;">₵0.00</strong>
+            </div>
+
+            <div style="margin-top:10px; font-size:0.75rem; line-height:1.4; color:#555;">
+              📸 <strong>TAKE A SCREENSHOT!</strong><br>
+              Show this price to the rider to avoid being overcharged.
+              <span style="color:#B71C1C; font-weight:bold;">Pay Cash on Arrival.</span>
+            </div>
           </div>
         </div>
       </div>
@@ -164,7 +173,6 @@
         <span class="status-dot"></span>
         <span id="status-text">Checking status...</span>
       </div>
-
       <h1>Taste the <span class="highlight">Joy</span></h1>
       <p>Authentic Ghanaian-Style Pizza, Wraps, and Smoothies.</p>
       <div class="hero-btns">
@@ -232,7 +240,6 @@
       <button class="slider-btn prev-btn" onclick="slideMenu(-1)">❮</button>
 
       <div class="menu-grid" id="menu-grid">
-
         <div class="pizza-card" data-category="pizza">
           <div class="card-image"><img src="margherita.jpeg" alt="Margheritta" loading="lazy"></div>
           <div class="card-content">
@@ -726,7 +733,6 @@
       <h2 class="section-title">Moments of Joy</h2>
       <p class="section-subtitle">Good Friends. Great Pizza.</p>
     </div>
-
     <div class="gallery-grid">
       <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100"><img src="2024-10-06.webp" alt="Customer Joy"
           loading="lazy"></div>
@@ -737,7 +743,6 @@
       <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400"><img src="2024-10-06 (3).webp"
           alt="Customer Joy" loading="lazy"></div>
     </div>
-
     <div class="gallery-footer">
       <a href="#" class="instagram-btn">See More on Instagram 📸</a>
     </div>
@@ -748,27 +753,43 @@
       <h2 class="section-title" style="color: white;">Customer Love</h2>
       <p class="section-subtitle">Don't just take our word for it</p>
     </div>
-
     <div class="reviews-scroll-container">
       <div class="review-card">
         <div class="quote-icon">“</div>
         <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"It was an overall nice experience. There was a football match showing to entertain you while you wait...
-          Service was excellent."</p>
+        <p>"It was an overall nice experience. Service was excellent."</p>
         <div class="reviewer">
-          <div class="reviewer-info">
-            <span>Chripin Koranteng</span>
-            <small>Verified Customer</small>
-          </div>
+
+          <div class="reviewer-info"><span>Chripin Koranteng</span><small>Verified Customer</small></div>
         </div>
       </div>
 
       <div class="review-card">
         <div class="quote-icon">“</div>
         <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"I love the vibe at Leona's. The smoothies are fresh and the staff is always smiling. My go-to spot on
-          weekends."</p>
+        <p>"It was an overall nice experience. Service was excellent."</p>
         <div class="reviewer">
+
+          <div class="reviewer-info"><span>Chripin Koranteng</span><small>Verified Customer</small></div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="quote-icon">“</div>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"It was an overall nice experience. Service was excellent."</p>
+        <div class="reviewer">
+
+          <div class="reviewer-info"><span>Chripin Koranteng</span><small>Verified Customer</small></div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="quote-icon">“</div>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <p>"I love the vibe at Leona's. The smoothies are fresh and the staff is always smiling."</p>
+        <div class="reviewer">
+
           <div class="reviewer-info">
             <span>Sarah A.</span>
             <small>Local Guide</small>
@@ -779,8 +800,9 @@
       <div class="review-card">
         <div class="quote-icon">“</div>
         <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"Finally, a place that does proper cheesy pizza! The large size is actually huge. Great value for money."</p>
+        <p>"Finally, a place that does proper cheesy pizza! The large size is actually huge."</p>
         <div class="reviewer">
+
           <div class="reviewer-info">
             <span>Abena K.</span>
             <small>Foodie</small>
@@ -791,9 +813,9 @@
       <div class="review-card">
         <div class="quote-icon">“</div>
         <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>"Fast delivery and the pizza was still hot when it arrived. The crust is perfect, not too thick, not too
-          thin."</p>
+        <p>"Fast delivery and the pizza was still hot when it arrived."</p>
         <div class="reviewer">
+
           <div class="reviewer-info">
             <span>Kojo B.</span>
             <small>Delivery Order</small>
@@ -801,26 +823,20 @@
         </div>
       </div>
     </div>
-
     <div class="reviews-footer">
-      <a href="https://wa.me/233596620696" target="_blank" class="review-btn">
-        Write a Review ✍️
-      </a>
+      <a href="https://wa.me/233596620696" target="_blank" class="review-btn">Write a Review ✍️</a>
     </div>
   </section>
 
   <section class="contact-section" id="contact">
     <h2 class="section-title" style="color:white;">Visit Us</h2>
     <p>We are open for Dine-in, Takeout and Delivery!</p>
-
     <div
       style="width: 100%; height: 350px; border-radius: 15px; overflow: hidden; margin: 30px 0; border: 2px solid #333;">
       <iframe width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3970.496724536867!2d-0.262355485735053!3d5.641037895898222!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdf99621170589b%3A0x8422555736993502!2sAblekuma%20Point%205!5e0!3m2!1sen!2sgh!4v1715789123456!5m2!1sen!2sgh">
-      </iframe>
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3970.496724536867!2d-0.262355485735053!3d5.641037895898222!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xfdf99621170589b%3A0x8422555736993502!2sAblekuma%20Point%205!5e0!3m2!1sen!2sgh!4v1715789123456!5m2!1sen!2sgh"></iframe>
     </div>
-
     <div class="contact-info">
       <div class="info-box">
         <h4>📞 Call Us</h4>
@@ -829,8 +845,7 @@
       </div>
       <div class="info-box">
         <h4>📍 Location</h4>
-        <p><a href="https://maps.google.com/?q=DE+WRAP+SQUARE+Ablekuma" target="_blank" class="contact-link">DE WRAP
-            SQUARE<br>Ablekuma Point 5, Accra</a></p>
+        <p>DE WRAP SQUARE<br>Ablekuma Point 5, Accra</p>
       </div>
       <div class="info-box">
         <h4>⏰ Hours</h4>
@@ -844,27 +859,17 @@
       <h2 class="section-title">Common Questions</h2>
       <p class="section-subtitle">Everything you need to know</p>
     </div>
-
     <div class="faq-container" data-aos="fade-up">
       <div class="faq-item">
-        <div class="faq-question">
-          <span>How long does it take?</span>
-          <span class="faq-icon">+</span>
-        </div>
+        <div class="faq-question"><span>How long does it take?</span><span class="faq-icon">+</span></div>
         <div class="faq-answer">
-          <p>Our standard prep time is 15-20 minutes. Delivery usually takes 30-45 minutes depending on traffic. We
-            appreciate your patience for fresh, hot pizza!</p>
+          <p>Our standard prep time is 15-20 minutes. Delivery depends on your location.</p>
         </div>
       </div>
-
       <div class="faq-item">
-        <div class="faq-question">
-          <span>Can I eat at the restaurant?</span>
-          <span class="faq-icon">+</span>
-        </div>
+        <div class="faq-question"><span>Can I eat at the restaurant?</span><span class="faq-icon">+</span></div>
         <div class="faq-answer">
-          <p>Absolutely! We have a comfortable seating area for you and your friends. We are located at Ablekuma Point
-            5, Accra. Come say hi!</p>
+          <p>Absolutely! Come say hi at Ablekuma Point 5.</p>
         </div>
       </div>
     </div>
@@ -876,17 +881,11 @@
       <a href="#" target="_blank">TikTok 🎵</a>
       <a href="#" target="_blank">Facebook 🔵</a>
     </div>
-
     <button onclick="shareWebsite()" class="share-btn">Share with Friends 🔗</button>
-
     <p style="margin-top: 20px;">© 2025 DE WRAP SQUARE. All rights reserved.</p>
     <div class="info-box" style="border:none; margin-top: 20px;">
-      <p style="font-size: 0.75rem; color: #666;">
-        DEVELOPED BY
-        <a href="https://wa.me/233596620696" target="_blank" style="color: var(--brand-yellow); font-weight: bold;">
-          MR.WETTA
-        </a>
-      </p>
+      <p style="font-size: 0.75rem; color: #c97c08;">DEVELOPED BY <a href="#"
+          style="color: var(--brand-yellow); font-weight: bold;">MR.WETTA</a></p>
     </div>
   </footer>
 
@@ -896,12 +895,11 @@
   <script src="https://js.paystack.co/v1/inline.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-
-    AOS.init({
-      duration: 800,
-      once: true,
-    });
+    AOS.init({ duration: 800, once: true });
   </script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACrQOdh72cC9tY8k9zqx-sPf6PHfxEtVU&libraries=places&callback=initGooglePlaces"
+    async defer></script>
 </body>
 
 </html>

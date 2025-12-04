@@ -346,7 +346,7 @@ header {
   color: #333;
 }
 
-/* --- PROMO BANNER SECTION (UPDATED) --- */
+/* PROMO BANNER (Updated) */
 .promo-banner {
   padding: 60px 5%;
   background-color: var(--bg-body);
@@ -356,16 +356,13 @@ header {
   max-width: 1100px;
   margin: 0 auto;
   background: linear-gradient(145deg, #1a1a1a, #252525);
-  /* More subtle premium gradient */
   border-radius: 24px;
   display: flex;
   align-items: center;
   overflow: hidden;
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
-  /* Softer, deeper shadow */
   color: white;
   position: relative;
-  /* Fix for Safari/iOS border-radius clipping */
   transform: translateZ(0);
 }
 
@@ -373,7 +370,6 @@ header {
   flex: 1;
   padding: 60px;
   z-index: 2;
-  /* Ensure text sits above any background effects */
 }
 
 .promo-tag {
@@ -400,7 +396,6 @@ header {
 
 .promo-text p {
   color: #d1d5db;
-  /* Softer grey text */
   margin-bottom: 35px;
   font-size: 1.1rem;
   line-height: 1.6;
@@ -430,7 +425,6 @@ header {
   flex: 1;
   height: 100%;
   min-height: 450px;
-  /* Ensure it's tall enough on desktop */
   position: relative;
 }
 
@@ -442,48 +436,8 @@ header {
   transition: transform 0.6s ease;
 }
 
-/* Hover Effect on Desktop */
 .promo-container:hover .promo-image img {
   transform: scale(1.03);
-}
-
-/* --- MOBILE & ANDROID FIXES --- */
-@media (max-width: 900px) {
-  .promo-container {
-    flex-direction: column-reverse;
-    /* Stacks Image on Top, Text on Bottom */
-    border-radius: 20px;
-  }
-
-  .promo-image {
-    width: 100%;
-    min-height: 300px;
-    /* Shorter height for mobile */
-    height: 300px;
-    /* Add a "Fade" at the bottom of the image so it blends into the text */
-    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-  }
-
-  .promo-text {
-    padding: 30px 25px 40px 25px;
-    /* Tighter padding */
-    text-align: center;
-  }
-
-  .promo-text h2 {
-    font-size: 2.2rem;
-    /* Smaller font for mobile */
-  }
-
-  .promo-text p {
-    font-size: 0.95rem;
-    max-width: 100%;
-  }
-
-  .promo-tag {
-    margin-bottom: 15px;
-  }
 }
 
 /* MENU SECTION */
@@ -1958,4 +1912,9 @@ footer {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* Google Maps Autocomplete dropdown z-index fix */
+.pac-container {
+  z-index: 10000 !important;
 }

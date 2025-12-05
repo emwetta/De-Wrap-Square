@@ -44,7 +44,10 @@ function nextSlide() {
 }
 setInterval(nextSlide, 5000);
 
-// --- ICONS & NOTIFICATIONS ---
+// ============================================================
+//  PROFESSIONAL NOTIFICATION SYSTEM (SVG ICONS)
+// ============================================================
+
 const icons = {
   success: `<svg xmlns="http://www.w3.org/2000/svg" class="modal-icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>`,
   error: `<svg xmlns="http://www.w3.org/2000/svg" class="modal-icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>`,
@@ -89,10 +92,11 @@ function closeAlert() {
   }, 300);
 }
 
+// Updated Toast Function (Uses innerHTML for checkmark)
 function showToast(message) {
   const x = document.getElementById("toast-box");
   if (x) {
-    x.innerText = message;
+    x.innerHTML = `<span>${message}</span>`;
     x.className = "show";
     setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
   }
@@ -131,7 +135,8 @@ function addToCart(name, size, price) {
   }
 
   updateCartUI();
-  showToast(`Added: ${name} 🍕`);
+  // New Cleaner Toast Message
+  showToast(`✅ Added ${name}`);
 
   const sidebar = document.getElementById('cart-sidebar');
   if (!sidebar.classList.contains('active')) {
@@ -157,7 +162,6 @@ function decreaseQty(index) {
 }
 
 function updateCartUI() {
-  // Reset variables if needed
   currentDiscount = 0;
   appliedCode = "";
   const promoInput = document.getElementById('promo-input');
@@ -200,8 +204,6 @@ function updateCartUI() {
     });
   }
 
-  // UPDATE TOTAL: Only food cost is charged online.
-  // Delivery fee is shown separately.
   cartTotal.innerText = '₵' + totalPrice;
 }
 
@@ -223,7 +225,7 @@ function applyPromo() {
     currentDiscount = subtotal * 0.10;
     appliedCode = "LEONA10";
     msg.style.color = "#25D366";
-    msg.innerText = `✅ 10% Discount Applied (-₵${currentDiscount.toFixed(2)})`;
+    msg.innerText = `✅ 10% Discount Applied`;
     showToast("Discount Applied! 🔥");
   }
   else {
@@ -287,12 +289,11 @@ function checkout() {
 function payWithPaystack(name, phone, address, amount, isDelivery) {
   const paymentRef = '' + Math.floor((Math.random() * 1000000000) + 1);
 
-  // Save pending order
   const orderData = {
     name: name,
     phone: phone,
     address: address,
-    total: amount, // Only food charge
+    total: amount,
     isDelivery: isDelivery,
     deliveryFee: calculatedDeliveryFee,
     ref: paymentRef,
@@ -309,7 +310,7 @@ function payWithPaystack(name, phone, address, amount, isDelivery) {
   let handler = PaystackPop.setup({
     key: publicKey,
     email: "orders@dewrapsquare.com",
-    amount: amount * 100, // Amount in pesewas (Only food cost)
+    amount: amount * 100,
     currency: "GHS",
     ref: paymentRef,
     metadata: {
@@ -368,7 +369,6 @@ function sendToWhatsapp(orderData) {
   document.getElementById('customer-name').value = "";
   document.getElementById('customer-phone').value = "";
 
-  // 1. RESET THE ADDRESS INPUT AND FEE LOGIC HERE
   const addrInput = document.getElementById('customer-address');
   if (addrInput) addrInput.value = "";
   calculatedDeliveryFee = 0;
@@ -399,7 +399,6 @@ function finishOrderProcess() {
   showToast("Order Process Completed ✅");
 }
 
-// --- RECOVERY LOGIC ---
 function checkPendingOrder() {
   const savedOrder = localStorage.getItem('backup_order');
   const btn = document.getElementById('recovery-btn');
@@ -456,7 +455,6 @@ function clearSavedOrder() {
   }
 }
 
-// --- UI HELPERS ---
 function filterMenu(category) {
   const buttons = document.querySelectorAll('.filter-btn');
   buttons.forEach(btn => btn.classList.remove('active'));
@@ -638,32 +636,26 @@ function checkTuesdayPromo() {
 }
 
 // ============================================================
-//  BOLT-STYLE DELIVERY CALCULATOR 
+//  BOLT-STYLE DELIVERY CALCULATOR 🛵
 // ============================================================
 
+const RESTAURANT_LOCATION = { lat: 5.6331968, lng: -0.3258539 };
 
-// EXACT LOCATION (Leona's Pizzeria, Ablekuma)
-const RESTAURANT_LOCATION = { lat: 5.6332218, lng: -0.3258371 };
+const BASE_FARE = 15;
+const RATE_PER_KM = 0.8;
+const MIN_PRICE = 20;
 
-// --- CALIBRATION SETTINGS (Adjust these to match Bolt) ---
-const BASE_FARE = 20;      // Starting Price (Standard for bike dispatch)
-const RATE_PER_KM = 1;   // Cost per Kilometer (Lowered from 4 to 2.5)
-const MIN_PRICE = 10;      // Minimum price (No matter how close, pay at least this)
-
-// 1. Initialize Google Places (Called automatically by the HTML script)
 window.initGooglePlaces = function () {
   const input = document.getElementById('customer-address');
   if (!input) return;
 
-  // Prevent "Enter" key from submitting the form
   input.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') e.preventDefault();
   });
 
-  // 2. ADD AUTO-CLEAR LISTENER HERE
+  // AUTO-CLEAR FIX
   input.addEventListener('input', function () {
     if (this.value === "") {
-      // Clear fee if user deletes text
       calculatedDeliveryFee = 0;
       document.getElementById('delivery-status-box').style.display = 'none';
     }
@@ -696,7 +688,6 @@ window.initGooglePlaces = function () {
 function calculateDistance(destination) {
   const service = new google.maps.DistanceMatrixService();
 
-  // Show loading state
   document.getElementById('fee-val').innerText = "Calculating...";
   document.getElementById('delivery-status-box').style.display = 'block';
 
@@ -715,23 +706,18 @@ function calculateDistance(destination) {
           const distanceInMeters = results.distance.value;
           const distanceInKm = distanceInMeters / 1000;
 
-          // --- NEW PRICING ALGORITHM (More Bolt-like) ---
+          // Pricing Logic
           let rawFee = BASE_FARE + (distanceInKm * RATE_PER_KM);
-
-          // Enforce Minimum Price
           if (rawFee < MIN_PRICE) {
             rawFee = MIN_PRICE;
           }
-
-          // Round to nearest integer
           calculatedDeliveryFee = Math.ceil(rawFee);
 
-          // --- Update UI ---
           document.getElementById('dist-val').innerText = distanceText;
           document.getElementById('fee-val').innerText = "₵" + calculatedDeliveryFee.toFixed(2);
 
           updateCartUI();
-          showToast(`Delivery Fee: ₵${calculatedDeliveryFee} (${distanceText})`);
+          showToast(`Delivery Fee: ₵${calculatedDeliveryFee}`);
 
         } else {
           showCustomAlert("Route Error", "We cannot calculate a driving route to this location.", "error");
@@ -739,12 +725,12 @@ function calculateDistance(destination) {
         }
       } else {
         console.error("Distance Matrix Error:", status);
-        showCustomAlert("System Error", "Map System is offline.", "error");
+        showCustomAlert("System Error", "Map System is offline. Please call to order.", "error");
       }
     }
   );
 }
-// 3. FINAL INIT
+
 window.onload = function () {
   checkPendingOrder();
   checkShopStatus();

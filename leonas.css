@@ -1356,9 +1356,7 @@ footer {
   color: #e65100;
 }
 
-/* =========================================
-   1. PREMIUM TOAST (Bottom Notification) - UPDATED LOOK
-   ========================================= */
+/* PREMIUM NOTIFICATIONS */
 #toast-box {
   visibility: hidden;
   min-width: 320px;
@@ -1388,9 +1386,6 @@ footer {
   transform: translateX(-50%) translateY(0);
 }
 
-/* =========================================
-   2. PREMIUM MODAL (Center Popup)
-   ========================================= */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -1399,7 +1394,6 @@ footer {
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
-  /* The "Glass" Effect */
   -webkit-backdrop-filter: blur(8px);
   z-index: 3000;
   display: flex;
@@ -1420,7 +1414,6 @@ footer {
   width: 90%;
   max-width: 420px;
   border-radius: 24px;
-  /* Super rounded modern corners */
   padding: 32px;
   text-align: center;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -1432,7 +1425,6 @@ footer {
   transform: scale(1);
 }
 
-/* Icon Container Circle */
 .modal-icon-wrapper {
   width: 72px;
   height: 72px;
@@ -1449,29 +1441,21 @@ footer {
   stroke-width: 2;
 }
 
-/* Themes */
 .modal-theme-success .modal-icon-wrapper {
   background-color: #DCFCE7;
-  /* Light Green */
   color: #166534;
-  /* Dark Green Text */
 }
 
 .modal-theme-error .modal-icon-wrapper {
   background-color: #FEE2E2;
-  /* Light Red */
   color: #991B1B;
-  /* Dark Red Text */
 }
 
 .modal-theme-normal .modal-icon-wrapper {
   background-color: #E0F2FE;
-  /* Light Blue */
   color: #075985;
-  /* Dark Blue Text */
 }
 
-/* Typography */
 .modal-box h3 {
   font-family: 'Poppins', sans-serif;
   font-size: 1.5rem;
@@ -1483,12 +1467,10 @@ footer {
 #modal-message {
   font-size: 1rem;
   color: #6B7280;
-  /* Cool Grey */
   line-height: 1.6;
   margin-bottom: 28px;
 }
 
-/* Buttons */
 .modal-actions {
   display: flex;
   flex-direction: column;
@@ -1497,7 +1479,6 @@ footer {
 
 .modal-btn-primary {
   background-color: #111827;
-  /* Modern Black/Dark Blue */
   color: white;
   border: none;
   padding: 16px;
@@ -1517,7 +1498,6 @@ footer {
   transform: scale(0.98);
 }
 
-/* WhatsApp Specific Button */
 .btn-whatsapp {
   background-color: #25D366 !important;
   box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
@@ -1543,13 +1523,354 @@ footer {
   color: #374151;
 }
 
-/* --- MOBILE SPECIFIC FIXES (UPDATED) --- */
-@media (max-width: 768px) {
+.recovery-wrapper {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  animation: slideUp 0.5s ease-out;
+}
 
-  /* 1. PROMO BANNER FIX (STACKED & CLEAN) */
+.recovery-box {
+  background: white;
+  border: 2px solid #B71C1C;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 250px;
+}
+
+.recovery-box span {
+  font-weight: bold;
+  color: #B71C1C;
+  font-size: 0.9rem;
+  display: block;
+  text-align: center;
+}
+
+.resend-btn {
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.dismiss-btn {
+  background: #eee;
+  color: #333;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+#scrollTopBtn {
+  display: none;
+  position: fixed;
+  bottom: 90px;
+  right: 25px;
+  z-index: 1999;
+  background: #333;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
+  opacity: 0.8;
+}
+
+#scrollTopBtn:hover {
+  background: var(--brand-primary);
+  color: white;
+  opacity: 1;
+}
+
+/* FAQ SECTION - FIXED AND ROBUST */
+.faq-section {
+  padding: 80px 5%;
+  background-color: var(--bg-body);
+  border-top: 1px solid #eee;
+}
+
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.faq-item {
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.faq-item.active {
+  border-color: var(--brand-primary);
+  box-shadow: 0 8px 25px rgba(183, 28, 28, 0.15);
+}
+
+.faq-question {
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 500;
+  user-select: none;
+}
+
+.faq-icon {
+  font-size: 1.5rem;
+  color: var(--brand-primary);
+  font-weight: bold;
+  transition: transform 0.3s ease;
+  line-height: 1;
+}
+
+.faq-item.active .faq-icon {
+  transform: rotate(45deg);
+  color: #333;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+  background-color: #fff;
+}
+
+.faq-answer p {
+  padding: 0 25px 25px 25px;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.faq-item.active .faq-question {
+  color: #000;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+    cursor: pointer;
+  }
+
+  .hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .hamburger.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  .desktop-btn {
+    display: none !important;
+  }
+
+  .mobile-btn {
+    display: block;
+    font-size: 0.8rem;
+    padding: 8px 15px;
+    margin-right: 15px;
+    margin-left: auto;
+  }
+
+  .logo {
+    padding: 5px 8px;
+  }
+
+  .logo .logo-top {
+    font-size: 1rem;
+  }
+
+  .logo .logo-bottom {
+    font-size: 0.7rem;
+  }
+
+  .nav-menu {
+    position: fixed;
+    left: -100%;
+    top: 60px;
+    gap: 0;
+    flex-direction: column;
+    background-color: white;
+    width: 100%;
+    height: calc(100vh - 60px);
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+    align-items: center;
+    justify-content: start;
+    padding-top: 40px;
+  }
+
+  .nav-menu.active {
+    left: 0;
+  }
+
+  .nav-item {
+    margin: 16px 0;
+  }
+
+  .nav-link {
+    font-size: 1.2rem;
+    display: block;
+    padding: 15px;
+    width: 100%;
+  }
+
+  .mobile-close-btn {
+    display: none;
+  }
+
+  .menu-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory;
+    gap: 20px !important;
+    padding-bottom: 30px;
+    padding-left: 5%;
+    padding-right: 5%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .menu-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pizza-card {
+    min-width: 75vw;
+    max-width: 75vw;
+    scroll-snap-align: center;
+    margin-top: 0 !important;
+  }
+
+  .gallery-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory;
+    gap: 15px !important;
+    padding-bottom: 20px;
+    padding-left: 5%;
+    padding-right: 5%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .gallery-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery-item {
+    min-width: 80%;
+    scroll-snap-align: center;
+    margin-right: 0;
+  }
+
+  .gallery-item img {
+    aspect-ratio: 4 / 5;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cart-sidebar {
+    width: 85%;
+    max-width: 350px;
+    right: -100%;
+  }
+
+  .cart-sidebar.active {
+    right: 0;
+  }
+
+  input,
+  select,
+  textarea,
+  .cart-input {
+    font-size: 16px !important;
+    transform: scale(1);
+  }
+
+  .modal-box {
+    width: 85% !important;
+    font-size: 1rem !important;
+  }
+
+  .gallery-footer::before {
+    content: 'Swipe →';
+    display: block;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 15px;
+    animation: floatSide 2s infinite;
+  }
+
+  @keyframes floatSide {
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+
+    50% {
+      transform: translateX(5px);
+    }
+  }
+
+  /* MOBILE PROMO BANNER FIX */
   .promo-container {
     flex-direction: column-reverse;
-    /* Image Top, Text Bottom */
     border-radius: 20px;
     height: auto;
     overflow: hidden;
@@ -1558,7 +1879,6 @@ footer {
   .promo-image {
     width: 100%;
     height: 250px;
-    /* Fixed height for mobile */
     min-height: 250px;
     position: relative;
   }
@@ -1568,6 +1888,16 @@ footer {
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  .promo-image::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to top, rgba(26, 26, 26, 0.8), transparent);
   }
 
   .promo-text {
@@ -1585,45 +1915,10 @@ footer {
     margin-bottom: 25px;
   }
 
-  /* 2. MAP SPACE FIX */
-  /* This targets the div wrapping the map in your contact section */
+  /* MOBILE MAP FIX */
   .contact-section div[style*="height: 350px"] {
     height: 280px !important;
-    /* Shorter map */
-    margin-bottom: 0 !important;
-    /* Remove bottom margin */
-  }
-
-  /* Ensure iframe has no whitespace below it */
-  .contact-section iframe {
-    display: block;
-    vertical-align: bottom;
-  }
-
-  /* 3. MENU GRID FIXES */
-  .menu-grid {
-    display: flex !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory;
-    gap: 20px !important;
-    padding-bottom: 30px;
-    padding-left: 5%;
-    padding-right: 5%;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .pizza-card {
-    min-width: 75vw;
-    max-width: 75vw;
-    scroll-snap-align: center;
-    margin-top: 0 !important;
-  }
-
-  .cart-sidebar {
-    width: 85%;
-    max-width: 350px;
-    right: -100%;
+    margin: 20px 0 !important;
   }
 }
 
@@ -1663,4 +1958,10 @@ footer {
 /* Google Maps Autocomplete dropdown z-index fix */
 .pac-container {
   z-index: 10000 !important;
+}
+
+/* FIX: REMOVES WHITE SPACE UNDER MAP */
+.contact-section iframe {
+  display: block;
+  vertical-align: bottom;
 }

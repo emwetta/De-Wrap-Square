@@ -44,10 +44,7 @@ function nextSlide() {
 }
 setInterval(nextSlide, 5000);
 
-// ============================================================
-//  PROFESSIONAL NOTIFICATION SYSTEM (SVG ICONS)
-// ============================================================
-
+// --- NOTIFICATION & TOAST SYSTEMS ---
 const icons = {
   success: `<svg xmlns="http://www.w3.org/2000/svg" class="modal-icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>`,
   error: `<svg xmlns="http://www.w3.org/2000/svg" class="modal-icon-svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>`,
@@ -92,11 +89,10 @@ function closeAlert() {
   }, 300);
 }
 
-// Updated Toast Function (Uses innerHTML for checkmark)
 function showToast(message) {
   const x = document.getElementById("toast-box");
   if (x) {
-    x.innerHTML = `<span>${message}</span>`;
+    x.innerText = message;
     x.className = "show";
     setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
   }
@@ -135,8 +131,7 @@ function addToCart(name, size, price) {
   }
 
   updateCartUI();
-  // New Cleaner Toast Message
-  showToast(`✅ Added ${name}`);
+  showToast(`Added: ${name} 🍕`);
 
   const sidebar = document.getElementById('cart-sidebar');
   if (!sidebar.classList.contains('active')) {
@@ -225,7 +220,7 @@ function applyPromo() {
     currentDiscount = subtotal * 0.10;
     appliedCode = "LEONA10";
     msg.style.color = "#25D366";
-    msg.innerText = `✅ 10% Discount Applied`;
+    msg.innerText = `✅ 10% Discount Applied (-₵${currentDiscount.toFixed(2)})`;
     showToast("Discount Applied! 🔥");
   }
   else {
@@ -399,6 +394,7 @@ function finishOrderProcess() {
   showToast("Order Process Completed ✅");
 }
 
+// --- RECOVERY LOGIC ---
 function checkPendingOrder() {
   const savedOrder = localStorage.getItem('backup_order');
   const btn = document.getElementById('recovery-btn');
@@ -455,6 +451,7 @@ function clearSavedOrder() {
   }
 }
 
+// --- UI HELPERS ---
 function filterMenu(category) {
   const buttons = document.querySelectorAll('.filter-btn');
   buttons.forEach(btn => btn.classList.remove('active'));
@@ -642,7 +639,7 @@ function checkTuesdayPromo() {
 const RESTAURANT_LOCATION = { lat: 5.6331968, lng: -0.3258539 };
 
 const BASE_FARE = 15;
-const RATE_PER_KM = 0.8;
+const RATE_PER_KM = 0.7;
 const MIN_PRICE = 20;
 
 window.initGooglePlaces = function () {
@@ -653,7 +650,6 @@ window.initGooglePlaces = function () {
     if (e.key === 'Enter') e.preventDefault();
   });
 
-  // AUTO-CLEAR FIX
   input.addEventListener('input', function () {
     if (this.value === "") {
       calculatedDeliveryFee = 0;
@@ -736,6 +732,7 @@ window.onload = function () {
   checkShopStatus();
   startAutoScroll();
   setTimeout(checkTuesdayPromo, 2000);
+  initGooglePlaces();
 
   const preloader = document.getElementById('preloader');
   if (preloader) {
